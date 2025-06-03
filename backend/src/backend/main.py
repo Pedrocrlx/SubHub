@@ -1,15 +1,13 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 
+# Montar a pasta de ficheiros estáticos (por exemplo, a pasta 'frontend')
+app.mount("/static", StaticFiles(directory="/workspaces/SubHub/frontend"), name="static")
+
+# Rota principal: servir index.html
 @app.get("/")
-def read_root():
-    return {"message": "Olá, FastAPI está funcionando!"}
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "query": q}
-
-if __name__ == "__main__":                
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+def read_index():
+    return FileResponse("/workspaces/SubHub/frontend/index.html")
