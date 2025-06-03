@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from backend.app.routers import auth        # Imports router module (Giulio)
-from backend.app.db import Base, engine     # For DB table creation (Giulio)
+from routers import auth        # Imports router module (Giulio)
+from db import Base, engine     # For DB table creation (Giulio)
 
 app = FastAPI()
 
