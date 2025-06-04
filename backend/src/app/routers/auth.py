@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Request, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 
-from backend.app.db import SessionLocal
-from backend.app.models.user import User
-from backend.app.schemas.user import UserCreate, Token
-from backend.app.services import auth as auth_service
+from app.db import SessionLocal
+from app.models.user import User
+from app.schemas.user import UserCreate, Token
+from app.services import auth as auth_service
 
 router = APIRouter()
 
@@ -41,5 +41,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 # Optional protected route (for testing)
 @router.get("/protected")
-def protected(current_user: str = Depends(auth_service.get_current_user)):
+def protected(request: Request):
+    current_user = request.state.user
     return {"message": f"Hello, {current_user}"}
