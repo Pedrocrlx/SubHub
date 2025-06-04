@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - my-app-net
+  db:
+    image: postgres:17
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qwerty
+      POSTGRES_DB: subHub
+    networks:
+      - my-app-net
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8080:8080
+
+networks:
+  my-app-net:
+    driver: bridge
