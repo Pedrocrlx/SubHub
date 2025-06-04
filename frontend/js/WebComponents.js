@@ -11,23 +11,7 @@ function loadMenu() {
     class CustomMenu extends HTMLElement {
         connectedCallback() {
             this.innerHTML = `
-                <nav>
-        <div id="links">
-            <div id="logoContainer">
-                <p>
-                    <span class="logo-sub">Sub</span><span class="logo-hub">Hub</span>
-                </p>
-            </div>
-            <a href="index.html" id="home-button" class="label button-terciary">home</a>
-            <a  id="language-button"class="label button-terciary">LANGUAGE</a>
-            <a href="LearnMore.html" id="learnmore-button" class="label button-terciary">learn more</a>
 
-        </div>
-        <div>
-            <button id="SignIn" class="button-secondary secondary-neutral">Sign In</button>
-            <button id="SignUp" class="button-primary primary-neutral">Get started</button>
-        </div>
-    </nav>
             `;
         }
     }

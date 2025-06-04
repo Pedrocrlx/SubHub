@@ -197,7 +197,12 @@ nav {
     justify-content: space-between;
     padding: 0px 3rem;
     align-items: center;
+    top: 0;
+    z-index: 1;
+    position: fixed;
+    width: 100vw;
 }
+
 .button-terciary {
     color: var(--marble-300);
     text-decoration: none;
@@ -230,6 +235,13 @@ nav {
     transform: scaleX(1);
 }
 
+.terciary-green {
+    color: var(--hunter-green-300);
+}
+
+#ForgotPassword {
+    margin: 1rem;
+}
 
 nav a.active {
     color: var(--hunter-green-600);
@@ -281,6 +293,7 @@ nav button {
     border-left: none;
 }
 
+
 /* Footer */
 footer {
     background-color: var(--hunter-green-50);
@@ -330,7 +343,7 @@ footer a {
     grid-column: span 4;
 }
 
-.footer-rights{
+.footer-rights {
     display: flex;
     grid-column: span 4;
     justify-content: center;
