@@ -18,9 +18,9 @@ function loadMenu() {
                     <span class="logo-sub">Sub</span><span class="logo-hub">Hub</span>
                 </p>
             </div>
-            <a href="index.html" id="home-button" class="label">home</a>
-            <a  id="language-button"class="label">LANGUAGE</a>
-            <a href="LearnMore.html" id="learnmore-button" class="label">learn more</a>
+            <a href="index.html" id="home-button" class="label button-terciary">home</a>
+            <a  id="language-button"class="label button-terciary">LANGUAGE</a>
+            <a href="LearnMore.html" id="learnmore-button" class="label button-terciary">learn more</a>
 
         </div>
         <div>
@@ -55,7 +55,45 @@ LoadFooter = () => {
     class CustomFooter extends HTMLElement {
         connectedCallback() {
             this.innerHTML = `
+                    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <p>
+                    <span class="logo-sub">Sub</span><span class="logo-hub">Hub</span>
+                </p>
+            </div>
+            <div class="footer-links">
+                <div class="underline">
+                    <a href="index.html" class="label button-terciary">FULL FAQ</a>
+                </div>
+                <div class="underline">
+                    <a href="index.html" class="label button-terciary">HELP CENTER</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="underline">
+                    <a href="index.html"class="label button-terciary">Account</a><br>
+                </div>
+                <div class="underline">
+                    <a href="index.html"class="label button-terciary">JOBS</a>                
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="underline">
+                    <a href="index.html"class="label button-terciary">PRIVACY</a><br>
+                </div>
+                <div class="underline">
+                    <a href="index.html"class="label button-terciary">CONTACT US</a>
+                </div>
+            </div>
+            <div class="footer-line">
 
+            </div>
+            <div class="footer-rights">
+                <p>&copy; ` + getYear() + ` SubHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
             `;
         }
     }
