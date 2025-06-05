@@ -192,15 +192,18 @@ button {
 }
 
 nav {
-    background-color: var(--hunter-green-50);
-    display: flex;
-    justify-content: space-between;
-    padding: 0px 3rem;
-    align-items: center;
     top: 0;
     z-index: 1;
     position: fixed;
     width: 100vw;
+}
+
+.nav-container{
+        background-color: var(--hunter-green-50);
+        padding: 0px 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between
 }
 
 .button-terciary {
@@ -293,15 +296,11 @@ nav button {
     border-left: none;
 }
 
-
 /* Footer */
 footer {
-    background-color: var(--hunter-green-50);
-    color: var(--marble-300);
-    gap: 2rem;
-    width: 100vw;
+    width: 100%;
     bottom: 0;
-    position: fixed;
+    position: relative;
 }
 
 footer a {
@@ -313,10 +312,15 @@ footer a {
     transition: color 0.2s;
 }
 
+.footer-container {
+    background-color: var(--hunter-green-50);
+    color: var(--marble-300);
+    padding: 0px 3rem;
+}
+
 .footer-content {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    padding: 0px 9rem;
 }
 
 .footer-logo {
@@ -348,4 +352,7 @@ footer a {
     grid-column: span 4;
     justify-content: center;
     margin: 4rem;
+}
+main{
+    min-height: calc(100vh - 6rem);
 }
