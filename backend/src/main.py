@@ -2,7 +2,7 @@ import os
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 
 from app.routers import auth                        # Imports router module (Giulio)
 from app.db import Base, engine                     # For DB table creation (Giulio)
@@ -25,5 +25,10 @@ app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 @app.get("/")
 def read_index():
     return FileResponse(os.path.join(frontend_path, "index.html"))
+
+# Login/Register route: serves login.html (Giulio)
+@app.get("/login", response_class=HTMLResponse)
+def read_login():
+    return FileResponse(os.path.join(frontend_path, "login.html"))
 
 app.include_router(auth.router)
