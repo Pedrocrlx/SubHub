@@ -14,9 +14,10 @@ services:
       dockerfile: Dockerfile
       context: ./frontend
     ports:
-      - "8080:80"
+      - "3000:3000"
     volumes:
-      - ./frontend:/usr/share/nginx/html
+      - ./frontend/html:/usr/share/nginx/html
+      - ./frontend/conf.d/:/etc/nginx/conf.d/ # Nginx configuration files to change the default port 80 to 3000:3000.
     networks:
       - my-app-net
   db:
