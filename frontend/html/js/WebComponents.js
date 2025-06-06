@@ -2,6 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to load the menu and set up event listeners
     loadMenu();
     LoadFooter();
+    const SignUp = document.getElementById("SignUp");
+    const SignIn = document.getElementById("SignIn");
+
+    SignUp.addEventListener('click', () => {
+        window.location.href = "http://127.0.0.1:5500/frontend/auth.html?signup=true";
+    });
+
+    SignIn.addEventListener('click', () => {
+        window.location.href = "http://127.0.0.1:5500/frontend/auth.html";
+    });
 });
 
 // Function to load the custom menu component
@@ -44,6 +54,7 @@ function loadMenu() {
         LearnMoreButton.classList.add('active');
     }
 }
+
 function getYear() {
     const year = new Date().getFullYear();
     const yearElement = document.getElementById('year');
