@@ -9,6 +9,16 @@ services:
       - db
     networks:
       - my-app-net
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - my-app-net
   db:
     image: postgres:17
     ports:
