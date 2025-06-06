@@ -25,64 +25,69 @@
 <body>
     <custom-menu></custom-menu>
     <div class="container" id="container">
-        <div class="form-box login-card">
-            <form action="">
-                <h1>Login</h1>
-                <div class="input-box">
-                    <input type="text" placeholder=" Email" required>
-                    <i class='bxr  bx-user'></i>
-                </div>
-                <div class="input-box">
-                    <input type="password" placeholder=" password" required>
-                    <i class='bxr  bx-lock'></i>
-                </div>
-                <div class="Forgot-link">
-                    <a href="" id="ForgotPassword" class="label terciary-green"> Forgot password ? </a>
-                </div>
-                <button type="submit" class="primary-green">Login</button>
-            </form>
-        </div>
-
-        <div class="form-box signup-card">
-            <form action="">
-                <h1>Sign Up</h1>
-                <div class="input-box">
-                    <input type="text" placeholder=" Username" required> 
-                    <i class='bxr  bx-user'></i>
-                </div>
-                <div class="input-box">
-                    <input type="text" placeholder=" Email" required>
-                    <i class='bxr bx-envelope'></i> 
-                </div>
-                <div class="input-box">
-                    <input type="password" placeholder=" password" required>
-                    <i class='bxr  bx-lock'></i>
-                </div>
-                <button type="submit" class="primary-green">Register</button>
-            </form>
-        </div>
-
-        <div class="toggle-box">
-            <div class="toggle-panel toggle-left">
-                <div class="tittle">
-                    <h1 class="label"> Welcome back to SubHub </h1>
-                </div>
-                <p>Track and manage all your subscriptions in one place.</p>
-                <p> Don't have an account ?</p>
-                <button class="primary-green" id="register-btn"> Create account </button>
+        <div class="auth">
+            <div class="form-box login-card">
+                <form action="">
+                    <h1>Login</h1>
+                    <div class="input-box">
+                        <input type="text" placeholder=" Email" required>
+                        <i class='bxr  bx-user'></i>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" placeholder=" password" required>
+                        <i class='bxr  bx-lock'></i>
+                    </div>
+                    <div class="Forgot-link">
+                        <a href="" id="ForgotPassword" class="label button-terciary terciary-green "> Forgot password ?
+                        </a>
+                    </div>
+                    <button type="submit" class="button-primary">Login</button>
+                </form>
             </div>
-            
-            <div class="toggle-panel toggle-right">
-                <h1 class="label">Create your SubHub account</h1>
-                <p>Easily monitor, cancel, and optimize all your subscriptions.</p>
-                <p>Already have an account?</p>
-                <button class="primary-green" id="login-btn">Login</button>
 
+            <div class="form-box signup-card">
+                <form action="">
+                    <h1>Sign Up</h1>
+                    <div class="input-box">
+                        <input type="text" placeholder=" Username" required>
+                        <i class='bxr  bx-user'></i>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" placeholder=" Email" required>
+                        <i class='bxr bx-envelope'></i>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" placeholder=" password" required>
+                        <i class='bxr  bx-lock'></i>
+                    </div>
+                    <button type="submit" class="button-primary">Register</button>
+                </form>
+            </div>
+
+            <div class="toggle-box">
+                <div class="toggle-panel toggle-left">
+                    <div class="tittle">
+                        <h1 class="neutral-tittle"> Welcome back to SubHub </h1>
+                    </div>
+                    <p>Track and manage all your subscriptions in one place.</p>
+                    <p> Don't have an account ?</p>
+                    <button class="button-secondary secondary-neutral" id="register-btn"> Create account </button>
+                </div>
+
+                <div class="toggle-panel toggle-right">
+                    <h1 class="neutral-tittle">Create your SubHub account</h1>
+                    <p>Easily monitor, cancel, and optimize all your subscriptions.</p>
+                    <p>Already have an account?</p>
+                    <button class="button-secondary secondary-neutral" id="login-btn">Login</button>
+
+                </div>
             </div>
         </div>
     </div>
 </body>
 <custom-footer></custom-footer>
 <script src="js/auth.js" defer></script>
+<script src="js/WebComponents.js" defer></script>
+
 
 </html>

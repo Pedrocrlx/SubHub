@@ -49,6 +49,9 @@ h1 {
     line-height: 76px;
     letter-spacing: -1px;
 }
+.neutral-tittle{
+    color: var(--marble-300);
+}
 
 h2 {
     font-size: 40px;
@@ -116,7 +119,7 @@ h5 {
 
 /* Buttons */
 button {
-    margin: 0px 10px;
+    margin: 20px 10px;
     font-size: 12px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -130,13 +133,13 @@ button {
 .button-primary {
     background: var(--hunter-green-300);
     color: var(--marble-300);
-    padding: 10px 16px;
+    padding: 16px 32px;
 }
 
 .button-primary:hover {
     background: var(--hunter-green-200);
     color: var(--marble-300);
-    border: 2px solid var(--hunter-green-200);
+    border: none;
 }
 
 .button-primary:active {
@@ -161,8 +164,7 @@ button {
     background: var(--marble-300);
     color: var(--hunter-green-300);
     border: 2px solid var(--hunter-green-300);
-    padding: 10px 16px;
-
+    padding: 16px 32px;
 }
 
 .button-secondary:hover {
@@ -210,7 +212,7 @@ nav {
     color: var(--marble-300);
     text-decoration: none;
     margin: 0px 1rem;
-    padding: 2.5rem 0px;
+    padding: 2rem 0px;
     position: relative;
     transition: color 0.2s;
 }
@@ -221,7 +223,7 @@ nav {
     display: block;
     position: absolute;
     left: 0;
-    bottom: 2rem;
+    bottom: 1.8rem;
     width: 100%;
     height: 2px;
     background: var(--hunter-green-600);
@@ -233,7 +235,7 @@ nav {
 .button-terciary:hover {
     color: var(--hunter-green-600);
 }
-
+ 
 .button-terciary:hover::after {
     transform: scaleX(1);
 }
