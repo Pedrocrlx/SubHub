@@ -1,6 +1,9 @@
 body {
+    display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
 }
 
 .container {
@@ -49,6 +52,7 @@ form {
 }
 
 .container h1 {
+    font-size: 2.5rem;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -141,13 +145,6 @@ form {
     transition-delay: 1.2s;
 }
 
-.Forgot-link{
-    margin: 1rem;
-}
-.auth{
-    padding-top: 25vh;
-    justify-self: center;
-}
 
 @media screen and (max-width:650px) {
     .container {
@@ -155,19 +152,11 @@ form {
         width: calc(100vw - 3rem);
     }
 
-    p {
-        font-size: 14px;
-    }
-    
     .form-box {
         width: 100%;
         height: 70%;
         bottom: 0;
 
-    }
-    .container h1{
-        font-size: 40px;
-                padding-top: 1rem;
     }
     .container.active .form-box {
         right: 0;
