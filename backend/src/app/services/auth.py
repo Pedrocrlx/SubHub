@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, Form, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
@@ -12,7 +12,6 @@ from app.models.user import User
 
 # Secret and algorithm (TO BE PULLED FROM .env)
 load_dotenv()
-
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -57,7 +56,13 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     except JWTError:
         raise credentials_exception
 
-    user = db.query(User).filter(User.username == username).first()
+    user = db.query(User).filter(User.email == username).first()
     if user is None:
         raise credentials_exception
     return user.username
+
+# Custom form for email/password login
+class EmailPasswordForm:
+    def __init__(self, email: str = Form(...), password: str = Form(...)):
+        self.email=email
+        self.password=password
