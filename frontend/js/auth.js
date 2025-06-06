@@ -14,4 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
         container.classList.remove('active');
     });
 
+    const params = new URLSearchParams(window.location.search);
+    const SignUp = params.get('signup')
+    if (SignUp == "true") {
+        container.classList.add('active');
+    }
+
+
 });
