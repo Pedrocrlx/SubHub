@@ -1,6 +1,8 @@
-body {
+main {
+    display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #f0f0f0;
 }
 
 .container {
@@ -36,11 +38,11 @@ body {
     right: 50%;
 }
 
-.form-box.signup-card {
+.form-box.right-card {
     visibility: hidden;
 }
 
-.container.active .form-box.signup-card {
+.container.active .form-box.right-card {
     visibility: visible;
 }
 
@@ -49,8 +51,7 @@ form {
 }
 
 .container h1 {
-    margin-bottom: 20px;
-    text-align: center;
+    padding: 5px;
 }
 
 .input-box {
@@ -101,6 +102,10 @@ form {
     z-index: 2;
     border-radius: 150px;
     transition: 1.8s ease-in-out;
+}
+
+.Forgot-link {
+    margin: 1rem;
 }
 
 .container.active .toggle-box::before {

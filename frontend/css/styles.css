@@ -244,10 +244,6 @@ nav {
     color: var(--hunter-green-300);
 }
 
-#ForgotPassword {
-    margin: 1rem;
-}
-
 nav a.active {
     color: var(--hunter-green-600);
 }
@@ -355,6 +351,7 @@ footer a {
     justify-content: center;
     margin: 4rem;
 }
+
 main{
     min-height: calc(100vh - 6rem);
 }
