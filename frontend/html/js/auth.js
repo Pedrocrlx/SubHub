@@ -1,6 +1,13 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById('container');
+    
+    const params = new URLSearchParams(window.location.search);
+    const signup = params.get('signup')
+    if (signup == "true") {
+        container.classList.add('active');
+    }
+
     const loginBtn = document.getElementById('login-btn');
     const registerBtn = document.getElementById('register-btn');
     if (registerBtn) {
