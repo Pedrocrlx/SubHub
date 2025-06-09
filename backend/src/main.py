@@ -18,8 +18,8 @@ app.add_middleware(JWTMiddleware)
 # Creates tables
 Base.metadata.create_all(bind=engine)
 
-# Montar a pasta de ficheiros estáticos (por exemplo, a pasta 'frontend')
-app.mount("/static", StaticFiles(directory=frontend_path), name="static")
+# Montar a pasta de ficheiros estáticos (por exemplo, a pasta 'frontend') -- (Giulio) Momentarily commented out due to container mounting conflicts. REMEMBER TO PUT IT BACK IN LATER
+# app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 # Rota principal: servir index.html
 @app.get("/")

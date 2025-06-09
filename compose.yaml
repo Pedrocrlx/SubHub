@@ -28,6 +28,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: qwerty
       POSTGRES_DB: subHub
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     networks:
       - my-app-net
 
@@ -35,7 +37,12 @@ services:
     image: adminer:latest
     ports:
       - 8080:8080
+    networks:
+      - my-app-net
 
 networks:
   my-app-net:
     driver: bridge
+
+volumes:
+  pgdata:
