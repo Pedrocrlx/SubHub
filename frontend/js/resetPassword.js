@@ -1,16 +1,6 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById('container');
-  const Goback = document.getElementById('GoBack');
-  const loginBtn = document.getElementById('login-btn');
-  Goback.addEventListener('click', () => {
-    container.classList.remove('active');
-  });
 
-  loginBtn.addEventListener('click', () => {
-    console.log('Login button clicked');
-    window.location.href = "auth.html";
-  });
   // Pega os parâmetros da URL
   const params = new URLSearchParams(window.location.search);
   const token = params.get('token');
@@ -28,6 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+function login(){
+  window.location.href = "auth.html";
+}
 
 // Exemplo: exibe no status (apenas para debug, remover depois)
 document.getElementById("status").textContent =

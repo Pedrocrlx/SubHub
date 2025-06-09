@@ -27,14 +27,14 @@
     <main>
    <div class="container" id="container">
         <div class="form-box left-card">
-            <form action="">
+            <form id="login-form">
                 <h1>Login</h1>
                 <div class="input-box">
-                    <input type="text" placeholder=" Email" required>
+                    <input type="text" id="login-email" placeholder=" Email" required>
                     <i class='bxr  bx-user'></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder=" password" required>
+                    <input type="password" id="login-password" placeholder=" password" required>
                     <i class='bxr  bx-lock'></i>
                 </div>
                 <div class="Forgot-link">
@@ -45,19 +45,21 @@
         </div>
 
         <div class="form-box right-card">
-            <form action="">
+            <form id="signUp">
                 <h1>Sign Up</h1>
                 <div class="input-box">
-                    <input type="text" placeholder=" Username" required> 
+                    <input type="text" id="signup-username" placeholder=" Username" required> 
                     <i class='bxr  bx-user'></i>
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder=" Email" required>
+                    <input type="text" id="signup-email"placeholder=" Email" required>
                     <i class='bxr bx-envelope'></i> 
+                    <label for="signup-email" id="signup-email-error-message">  </label>
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder=" password" required>
+                    <input type="password" id="signup-password"placeholder=" password" required>
                     <i class='bxr  bx-lock'></i>
+                    <label for="signup-password" id="signup-password-error-message">  </label>
                 </div>
                 <button type="submit" class="button-primary">Register</button>
             </form>
@@ -66,9 +68,8 @@
         <div class="toggle-box">
             <div class="toggle-panel toggle-left">
                 <div class="tittle">
-                    <h1 class="neutral-tittle"> Welcome back to SubHub </h1>
+                    <h1 class="neutral-tittle"> Welcome to SubHub </h1>
                 </div>
-                <p>Track and manage all your subscriptions in one place.</p>
                 <p> Don't have an account ?</p>
                 <button class="button-secondary secondary-neutral" id="register-btn"> Create account </button>
             </div>
@@ -86,6 +87,7 @@
 </body>
 <custom-footer></custom-footer>
 <script src="js/auth.js" defer></script>
+<script src="js/auth_form_validation.js" defer></script>
 <script src="js/WebComponents.js" defer></script>
 
 </html>
