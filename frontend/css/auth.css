@@ -79,7 +79,7 @@ form {
 .input-box i {
     position: absolute;
     right: 1rem;
-    top: 50%;
+    top: 1.8rem;
     transform: translateY(-50%);
     font-size: 20px;
     color: #888;
