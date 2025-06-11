@@ -40,7 +40,7 @@ services:
     networks:
       - my-app-net
 
-networks:
+networks: # Define a custom network for the services to communicate.
   my-app-net:
     driver: bridge
 
