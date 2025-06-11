@@ -2,7 +2,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0;
 }
 
 .container {
@@ -14,6 +13,7 @@ main {
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     text-align: center;
+    z-index: 0;
 }
 
 .form-box {
@@ -62,7 +62,7 @@ form {
 .input-box input {
     width: 100%;
     padding: 18px 0px;
-    background: #F2F8FC;
+    background: #ffffff;
     border: 2px solid #2C5C33;
     border-radius: 8px;
     outline: none;
@@ -84,6 +84,69 @@ form {
     font-size: 20px;
     color: #888;
 }
+
+
+.floating-input {
+  width: 100%;
+  padding: 18px 12px 6px 12px; /* extra space for label on top */
+  background: #ffffff;
+  border: 2px solid #2C5C33;
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.floating-label {
+  position: absolute;
+  left: 12px;
+  top: 16px;
+  color: #888;
+  font-size: 16px;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+  background: #ffffff;
+  padding: 0 4px;
+}
+
+/* Float when input is focused or filled */
+.floating-input:focus + .floating-label,
+.floating-input.filled + .floating-label {
+  top: -10px;
+  left: 10px;
+  font-size: 12px;
+  color: var(--primary-color, #2C5C33);
+}
+
+
+.open-eye,
+.closed-eye {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  visibility: hidden;
+}
+
+.password-input:focus ~ .lock-icon,
+.password-input.filled ~ .lock-icon {
+  visibility: hidden;
+}
+
+.password-input:focus ~ .open-eye,
+.password-input.filled ~ .open-eye{
+  visibility: visible;
+}
+
+.closed-eye.active {
+  visibility: visible;
+}
+.open-eye.active {
+  visibility: visible;
+}
+
 
 .toggle-box {
     position: absolute;
@@ -146,12 +209,14 @@ form {
     transition-delay: 1.2s;
 }
 
-.Forgot-link{
-    margin: 1rem;
+.error-message{
+    display: flex;
+    color: red;
+    text-align: start;
 }
-.auth{
-    padding-top: 25vh;
-    justify-self: center;
+
+.component{
+    margin: 30px 0;
 }
 
 @media screen and (max-width:650px) {
@@ -225,4 +290,17 @@ form {
     .input-box i {
         right: 0;
     }
+}
+
+
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-password-reveal-button {
+    display: none !important;
+}
+
+input[type="password"]::-webkit-textfield-decoration-container {
+    display: none !important;
 }
