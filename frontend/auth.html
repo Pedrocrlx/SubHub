@@ -20,74 +20,92 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
+
+    <!-- external library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
     <custom-menu></custom-menu>
     <main>
-   <div class="container" id="container">
-        <div class="form-box left-card">
-            <form id="login-form">
-                <h1>Login</h1>
-                <div class="input-box">
-                    <input type="text" id="login-email" placeholder=" Email" required>
-                    <i class='bxr  bx-user'></i>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="login-password" placeholder=" password" required>
-                    <i class='bxr  bx-lock'></i>
-                </div>
-                <div class="Forgot-link">
-                    <a href="resetPassword.html" id="ForgotPassword" class="label terciary-green button-terciary"> Forgot password ? </a>
-                </div>
-                <button type="submit" class="button-primary">Login</button>
-            </form>
-        </div>
-
-        <div class="form-box right-card">
-            <form id="signUp">
-                <h1>Sign Up</h1>
-                <div class="input-box">
-                    <input type="text" id="signup-username" placeholder=" Username" required> 
-                    <i class='bxr  bx-user'></i>
-                </div>
-                <div class="input-box">
-                    <input type="text" id="signup-email"placeholder=" Email" required>
-                    <i class='bxr bx-envelope'></i> 
-                    <label for="signup-email" id="signup-email-error-message">  </label>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="signup-password"placeholder=" password" required>
-                    <i class='bxr  bx-lock'></i>
-                    <label for="signup-password" id="signup-password-error-message">  </label>
-                </div>
-                <button type="submit" class="button-primary">Register</button>
-            </form>
-        </div>
-
-        <div class="toggle-box">
-            <div class="toggle-panel toggle-left">
-                <div class="tittle">
-                    <h1 class="neutral-tittle"> Welcome to SubHub </h1>
-                </div>
-                <p> Don't have an account ?</p>
-                <button class="button-secondary secondary-neutral" id="register-btn"> Create account </button>
+        <div class="container" id="container">
+            <div class="form-box left-card">
+                <form id="login-form">
+                    <h1>Login</h1>
+                    <div class="input-box">
+                        <input type="text" id="login-email" class="floating-input" autocomplete="username" />
+                        <label class="floating-label" for="login-email">Email</label>
+                        <i class='bxr bx-user'></i>
+                        <label id="login-email-error-message" class="error-message"></label>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="login-password" class="floating-input password-input"
+                            autocomplete="current-password" />
+                        <label class="floating-label" for="login-password">Password</label>
+                        <i class="bx bx-lock lock-icon"></i>
+                        <i class="bx bx-eye open-eye"></i>
+                        <i class="bx bx-eye-slash closed-eye"></i>
+                        <label id="login-password-error-message" class="error-message"></label>
+                    </div>
+                    <div class="Forgot-link">
+                        <a href="resetPassword.html" id="ForgotPassword" class="label terciary-green button-terciary">
+                            Forgot password ? </a>
+                    </div>
+                    <button type="submit" class="button-primary">Login</button>
+                </form>
             </div>
-            
-            <div class="toggle-panel toggle-right">
-                <h1  class="neutral-tittle">Create your SubHub account</h1>
-                <p>Easily monitor, cancel, and optimize all your subscriptions.</p>
-                <p>Already have an account?</p>
-                <button class="button-secondary secondary-neutral" id="login-btn">Login</button>
 
+            <div class="form-box right-card">
+                <form id="signUp">
+                    <h1>Sign Up</h1>
+                    <div class="input-box">
+                        <input type="text" id="signup-username" class="floating-input" />
+                        <label class="floating-label" for="signup-username">Username</label>
+                        <i class='bxr bx-user'></i>
+                        <label id="signup-username-error-message" class="error-message"></label>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" id="signup-email" class="floating-input" />
+                        <label class="floating-label" for="signup-email">Email</label>
+                        <i class='bxr bx-envelope'></i>
+                        <label id="signup-email-error-message" class="error-message"></label>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="signup-password" class="floating-input" />
+                        <label class="floating-label" for="signup-password">Password</label>
+                        <i class="bx bx-lock lock-icon"></i>
+                        <i class="bx bx-eye open-eye"></i>
+                        <i class="bx bx-eye-slash closed-eye"></i>
+                        <label id="signup-password-error-message" class="error-message"></label>
+                    </div>
+                    <button type="submit" class="button-primary">Register</button>
+                </form>
+            </div>
+
+            <div class="toggle-box">
+                <div class="toggle-panel toggle-left">
+                    <div class="tittle">
+                        <h1 class="neutral-tittle"> Welcome to SubHub </h1>
+                    </div>
+                    <p> Don't have an account ?</p>
+                    <button class="button-secondary secondary-neutral" id="register-btn"> Create account </button>
+                </div>
+
+                <div class="toggle-panel toggle-right">
+                    <h1 class="neutral-tittle">Create your account</h1>
+                    <p>Already have an account?</p>
+                    <button class="button-secondary secondary-neutral" id="login-btn">Login</button>
+
+                </div>
             </div>
         </div>
-    </div>
     </main>
 </body>
 <custom-footer></custom-footer>
 <script src="js/auth.js" defer></script>
 <script src="js/auth_form_validation.js" defer></script>
+<script src="js/input-animation.js" defer></script>
 <script src="js/WebComponents.js" defer></script>
 
 </html>
