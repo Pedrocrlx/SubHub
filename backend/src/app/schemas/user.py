@@ -15,3 +15,11 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: str | None = None
+
+class UserRead(BaseModel):
+    id: int
+    username: str
+    email: str
+
+    class Config:
+        orm_mode = True
