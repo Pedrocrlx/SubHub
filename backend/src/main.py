@@ -21,12 +21,19 @@ from app.db.storage import (
     load_data_from_file
 )
 
+<<<<<<< HEAD
 # Re-export security functions needed by tests
 from app.core.security import (
     hash_password,
     verify_password,
     create_access_token
 )
+=======
+from app.routers import auth, ping                  # Imports router modules (Giulio)
+from app.db import Base, engine                     # For DB table creation (Giulio)
+from app.routers import auth, user                  # Imports router module (Giulio)
+from app.services.middleware import JWTMiddleware   # For Middleware protection (Giulio)
+>>>>>>> ca637ec (fix:(User Model and CRUD): update main.py)
 
 # Re-export settings
 from app.config import app_settings  # Changed: don't rename this variable
