@@ -21,16 +21,32 @@ document.addEventListener("DOMContentLoaded", () => {
 function login(){
   window.location.href = "auth.html";
 }
+window.login = login;
 
-// Exemplo: exibe no status (apenas para debug, remover depois)
-document.getElementById("status").textContent =
-  token && email ? `Token: ${token}, Email: ${email}` : 'Parâmetros inválidos';
+export async function email_send_validation(email) {
+// Aqui você faria uma chamada para sua API para enviar o email de validação
+  // Exemplo de fetch:
+  fetch('https://api.teusite.com/send-reset-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert('Email de redefinição enviado com sucesso!');
+        // Redirecionar para a página de redefinição de senha
+      } else {
+        alert('Erro ao enviar o email de redefinição.');
+      }
+    })
+    .catch(err => {
+      console.error('Erro na requisição:', err);
+      alert('Erro ao enviar o email de redefinição.');
+    });
+}
 
-// Se quiser lidar com o envio do form
-const form = document.getElementById('resetForm');
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
-  const newPassword = document.getElementById('newPassword').value;
+export async function resetPassword(newPassword) {
 
   // Aqui você faria uma chamada para sua API para redefinir a senha
   // Exemplo de fetch:
@@ -56,4 +72,4 @@ form.addEventListener('submit', function (e) {
       console.error('Erro na requisição:', err);
       alert('Erro ao redefinir a senha.');
     });
-});
+}
