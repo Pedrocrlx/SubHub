@@ -1,10 +1,10 @@
 import os
 
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
+#from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
 
-from app.routers import auth                        # Imports router module (Giulio)
+from app.routers import auth, ping                  # Imports router modules (Giulio)
 from app.db import Base, engine                     # For DB table creation (Giulio)
 from app.services.middleware import JWTMiddleware   # For Middleware protection (Giulio)
 
@@ -32,3 +32,4 @@ def read_login():
     return FileResponse(os.path.join(frontend_path, "login.html"))
 
 app.include_router(auth.router)
+app.include_router(ping.router)
