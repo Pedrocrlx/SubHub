@@ -36,6 +36,6 @@ services:
     ports:
       - 8080:8080
 
-networks:
+networks: # Define a custom network for the services to communicate.
   my-app-net:
     driver: bridge
