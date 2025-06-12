@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-=======
-from pydantic import BaseModel
->>>>>>> da9a447 (git feat:(User Model and CRUD): Start adding Files)
 
 class UserCreate(BaseModel):
     username: str
@@ -39,3 +35,4 @@ class PasswordChange(BaseModel):    #Separate from above for secure password han
     new_password: str
     class Config:
         orm_mode = True
+        from_attributes = True
