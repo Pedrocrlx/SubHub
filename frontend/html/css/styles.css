@@ -49,6 +49,12 @@ h1 {
     line-height: 76px;
     letter-spacing: -1px;
 }
+<<<<<<< HEAD
+=======
+.neutral-tittle{
+    color: var(--marble-300);
+}
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
 
 h2 {
     font-size: 40px;
@@ -116,7 +122,11 @@ h5 {
 
 /* Buttons */
 button {
+<<<<<<< HEAD
     margin: 0px 10px;
+=======
+    margin: 20px 10px;
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
     font-size: 12px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -130,13 +140,21 @@ button {
 .button-primary {
     background: var(--hunter-green-300);
     color: var(--marble-300);
+<<<<<<< HEAD
     padding: 10px 16px;
+=======
+    padding: 16px 32px;
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
 }
 
 .button-primary:hover {
     background: var(--hunter-green-200);
     color: var(--marble-300);
+<<<<<<< HEAD
     border: 2px solid var(--hunter-green-200);
+=======
+    border: none;
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
 }
 
 .button-primary:active {
@@ -161,8 +179,12 @@ button {
     background: var(--marble-300);
     color: var(--hunter-green-300);
     border: 2px solid var(--hunter-green-300);
+<<<<<<< HEAD
     padding: 10px 16px;
 
+=======
+    padding: 16px 32px;
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
 }
 
 .button-secondary:hover {
@@ -210,7 +232,11 @@ nav {
     color: var(--marble-300);
     text-decoration: none;
     margin: 0px 1rem;
+<<<<<<< HEAD
     padding: 2.5rem 0px;
+=======
+    padding: 2rem 0px;
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
     position: relative;
     transition: color 0.2s;
 }
@@ -221,7 +247,11 @@ nav {
     display: block;
     position: absolute;
     left: 0;
+<<<<<<< HEAD
     bottom: 2rem;
+=======
+    bottom: 1.8rem;
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
     width: 100%;
     height: 2px;
     background: var(--hunter-green-600);
@@ -233,7 +263,11 @@ nav {
 .button-terciary:hover {
     color: var(--hunter-green-600);
 }
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
 .button-terciary:hover::after {
     transform: scaleX(1);
 }
@@ -242,10 +276,13 @@ nav {
     color: var(--hunter-green-300);
 }
 
+<<<<<<< HEAD
 #ForgotPassword {
     margin: 1rem;
 }
 
+=======
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
 nav a.active {
     color: var(--hunter-green-600);
 }
@@ -353,6 +390,10 @@ footer a {
     justify-content: center;
     margin: 4rem;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6e9bf32 (Refactor: Organize frontend structure by moving and renaming files)
 main{
     min-height: calc(100vh - 6rem);
 }
