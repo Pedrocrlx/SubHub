@@ -6,13 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const SignIn = document.getElementById("SignIn");
 
     SignUp.addEventListener('click', () => {
-        window.location.href = "http://127.0.0.1:5500/frontend/auth.html?signup=true";
+        window.location.href = "/frontend/html/auth/?signup=true";
     });
-
+    
     SignIn.addEventListener('click', () => {
-        window.location.href = "http://127.0.0.1:5500/frontend/auth.html";
+        window.location.href = "/frontend/html/auth";
     });
 });
+
 
 // Function to load the custom menu component
 // This function defines a custom HTML element for the menu and appends it to the document
@@ -29,7 +30,7 @@ function loadMenu() {
                         <span class="logo-sub">Sub</span><span class="logo-hub">Hub</span>
                     </p>
                 </div>
-                <a href="index.html" id="home-button" class="label button-terciary">home</a>
+                <a href="/frontend/html/landing_page/index.html" id="home-button" class="label button-terciary">home</a>
                 <a id="language-button" class="label button-terciary">LANGUAGE</a>
                 <a href="LearnMore.html" id="learnmore-button" class="label button-terciary">learn more</a>
 
@@ -64,7 +65,7 @@ function getYear() {
     return year;
 }
 
-LoadFooter = () => {
+function LoadFooter () {
     class CustomFooter extends HTMLElement {
         connectedCallback() {
             this.innerHTML = `
