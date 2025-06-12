@@ -4,9 +4,16 @@ RUN pip install poetry
 
 WORKDIR /app
 
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry config virtualenvs.create true &&\
+    poetry config virtualenvs.in-project true &&\
+    poetry install --no-root
+
 COPY . .
 
-RUN poetry install
+ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH=/app/src
 
 EXPOSE 8000
 
