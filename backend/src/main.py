@@ -1,7 +1,7 @@
 import os
 
 from fastapi import FastAPI
-#from fastapi.staticfiles import StaticFiles
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
 
 from app.routers import auth, ping                  # Imports router modules (Giulio)
@@ -34,3 +34,4 @@ def read_login():
 
 app.include_router(auth.router)
 app.include_router(ping.router)
+app.include_router(user.router)

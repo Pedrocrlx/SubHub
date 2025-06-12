@@ -5,7 +5,7 @@ from app.services.auth import SECRET_KEY, ALGORITHM
 
 class JWTMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        if request.url.path.startswith("/protected"):
+        if request.url.path.startswith("/auth/protected"):
             print(f"[DEBUG] Path: {request.url.path}")
             auth_header = request.headers.get("Authorization")
             print(f"[DEBUG] Authorization header: {auth_header}")

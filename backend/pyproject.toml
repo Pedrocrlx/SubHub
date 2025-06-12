@@ -17,6 +17,7 @@ python-dotenv = "^1.1.0"
 python-jose = "^3.5.0"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.20"
+bcrypt = "^3.2.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
