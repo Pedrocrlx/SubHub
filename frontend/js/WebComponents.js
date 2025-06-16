@@ -104,3 +104,11 @@ LoadFooter = () => {
     }
     customElements.define('custom-footer', CustomFooter);
 }
+
+function SignUp(){
+    window.location.href = "frontend/html/auth/?signup=true";
+}
+
+function SignIn(){
+    window.location.href = "frontend/html/auth/";
+}
