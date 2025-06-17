@@ -1,10 +1,4 @@
-/*
-=================================
-    LANDING PAGE STYLES
-=================================
-*/
 
-/* General page setup */
 body {
     background-color: var(--marble-300);
 }
@@ -14,10 +8,6 @@ main {
 }
 
 
-/* =================================
-    1. HERO SECTION
-=================================
-*/
 .hero-section {
     color: var(--marble-300);
     text-align: center;
@@ -27,7 +17,7 @@ main {
     justify-content: center;
     align-items: center;
     position: relative;
-    background: url('/frontend/images/hero-background.png') no-repeat center center;
+    background: url('/frontend/html/images/hero-background.png') no-repeat center center;
     background-size: cover;
     background-position: center center;
 }
@@ -54,10 +44,7 @@ main {
 .hero-section button{
     padding: 16px 20px;
 }
-/* =================================
-    2. FEATURES SECTION
-=================================
-*/
+
 .features-section {
     display: flex;
     justify-content: center;
@@ -94,10 +81,6 @@ main {
     padding: 0 10px;
 }
 
-/* =================================
-    3. FAQ SECTION
-=================================
-*/
 .faq-section {
     padding: 80px 40px;
     display: flex;
@@ -196,10 +179,6 @@ main {
     height: auto;
 }
 
-/* =================================
-    4. CONVINCED SECTION
-=================================
-*/
 .convinced-section {
     background: linear-gradient(to bottom, var(--hunter-green-50), var(--hunter-green-500));
     color: var(--marble-300);
@@ -217,11 +196,6 @@ main {
     margin-bottom: 20px;
 }
 
-
-/* =================================
-    RESPONSIVE DESIGN
-=================================
-*/
 @media (max-width: 992px) {
     .faq-container {
         flex-direction: column;

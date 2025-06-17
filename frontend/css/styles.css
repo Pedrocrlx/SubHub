@@ -139,10 +139,6 @@ button {
 .button-primary:hover {
     background: var(--hunter-green-200);
     color: var(--marble-300);
-<<<<<<< HEAD
-    border: none;
-=======
->>>>>>> f0fa028 (Add FAQ accordion functionality to landing page)
 }
 
 .button-primary:active {

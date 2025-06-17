@@ -18,10 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-function login(){
-  window.location.href = "auth.html";
-}
-window.login = login;
 
 export async function email_send_validation(email) {
 // Aqui você faria uma chamada para sua API para enviar o email de validação

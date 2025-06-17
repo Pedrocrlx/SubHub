@@ -16,7 +16,7 @@ document.getElementById('reset-email-form').addEventListener('submit', async fun
     }
     else {
         try {
-            window.location.href = 'resetPassword.html?verified=true&email=' + email;
+            window.location.href = '/frontend/html/reset_password/?verified=true&email=' + email;
             //await email_send_validation(email);
         } catch (error) {
             console.error('couldnt send email to reset the password:', error);
