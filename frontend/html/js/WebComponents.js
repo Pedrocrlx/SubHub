@@ -33,11 +33,12 @@ function loadMenu() {
     customElements.define('custom-menu', CustomMenu);
     const homeButton = document.getElementById('home-button');
     const LearnMoreButton = document.getElementById('learnmore-button');
-    const currentPath = window.location.pathname.split('/').pop();
-    if (currentPath === 'index.html') {
+    const currentPath = window.location.pathname.split('/');
+    console.log("Current Path: " + currentPath[3]);
+    if (currentPath[3] === 'landing_page') {
         homeButton.classList.add('active');
     }
-    if (currentPath === 'LearnMore.html') {
+    if (currentPath[3] === 'learn_more') {
         LearnMoreButton.classList.add('active');
     }
 }
