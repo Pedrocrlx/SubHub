@@ -22,7 +22,7 @@ This MVP focuses on delivering essential functionality with a static, user-frien
 - **NGINX 1.27** – Used to serve the static frontend content efficiently in a production environment.
 - **Docker** – Provides isolated containers for each service to ensure consistent environments across development and deployment.
 - **Docker Compose** – Simplifies the orchestration and management of multi-container applications.
-- **VSCode DevContainer** – Facilitates a pre-configured development environment for all contributors.
+- **VSCode DevContainer - Docker in Docker** – Facilitates a pre-configured development environment for all contributors.
 - **Poetry** – Manages Python dependencies and virtual environments in a reproducible and maintainable way.
 - **Git and GitHub** – Used for version control, collaboration, and continuous integration.
 
@@ -33,6 +33,10 @@ This MVP focuses on delivering essential functionality with a static, user-frien
 - RESTful API endpoints for communication between frontend and backend.
 - Static frontend hosted through an NGINX container.
 - Fully containerized architecture for cross-platform compatibility.
+
+## API Endpoints
+
+## Environment variables (.env) example
 
 ## Project Structure
 ```
@@ -50,23 +54,52 @@ SubHub/
 
 ![Architecture diagram](docs\architecture-diagram.png)
 
+## Prerequisites
 
-## Running the Project
+Before opening the project, make sure you have the following installed:
 
-To build and start the application, run:
+1. **Visual Studio Code**  
+   Download and install from: https://code.visualstudio.com/
 
-```bash
-docker compose up --build
-```
+2. **VS Code Extensions**  
+   In Visual Studio Code, install the following extensions:
+   - Docker
+   - Dev Containers
 
-Alternatively, using Makefile:
+3. **Docker Desktop**  
+   Download and install from: https://www.docker.com/products/docker-desktop/
 
-```bash
-make compose
-```
+4. **.env file**  
+   Create a `.env` file in the project root.
 
-## Development Team
+## How to Open the Project
 
-- **Pedro Santos** – Backend architecture and Docker/DevOps lead
-- **Giulio & Nuno** – Backend implementation
-- **Nelson** – Frontend development
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
+
+2. **Open the project folder in Visual Studio Code:**
+   ```bash
+   code .
+   ```
+   
+3. **Create the `.env` file:**  
+   Copy the example above and save it as `.env` in the root directory.
+
+4. **Reopen in Dev Container:**  
+   In VS Code, press `Ctrl+Shift+P`, then select:  
+   `Dev Containers: Reopen in Container`
+
+5. **Start the application using Make:**
+   ```bash
+   make compose
+   ```
+
+   Alternatively, using Docker:
+   ```bash
+   docker compose up --build
+   ```
+
+Now the project should be up and running.
