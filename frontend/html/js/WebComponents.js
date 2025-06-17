@@ -16,9 +16,9 @@ function loadMenu() {
                         <span class="logo-sub">Sub</span><span class="logo-hub">Hub</span>
                     </p>
                 </div>
-                <a href="/frontend/html/landing_page/" id="home-button" class="label button-terciary">home</a>
+                <a href="/home/" id="home-button" class="label button-terciary">home</a>
                 <a id="language-button" class="label button-terciary">LANGUAGE</a>
-                <a href="/frontend/html/learn_more/" id="learnmore-button" class="label button-terciary">learn more</a>
+                <a href="/learn_more/" id="learnmore-button" class="label button-terciary">learn more</a>
 
             </div>
             <div>
@@ -104,8 +104,8 @@ function LoadFooter() {
 }
 
 function signUp() {
-    window.location.href = "/frontend/html/auth/?signup=true";
+    window.location.href = "/auth/?signup=true";
 }
 function signIn() {
-    window.location.href = "/frontend/html/auth/";
+    window.location.href = "/auth/";
 }
