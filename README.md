@@ -39,83 +39,73 @@ This project uses a `.env` file to manage secrets and configuration. For securit
 Ensure Docker is installed and running on your machine.
 
 
-## Description
-**SubHub** is a simple and secure application that helps users manage their online subscriptions, providing clear visibility over recurring costs and promoting healthier financial habits.
+## Project Description
 
-## 🚀 Project Goal
+**SubHub** is a secure and minimalistic application designed to help users manage their online subscriptions. It provides visibility over recurring expenses and encourages more responsible financial decisions.
 
-The app allows users to:
-- View and manage their active subscriptions
-- Automatically calculate total monthly spending
-- Receive alerts before subscription renewals
+## Project Objective
 
-This MVP focuses on core functionality with a clean and static UI.
+This application enables users to:
+- Monitor and organize their active subscriptions.
+- Automatically calculate the total monthly spending on subscriptions.
+- Receive notifications prior to renewal dates.
 
-## 🛠️ Tech Stack
+This MVP focuses on delivering essential functionality with a static, user-friendly interface.
 
-- **Frontend**: HTML + CSS and JavaScript (no frameworks)
-- **Backend**: Python 3.12 + FastAPI
-- **Database**: PostgreSQL
-- **Containers**: Docker + Docker Compose
-- **Development Environment**: VSCode DevContainer
-- **Dependency Management**: Poetry
-- **Version Control**: Git + GitHub
+## Technology Stack
 
-## ✨ Features
+- **HTML, CSS, JavaScript (Vanilla)** – Used for building a lightweight, static frontend without additional framework complexity.
+- **Python 3.12** – A modern, widely supported programming language suitable for backend services.
+- **FastAPI ^0.115.0** – A high-performance web framework for building RESTful APIs quickly and with automatic documentation.
+- **PostgreSQL 17** – A robust, open-source relational database system ideal for managing structured data securely.
+- **NGINX 1.27** – Used to serve the static frontend content efficiently in a production environment.
+- **Docker** – Provides isolated containers for each service to ensure consistent environments across development and deployment.
+- **Docker Compose** – Simplifies the orchestration and management of multi-container applications.
+- **VSCode DevContainer** – Facilitates a pre-configured development environment for all contributors.
+- **Poetry** – Manages Python dependencies and virtual environments in a reproducible and maintainable way.
+- **Git and GitHub** – Used for version control, collaboration, and continuous integration.
 
-- User authentication and authorization.
-- Subscription tracking and management.
-- RESTful API for backend services.
-- Responsive frontend served via NGINX.
-- Containerized architecture for seamless deployment.
+## Key Features
 
-## 📂 Project Structure
+- Secure user authentication and basic authorization.
+- Manual subscription management interface.
+- RESTful API endpoints for communication between frontend and backend.
+- Static frontend hosted through an NGINX container.
+- Fully containerized architecture for cross-platform compatibility.
+
+## Project Structure
 ```
 SubHub/
-├── backend/          # Backend service (FastAPI)
-├── frontend/         # Frontend service (NGINX)
-├── docs/             # Documentation files
-├── compose.yaml      # Docker Compose
+├── backend/          # FastAPI application code
+├── frontend/         # Static frontend assets served via NGINX
+├── docs/             # Project and technical documentation
+├── compose.yaml      # Docker Compose configuration file
 ├── LICENSE           # MIT license
-├── Makefile          # Makefile with commands
-└── README.md         # Project overview
+├── Makefile          # Command shortcuts
+└── README.md         # Project overview and setup instructions
 ```
 
-## ⚙️ How to Run the Project
+## Architecture Diagram
+
+![Architecture diagram](docs\architecture-diagram.png)
+
+
+## Running the Project
+
+To build and start the application, run:
+
 ```bash
 docker compose up --build
 ```
 
-This will spin up:
-
-- The FastAPI backend (`localhost:8000`)
-- The Nginx frontend (`localhost:3000`)
-- PostgreSQL database
-- Adminer DB UI (`localhost:8080`)
-
----
-
-## Tech Stack
-
-- **Backend:** FastAPI, SQLAlchemy, JWT, bcrypt
-- **Frontend:** Nginx serving static HTML
-- **Database:** PostgreSQL
-- **Admin Interface:** Adminer
-
----
-or (Makefile option)
+Alternatively, using Makefile:
 
 ```bash
 make compose
 ```
 
-## 📌 MVP Notes
+## Development Team
 
-- User authentication is not included in this version.
-- Services must be added manually by the user (future integration with APIs planned).
-
-## 👥 Team
-
-- Pedro Santos — Backend architecture, Docker/DevOps
-- Giulio & Nuno — Backend development
-- Nelson — Frontend implementation
+- **Pedro Santos** – Backend architecture and Docker/DevOps lead
+- **Giulio & Nuno** – Backend implementation
+- **Nelson** – Frontend development
