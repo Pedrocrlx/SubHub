@@ -17,7 +17,7 @@ main {
     justify-content: center;
     align-items: center;
     position: relative;
-    background: url('/frontend/html/images/hero-background.png') no-repeat center center;
+    background: url('/images/hero-background.png') no-repeat center center;
     background-size: cover;
     background-position: center center;
 }
