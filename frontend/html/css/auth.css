@@ -39,11 +39,11 @@ main {
 }
 
 .form-box.right-card {
-    visibility: hidden;
+    display: none;
 }
 
 .container.active .form-box.right-card {
-    visibility: visible;
+    display: flex;
 }
 
 form {

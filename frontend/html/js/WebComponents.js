@@ -2,22 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Function to load the menu and set up event listeners
     loadMenu();
     LoadFooter();
-    const SignUp = document.getElementById("SignUp");
-    const SignIn = document.getElementById("SignIn");
-
-    SignUp.addEventListener('click', () => {
-        window.location.href = "/frontend/html/auth/?signup=true";
-    });
-    
-    SignIn.addEventListener('click', () => {
-        window.location.href = "/frontend/html/auth";
-    });
 });
 
-
-// Function to load the custom menu component
-// This function defines a custom HTML element for the menu and appends it to the document
-// It also adds active classes to the menu items based on the current page
 function loadMenu() {
     class CustomMenu extends HTMLElement {
         connectedCallback() {
@@ -30,14 +16,14 @@ function loadMenu() {
                         <span class="logo-sub">Sub</span><span class="logo-hub">Hub</span>
                     </p>
                 </div>
-                <a href="/frontend/html/landing_page/index.html" id="home-button" class="label button-terciary">home</a>
+                <a href="/frontend/html/landing_page/" id="home-button" class="label button-terciary">home</a>
                 <a id="language-button" class="label button-terciary">LANGUAGE</a>
-                <a href="LearnMore.html" id="learnmore-button" class="label button-terciary">learn more</a>
+                <a href="/frontend/html/learn_more/" id="learnmore-button" class="label button-terciary">learn more</a>
 
             </div>
             <div>
-                <button id="SignIn" class="button-secondary secondary-neutral">Sign In</button>
-                <button id="SignUp" class="button-primary primary-neutral">Get started</button>
+                <button id="SignIn" class="button-secondary secondary-neutral" onclick="signIn()">Sign In</button>
+                <button id="SignUp" class="button-primary primary-neutral" onclick="signUp()">Get started</button>
             </div>
         </div>
         </nav>
@@ -65,7 +51,7 @@ function getYear() {
     return year;
 }
 
-function LoadFooter () {
+function LoadFooter() {
     class CustomFooter extends HTMLElement {
         connectedCallback() {
             this.innerHTML = `
@@ -115,4 +101,11 @@ function LoadFooter () {
         }
     }
     customElements.define('custom-footer', CustomFooter);
+}
+
+function signUp() {
+    window.location.href = "/frontend/html/auth/?signup=true";
+}
+function signIn() {
+    window.location.href = "/frontend/html/auth/";
 }
