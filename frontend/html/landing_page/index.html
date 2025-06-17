@@ -8,8 +8,8 @@
     <meta name="description" content="" />
 
     <!-- Font -->
-    <link rel="stylesheet" href="/frontend/css/styles.css" />
-    <link rel="stylesheet" href="/frontend/css/landing_page.css" />
+    <link rel="stylesheet" href="/frontend/html/css/styles.css" />
+    <link rel="stylesheet" href="/frontend/html/css/landing_page.css" />
 
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,27 +24,25 @@
 <body>
     <custom-menu></custom-menu>
     <main>
-
-        <main>
             <section class="hero-section">
                 <div class="hero-content">
                     <h1>Take control of your streaming services</h1>
                     <p class="text1">Starts at €6.99 a month. Cancel at any time.</p>
-                    <button class="button-primary">REGISTER NOW</button>
+                    <button class="button-primary" onclick="signUp()">REGISTER NOW</button>
                 </div>
             </section>
 
             <section class="features-section">
                 <div class="feature-card">
-                    <img src="/frontend/images/phone-cancel.png" alt="Cancel subscriptions easily">
+                    <img src="/frontend/html/images/phone-cancel.png" alt="Cancel subscriptions easily">
                     <p class="text2">Cancel your subscriptions with just a few taps</p>
                 </div>
                 <div class="feature-card">
-                    <img src="/frontend/images/phone-expenses.png" alt="Track monthly expenses">
+                    <img src="/frontend/html/images/phone-expenses.png" alt="Track monthly expenses">
                     <p class="text2">Keep track of your monthly expenses</p>
                 </div>
                 <div class="feature-card">
-                    <img src="/frontend/images/phone-budget.png" alt="Create monthly budgets">
+                    <img src="/frontend/html/images/phone-budget.png" alt="Create monthly budgets">
                     <p class="text2">Create monthly budgets</p>
                 </div>
             </section>
@@ -176,7 +174,7 @@
                     </div>
                     <div class="faq-illustration">
                         <h2> Frequently Asked Questions </h2>
-                        <img src="/frontend/images/faq-illustration.png"
+                        <img src="/frontend/html/images/faq-illustration.png"
                             alt="Woman with a question mark and a lightbulb">
                     </div>
                 </div>
@@ -185,13 +183,13 @@
             <section class="convinced-section">
                 <h2>Convinced?</h2>
                 <p class="text1">Click Register Now to get started!</p>
-                <button class="button-primary">REGISTER NOW</button>
+                <button class="button-primary" onclick="signUp()">REGISTER NOW</button>
             </section>
         </main>
         <custom-footer></custom-footer>
 
-        <script src="/frontend/js/WebComponents.js" defer></script>
-        <script src="/frontend/js/landing_page.js" defer></script>
+        <script src="/frontend/html/js/WebComponents.js" defer></script>
+        <script src="/frontend/html/js/landing_page.js" defer></script>
 </body>
 
 </html>
