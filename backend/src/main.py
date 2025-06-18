@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
 
-from app.routers import auth, ping                  # Imports router modules (Giulio)
+from app.routers import auth, ping, subscription    # Imports router modules (Giulio)
 from app.db import Base, engine                     # For DB table creation (Giulio)
 from app.routers import auth, user                  # Imports router module (Giulio)
 from app.services.middleware import JWTMiddleware   # For Middleware protection (Giulio)
@@ -35,3 +35,4 @@ def read_login():
 app.include_router(auth.router)
 app.include_router(ping.router)
 app.include_router(user.router)
+app.include_router(subscription.router)

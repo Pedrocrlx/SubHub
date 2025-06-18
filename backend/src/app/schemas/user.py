@@ -29,3 +29,7 @@ class UserUpdate(BaseModel):
 
     class Config:
         from_attributes = True
+
+class PasswordChange(BaseModel):    #Separate from above for secure password handling 
+    current_password: str
+    new_password: str
