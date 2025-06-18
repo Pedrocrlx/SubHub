@@ -1,0 +1,2 @@
+date,time,level,name,message
+2025-06-18,19:59:46,INFO,log,"SubHub initiated (log file: [/workspaces/SubHub/backend/old_src/logs/log_1750276786.log])"
