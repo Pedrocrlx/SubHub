@@ -1,2 +1,4 @@
 .env
 __pycache__
+src/logs
+__pycache__
