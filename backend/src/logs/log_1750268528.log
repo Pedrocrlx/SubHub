@@ -1,0 +1,3 @@
+date,time,level,name,message
+2025-06-18,17:42:08,INFO,log,"SubHub initiated (log file: [/workspaces/SubHub/backend/src/backend/app/core/../../logs/log_1750268528.log])"
+2025-06-18,17:42:08,INFO,log,"Application startup: data loaded successfully"
