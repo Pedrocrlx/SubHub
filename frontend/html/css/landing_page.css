@@ -1,4 +1,3 @@
-
 body {
     background-color: var(--marble-300);
 }
@@ -41,7 +40,7 @@ main {
 }
 
 
-.hero-section button{
+.hero-section button {
     padding: 16px 20px;
 }
 
@@ -86,7 +85,7 @@ main {
     display: flex;
     height: 100vh;
     justify-content: center;
-        background: linear-gradient(to bottom,var(--hunter-green-0));
+    background: linear-gradient(to bottom, var(--hunter-green-0));
 }
 
 .faq-container {
@@ -110,6 +109,7 @@ main {
     margin-bottom: 20px;
     cursor: pointer;
 }
+
 .faq-item:last-child {
     border-bottom: none;
     margin-bottom: 0;
@@ -139,7 +139,8 @@ main {
     overflow: hidden;
     transition: max-height 0.4s ease-in-out;
     color: var(--kingly-cloud-400);
-    padding-right: 30px; /* To avoid text hitting the edge */
+    padding-right: 30px;
+    /* To avoid text hitting the edge */
 }
 
 .faq-answer p {
@@ -152,7 +153,8 @@ main {
 }
 
 .faq-item.active .faq-answer {
-    max-height: 200px; /* Adjust if your answers are longer */
+    max-height: 200px;
+    /* Adjust if your answers are longer */
 }
 
 .faq-item.active .faq-icon .bx-plus {
@@ -168,7 +170,8 @@ main {
     flex: 0.8;
     text-align: center;
 }
-.faq-illustration h2{
+
+.faq-illustration h2 {
     font-weight: 600;
     color: var(--hunter-green-100);
 

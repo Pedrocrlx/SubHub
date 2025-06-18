@@ -127,13 +127,14 @@ button {
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
     border: none;
     border-radius: 45px;
+    font-family: "Inter", sans-serif;
 }
 
 /* Primary */
 .button-primary {
     background: var(--hunter-green-300);
     color: var(--marble-300);
-    padding: 16px 32px;
+    padding: 1rem 2rem;
 }
 
 .button-primary:hover {
@@ -156,7 +157,6 @@ button {
 .primary-neutral {
     background: var(--marble-300);
     color: var(--hunter-green-200);
-    border: 2px solid var(--marble-300);
 }
 
 /* Botões Secondary */
@@ -164,7 +164,7 @@ button {
     background: var(--marble-300);
     color: var(--hunter-green-300);
     border: 2px solid var(--hunter-green-300);
-    padding: 16px 32px;
+    padding: 1rem 2rem;
 }
 
 .button-secondary:hover {
