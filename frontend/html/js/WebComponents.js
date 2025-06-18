@@ -34,11 +34,11 @@ function loadMenu() {
     const homeButton = document.getElementById('home-button');
     const LearnMoreButton = document.getElementById('learnmore-button');
     const currentPath = window.location.pathname.split('/');
-    console.log("Current Path: " + currentPath[3]);
-    if (currentPath[3] === 'landing_page') {
+    console.log("Current Path: " + currentPath[1]);
+    if (currentPath[1] === 'home') {
         homeButton.classList.add('active');
     }
-    if (currentPath[3] === 'learn_more') {
+    if (currentPath[1] === 'learn_more') {
         LearnMoreButton.classList.add('active');
     }
 }

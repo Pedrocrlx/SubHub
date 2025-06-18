@@ -8,7 +8,8 @@
     <meta name="description" content="" />
 
     <!-- Font -->
-    <link rel="stylesheet" href="/frontend/html/css/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
     <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,13 +21,61 @@
 </head>
 
 <body>
-    <custom-menu></custom-menu>
-    <main>
-        
-    </main>
-        <custom-footer></custom-footer>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav>
+                <div class="sidebar-header">
+                    <span class="sidebar-title">SUBHUB</span>
+                </div>
+                <div class="nav-links">
+                    <div class="dashboar nav-link"> <a href="#">Dashboard</a> </div>
+                    <div class="shared nav-link"> <a href="#">Shared</a> </div>
+                    <div class="bills nav-link"> <a href="#">Bills</a> </div>
+                </div>
+            </nav>
+        </aside>
 
-        <script src="/frontend/html/js/WebComponents.js" defer></script>
+        <main>
+            <header class="main-header">
+                <h1>Dashboard</h1>
+                <button class="logout-btn button-secondary">LOGOUT</button>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="overview-card">
+                    <h2 class="neutral-tittle">Overview</h2>
+                    <div class="overview-content">
+                        <div class="overview-top">
+                            <div class="overview-spending">
+                                Total spending €<span class="total-spending">120</span>
+                            </div>
+                            <div class="overview-button">
+                                <a href="#" class="button-secondary">Add Subscription</a>
+                            </div>
+                        </div>
+                        <div class="overview-down">
+                            <div class="overview-subscriptions">
+                                Total subscriptions <span class="total-subscriptions">5</span>
+                            </div>
+                            <div class="overview-graph">
+                                <a href="#" class="button-secondary">View Graph</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="coming-up-card">
+                    <h2>Coming up</h2>
+                    <div class="calendar">
+                        <p> Calendar</p>
+                    </div>
+                </div>
+
+        </main>
+    </div>
+
+
+    <script src="/js/WebComponents.js" defer></script>
 </body>
 
 </html>
