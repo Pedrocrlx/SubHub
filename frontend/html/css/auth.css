@@ -60,7 +60,7 @@ form {
 }
 
 .input-box input {
-    width: 100%;
+    width: 98%;
     padding: 18px 0px;
     background: #ffffff;
     border: 2px solid #2C5C33;
@@ -69,6 +69,7 @@ form {
     font-size: 16px;
     color: #333;
     font-weight: 500;
+    padding-left: 10px;
 }
 
 .input-box input::placeholder {

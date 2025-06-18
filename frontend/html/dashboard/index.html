@@ -7,29 +7,24 @@
     <title>SubHub Dashboard</title>
     <meta name="description" content="" />
 
-    <!-- Font -->
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/dashboard.css" />
-    <!-- Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-
-
 </head>
 
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <nav>
                 <div class="sidebar-header">
                     <span class="sidebar-title">SUBHUB</span>
                 </div>
                 <div class="nav-links">
-                    <div class="dashboar nav-link"> <a href="#">Dashboard</a> </div>
+                    <div class="dashboard nav-link active"> <a href="#">Dashboard</a> </div>
                     <div class="shared nav-link"> <a href="#">Shared</a> </div>
                     <div class="bills nav-link"> <a href="#">Bills</a> </div>
                 </div>
@@ -51,31 +46,39 @@
                                 Total spending €<span class="total-spending">120</span>
                             </div>
                             <div class="overview-button">
-                                <a href="#" class="button-secondary">Add Subscription</a>
+                                <button href="#" class="button-secondary" id="addSubscription">Add Subscription</button>
                             </div>
                         </div>
                         <div class="overview-down">
                             <div class="overview-subscriptions">
-                                Total subscriptions <span class="total-subscriptions">5</span>
+                                No subscriptions yet <span class="total-subscriptions"></span>
                             </div>
                             <div class="overview-graph">
-                                <a href="#" class="button-secondary">View Graph</a>
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="coming-up-card">
-                    <h2>Coming up</h2>
-                    <div class="calendar">
-                        <p> Calendar</p>
+                    <h2>Subscriptions</h2>
+                    <div class="overview-chart">
+                        <div class="pie-chart-container">
+                            <svg class="pie-chart-svg" viewBox="0 0 100 100">
+                            </svg>
+                            <div class="pie-center-text">
+                                Total<br>0.00€
+                            </div>
+                            <div class="pie-tooltip">
+                            </div>
+                        </div>
                     </div>
                 </div>
-
+            </div>
         </main>
     </div>
 
-
     <script src="/js/WebComponents.js" defer></script>
+    <script src="/js/pie_chart.js" defer></script>
 </body>
 
 </html>
