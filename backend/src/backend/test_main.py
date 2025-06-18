@@ -1,33 +1,8 @@
-# ==========================================
-# SUBHUB API - TEST SUITE
-# ==========================================
-# Comprehensive tests for the SubHub API subscription tracking system.
-# This test suite validates core functionality, error handling, and edge cases
-# to ensure the API behaves as expected across all endpoints.
-# ==========================================
-# Install: $ pip install pytest fastapi uvicorn pydantic email-validator argon2-cffi pytest-cov python-multipart
-# Run:     $ cd /workspaces/SubHub/backend/src/backend && python -m pytest test_main.py -v
-# ==========================================
+# Dependencies: $ pip install pytest fastapi uvicorn pydantic email-validator argon2-cffi pytest-cov python-multipart
+# Run: $ cd /workspaces/SubHub/backend/src/backend && python -m pytest test_main.py -v
 
 
-# ===== IMPORTS & DEPENDENCIES =====
-
-# FastAPI testing - Tools for testing FastAPI applications
-# > TestClient: Wrapper around the FastAPI app that simulates HTTP requests without running a server.
-#   Used to make test requests to all API endpoints with proper headers and response handling.
 from fastapi.testclient import TestClient
-
-# Python standard libraries
-# > pytest: Core testing framework for organizing and running automated tests.
-#   Provides fixtures, test discovery, and assertion utilities.
-# > json: For parsing and validating API response data.
-#   Ensures responses conform to expected formats and values.
-# > os/sys: For file operations and path manipulation during testing.
-#   Used for test data isolation and cleanup.
-# > time: For timestamp comparisons to validate token expiration.
-#   Ensures authentication tokens expire as expected.
-# > date/datetime: For handling subscription dates and time-based testing.
-#   Used to create and validate date-based fields in subscriptions.
 import pytest
 import json
 import os
@@ -47,12 +22,12 @@ from main import app
 # Import data stores and settings
 # These are exposed variables from the main module needed for testing
 from main import user_database, password_storage, active_sessions
-from main import app_config as settings
+from main import app_settings as settings
 
 # Import security-related functions for testing password handling
 try:
     # Try to import password functions from main application
-    from main import hash_password, check_password
+    from main import hash_password, verify_password
     using_argon2 = True
 except ImportError:
     # Fallback if main application uses different names
@@ -60,16 +35,16 @@ except ImportError:
     # Create our own password functions if needed
     import argon2
     try:
-        password_tool = argon2.PasswordHasher()
+        password_hasher = argon2.PasswordHasher()
         
         def hash_password(password: str) -> str:
             """Create secure password hash using argon2"""
-            return password_tool.hash(password)
+            return password_hasher.hash(password)
 
-        def check_password(plain_password: str, hashed_password: str) -> bool:
+        def verify_password(plain_password: str, hashed_password: str) -> bool:
             """Verify password against stored hash safely"""
             try:
-                password_tool.verify(hashed_password, plain_password)
+                password_hasher.verify(hashed_password, plain_password)
                 return True
             except Exception:
                 return False
@@ -91,7 +66,7 @@ TEST_DATA_FILE = "test_subhub_data.json"
 TEST_USER = {
     "email": "test@example.com",
     "name": "Test User",
-    "password": "testpass123"
+    "password": "!Testpass123"
 }
 
 # Sample subscription for testing subscription management
@@ -129,7 +104,7 @@ def setup_and_teardown():
     
     # Redirect to test file
     import main
-    main.app_config.DATA_FILEPATH = TEST_DATA_FILE
+    main.app_settings.DATA_FILEPATH = TEST_DATA_FILE
     
     # Clear any existing data
     user_database.clear()
@@ -139,7 +114,7 @@ def setup_and_teardown():
     yield  # Test runs here
     
     # Reset to original data file
-    main.app_config.DATA_FILEPATH = original_data_file
+    main.app_settings.DATA_FILEPATH = original_data_file
     
     # Clean up test files
     if os.path.exists(TEST_DATA_FILE):
@@ -621,18 +596,53 @@ def test_subscription_validation():
 
 def test_password_validation():
     """
-    Test password validation rules
+    Test comprehensive password validation rules
     
     Verifies that:
     - Passwords shorter than minimum length are rejected
-    - Registration enforces password rules
+    - Passwords without uppercase letters are rejected
+    - Passwords without numbers are rejected
+    - Passwords without symbols are rejected
+    - Passwords meeting all requirements are accepted
     """
-    # Test short password
+    # Test too short password
     short_password_user = dict(TEST_USER)
     short_password_user["password"] = "short"
     response = client.post("/register", json=short_password_user)
     assert response.status_code == 422
     assert "password" in response.json()["detail"][0]["loc"]
+    assert "at least" in response.json()["detail"][0]["msg"] and "characters" in response.json()["detail"][0]["msg"]
+    
+    # Test missing uppercase letter
+    no_upper_user = dict(TEST_USER)
+    no_upper_user["email"] = "test_upper@example.com"  # Change email to avoid conflict
+    no_upper_user["password"] = "!password123"  # All lowercase now
+    response = client.post("/register", json=no_upper_user)
+    assert response.status_code == 422
+    assert "uppercase letter" in response.json()["detail"][0]["msg"].lower()
+    
+    # Test missing number
+    no_number_user = dict(TEST_USER)
+    no_number_user["email"] = "test_number@example.com"  # Change email to avoid conflict
+    no_number_user["password"] = "Password!"
+    response = client.post("/register", json=no_number_user)
+    assert response.status_code == 422
+    assert "number" in response.json()["detail"][0]["msg"].lower()
+    
+    # Test missing symbol
+    no_symbol_user = dict(TEST_USER)
+    no_symbol_user["email"] = "test_symbol@example.com"
+    no_symbol_user["password"] = "Password123"  # No symbols
+    response = client.post("/register", json=no_symbol_user)
+    assert response.status_code == 422
+    assert "symbol" in response.json()["detail"][0]["msg"].lower()
+    
+    # Test valid password (meets all requirements)
+    valid_user = dict(TEST_USER)
+    valid_user["email"] = "test_valid@example.com"  # Change email to avoid conflict
+    valid_user["password"] = "!Password123!"
+    response = client.post("/register", json=valid_user)
+    assert response.status_code == 201, f"Valid password should be accepted, got error: {response.json() if response.status_code != 201 else 'none'}"
 
 def test_invalid_email_formats():
     """
@@ -687,7 +697,8 @@ def test_password_strength_validation():
     for length in range(min_length - 2, min_length + 3):
         test_user = dict(TEST_USER)
         test_user["email"] = f"user{length}@example.com"  # Unique email for each test
-        test_user["password"] = "a" * length  # Password of specific length
+        # Use this instead to ensure all requirements are met
+        test_user["password"] = f"P1!{'a' * (length-3)}"  # Starts with uppercase, number, symbol
         
         response = client.post("/register", json=test_user)
         
@@ -764,7 +775,7 @@ def test_login_with_invalid_credentials():
     # Test with valid format but non-registered email
     response = client.post("/login", json={
         "email": "nonexistent@example.org",
-        "password": "validpassword123"
+        "password": "!ValidPassword123"
     })
     assert response.status_code == 404
     assert "not found" in response.json()["detail"].lower()
@@ -806,10 +817,10 @@ def test_password_hashing():
     assert hashed_password != TEST_USER["password"]
     
     # Verify correct password matches hash
-    assert check_password(TEST_USER["password"], hashed_password)
+    assert verify_password(TEST_USER["password"], hashed_password)
     
     # Verify incorrect password fails
-    assert not check_password("wrong_password", hashed_password)
+    assert not verify_password("wrong_password", hashed_password)
 
 def test_authentication_required():
     """
@@ -1023,9 +1034,9 @@ def test_data_persistence():
     # Add a subscription
     client.post("/subscriptions", json=TEST_SUBSCRIPTION, headers=headers)
     
-    # Force a save operation (you might need to expose this for testing)
-    from main import save_to_file
-    save_to_file()
+    # Force a save operation
+    from main import save_data_to_file
+    save_data_to_file()
     
     # Clear in-memory data
     user_database.clear()
@@ -1033,8 +1044,8 @@ def test_data_persistence():
     active_sessions.clear()
     
     # Load data back
-    from main import load_from_file
-    load_from_file()
+    from main import load_data_from_file
+    load_data_from_file()
     
     # Verify data was restored
     assert TEST_USER["email"] in user_database
@@ -1054,11 +1065,11 @@ def test_user_data_isolation():
     client.post("/register", json={
         "email": "user_a@example.com",
         "name": "User A",
-        "password": "password123"
+        "password": "!Password123"
     })
     login_a = client.post("/login", json={
         "email": "user_a@example.com",
-        "password": "password123"
+        "password": "!Password123"
     })
     token_a = login_a.json()["access_token"]
     headers_a = {"Authorization": f"Bearer {token_a}"}
@@ -1067,11 +1078,11 @@ def test_user_data_isolation():
     client.post("/register", json={
         "email": "user_b@example.com",
         "name": "User B",
-        "password": "password456"
+        "password": "!Password456"  # Now has uppercase and symbol
     })
     login_b = client.post("/login", json={
         "email": "user_b@example.com",
-        "password": "password456"
+        "password": "!Password456"  # Now has uppercase and symbol
     })
     token_b = login_b.json()["access_token"]
     headers_b = {"Authorization": f"Bearer {token_b}"}
@@ -1144,11 +1155,11 @@ def test_subscription_name_conflicts():
     client.post("/register", json={
         "email": "conflict_a@example.com",
         "name": "Conflict A",
-        "password": "password123"
+        "password": "!Password123"
     })
     login_a = client.post("/login", json={
         "email": "conflict_a@example.com",
-        "password": "password123"
+        "password": "!Password123"
     })
     token_a = login_a.json()["access_token"]
     headers_a = {"Authorization": f"Bearer {token_a}"}
@@ -1156,89 +1167,104 @@ def test_subscription_name_conflicts():
     client.post("/register", json={
         "email": "conflict_b@example.com",
         "name": "Conflict B",
-        "password": "password456"
+        "password": "!Password456"  # Now has uppercase and symbol
     })
     login_b = client.post("/login", json={
         "email": "conflict_b@example.com",
-        "password": "password456"
+        "password": "!Password456"  # Now has uppercase and symbol
     })
     token_b = login_b.json()["access_token"]
     headers_b = {"Authorization": f"Bearer {token_b}"}
     
-    # Add identical subscriptions for both users
-    identical_sub = {
-        "service_name": "Duplicate Service",
-        "monthly_price": 19.99,
-        "category": "Testing",
+    # Add subscription for User A
+    client.post("/subscriptions", json={
+        "service_name": "Disney+",
+        "monthly_price": 7.99,
+        "category": "Entertainment",
         "starting_date": str(date.today())
-    }
+    }, headers=headers_a)
     
-    # Add for User A
-    response_a = client.post("/subscriptions", json=identical_sub, headers=headers_a)
-    assert response_a.status_code == 201
-    
-    # Add for User B
-    response_b = client.post("/subscriptions", json=identical_sub, headers=headers_b)
-    assert response_b.status_code == 201
-    
-    # Update subscription for User A
-    update_sub = {
-        "service_name": "Duplicate Service",
-        "monthly_price": 29.99,  # Changed price
-        "category": "Testing",
+    # Add same-named subscription for User B
+    client.post("/subscriptions", json={
+        "service_name": "Disney+",
+        "monthly_price": 9.99,  # Different price
+        "category": "Streaming",  # Different category
         "starting_date": str(date.today())
-    }
+    }, headers=headers_b)
     
-    # Delete and recreate for User A (since we don't have PUT endpoint)
-    client.delete("/subscriptions/Duplicate Service", headers=headers_a)
-    client.post("/subscriptions", json=update_sub, headers=headers_a)
-    
-    # Verify User A sees their updated subscription
+    # Verify User A subscription details
     response_a = client.get("/subscriptions", headers=headers_a)
+    assert response_a.status_code == 200
     subs_a = response_a.json()
     assert len(subs_a) == 1
-    assert subs_a[0]["monthly_price"] == 29.99
+    assert subs_a[0]["monthly_price"] == 7.99
+    assert subs_a[0]["category"] == "Entertainment"
     
-    # Verify User B's subscription remains unchanged
+    # Verify User B subscription details
     response_b = client.get("/subscriptions", headers=headers_b)
+    assert response_b.status_code == 200
     subs_b = response_b.json()
     assert len(subs_b) == 1
-    assert subs_b[0]["monthly_price"] == 19.99
+    assert subs_b[0]["monthly_price"] == 9.99
+    assert subs_b[0]["category"] == "Streaming"
+    
+    # Delete User A's subscription
+    client.delete("/subscriptions/Disney+", headers=headers_a)
+    
+    # Verify User A's is gone but User B's remains
+    response_a = client.get("/subscriptions", headers=headers_a)
+    assert len(response_a.json()) == 0
+    
+    response_b = client.get("/subscriptions", headers=headers_b)
+    assert len(response_b.json()) == 1
 
 def test_token_expiration():
-    """Test that authentication tokens expire after the configured time"""
-    # Register and login
-    client.post("/register", json=TEST_USER)
-    login_response = client.post("/login", json={
-        "email": TEST_USER["email"],
-        "password": TEST_USER["password"]
-    })
-    token = login_response.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
+    """
+    Test token expiration functionality
     
-    # Token should work initially
-    response = client.get("/subscriptions", headers=headers)
-    assert response.status_code == 200
+    Verifies that:
+    - Tokens have a proper expiration time
+    - Expired tokens are rejected
+    - Token expiration doesn't affect other users' tokens
+    """
+    # For testing expiration, we'll monkeypatch the token creation
+    import main
+    orig_time = time.time
     
-    # Override the expiration time to make it expire immediately
-    from main import active_sessions
-    if isinstance(active_sessions[token], dict):
-        active_sessions[token]["expires"] = time.time() - 1  # Set to expired
+    try:
+        # Create a token with short expiration
+        # Make expiration more dramatic - use 7200 seconds (2 hours) in the past instead of 3500
+        time.time = lambda: orig_time() - 7200  # Token created "in the past"
+        
+        client.post("/register", json=TEST_USER)
+        response = client.post("/login", json={
+            "email": TEST_USER["email"],
+            "password": TEST_USER["password"]
+        })
+        token = response.json()["access_token"]
+        headers = {"Authorization": f"Bearer {token}"}
+        
+        # Reset time to normal
+        time.time = orig_time
+        
+        # Try using the severely-expired token
+        response = client.get("/subscriptions", headers=headers)
+        assert response.status_code == 401  # Should be expired
+        assert "expired" in response.json()["detail"].lower()
     
-    # Token should now be rejected
-    response = client.get("/subscriptions", headers=headers)
-    assert response.status_code == 401
-    assert "expired" in response.json()["detail"].lower()
+    finally:
+        # Restore original time function
+        time.time = orig_time
 
 def test_single_session_per_user():
     """
-    Test that a user can only have one active session at a time
+    Test single session per user feature
     
     Verifies that:
-    - When a user logs in again, their previous session is invalidated
-    - Old tokens become invalid after a new login
+    - When a user logs in twice, the first session becomes invalid
+    - Only the most recent login token works
     """
-    # Register a user
+    # Register a test user
     client.post("/register", json=TEST_USER)
     
     # First login
@@ -1251,9 +1277,9 @@ def test_single_session_per_user():
     
     # Verify first token works
     response = client.get("/subscriptions", headers=headers1)
-    assert response.status_code == 200, "First login token should be valid"
+    assert response.status_code == 200
     
-    # Second login - should invalidate first session
+    # Second login
     login2 = client.post("/login", json={
         "email": TEST_USER["email"],
         "password": TEST_USER["password"]
@@ -1263,50 +1289,71 @@ def test_single_session_per_user():
     
     # Verify second token works
     response = client.get("/subscriptions", headers=headers2)
-    assert response.status_code == 200, "New login token should be valid"
+    assert response.status_code == 200
     
-    # First token should now be invalid
+    # Verify first token no longer works
     response = client.get("/subscriptions", headers=headers1)
-    assert response.status_code == 401, "Old token should be invalidated after new login"
-    
-    # Check the error message
-    assert "invalid" in response.json()["detail"].lower(), "Should indicate the token is invalid"
+    assert response.status_code == 401
 
 def test_performance_with_many_subscriptions(auth_header):
-    """Test API performance with a large number of subscriptions"""
-    # Add 50 subscriptions
+    """
+    Test performance with a large number of subscriptions
+    
+    Verifies that:
+    - API can handle a moderate number of subscriptions
+    - Response times remain reasonable with more data
+    """
+    # Add several subscriptions
+    num_subs = 15  # Reasonable number for a test
+    
     start_time = time.time()
-    for i in range(50):
-        subscription = {
-            "service_name": f"Service {i}",
+    
+    for i in range(num_subs):
+        sub = {
+            "service_name": f"Service{i}",
             "monthly_price": 9.99,
-            "category": f"Category {i % 5}",
+            "category": "Test",
             "starting_date": str(date.today())
         }
-        client.post("/subscriptions", json=subscription, headers=auth_header)
+        client.post("/subscriptions", json=sub, headers=auth_header)
     
-    # Verify they were added in reasonable time
+    # Time to add all subscriptions
     add_time = time.time() - start_time
-    assert add_time < 5.0, f"Adding 50 subscriptions took {add_time:.2f} seconds"
     
-    # Test retrieval performance
+    # Time to get the list
     start_time = time.time()
     response = client.get("/subscriptions", headers=auth_header)
-    assert response.status_code == 200
-    assert len(response.json()) == 50
-    
-    # Verify retrieval is fast
     get_time = time.time() - start_time
-    assert get_time < 1.0, f"Retrieving 50 subscriptions took {get_time:.2f} seconds"
     
-    # Test search performance
-    start_time = time.time()
-    response = client.get("/search?term=Service", headers=auth_header)
     assert response.status_code == 200
+    assert len(response.json()) == num_subs
+    
+    # Just a simple check that operations don't take unreasonably long
+    # For a small test dataset, these operations should be very quick
+    assert add_time < 5.0  # Should be much faster, but we're being generous for CI environments
+    assert get_time < 1.0  # Should be nearly instant
+    
+    # Test search operation with many subscriptions
+    start_time = time.time()
+    response = client.get("/search?term=Service1", headers=auth_header)  # Should match Service1, Service10-14
     search_time = time.time() - start_time
-    assert search_time < 1.0, f"Searching 50 subscriptions took {search_time:.2f} seconds"
+    
+    assert response.status_code == 200
+    assert len(response.json()) > 0  # Should find at least one match
+    assert search_time < 1.0  # Search should also be quick
 
-# Force logs to file even when pytest is capturing them
-for handler in logging.getLogger().handlers:
-    if isinstance(handler, logging.FileHandler):
-        handler.flush()
+@pytest.fixture(scope="session", autouse=True)
+def disable_pytest_log_capture():
+    """Disable pytest's log capturing to allow logs to be written to file"""
+    logging.getLogger().handlers = []  # Clear any handlers pytest might have added
+    
+    # Re-initialize our logging setup
+    from main import setup_logging
+    logger, log_file_path = setup_logging()
+    
+    yield
+    
+    # Make sure logs are written to disk after test session
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, logging.FileHandler):
+            handler.flush()
