@@ -1,11 +1,11 @@
 
-# 🐳 Docker & Dev Environment 📦
+# Docker & Dev Environment
 
 This section documents how to configure and run the complete development environment for the project using Docker, including both backend and frontend services.
 
 ---
 
-## 1. 🛠️ Backend Dockerfile
+## 1. Backend Dockerfile
 
 ```dockerfile
 # backend/Dockerfile
@@ -31,7 +31,7 @@ CMD ["poetry", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", 
 
 ---
 
-## 2. 🧩 Frontend Dockerfile with Nginx
+## 2. Frontend Dockerfile with Nginx
 
 ```dockerfile
 # frontend/Dockerfile
@@ -52,7 +52,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ---
 
-## 3. ⚙️ compose.yml
+## 3. compose.yml
 
 ```yaml
 services:
@@ -106,14 +106,14 @@ networks: # Define a custom network for the services to communicate.
 
 ---
 
-## 4. 🧪 .devcontainer for VSCode
+## 4. .devcontainer for VSCode
 
 - References the backend Dockerfile
 - Allows project to be opened directly in container
 
 ---
 
-## 5. 🔧 .dockerignore
+## 5. .dockerignore
 
 Example:
 
@@ -128,7 +128,7 @@ __pycache__/
 
 ---
 
-## 6. 🧰 Usage
+## 6. Usage
 
 - **Build backend manually:** `docker build -f backend/Dockerfile -t subhub-backend .`
 - **Run entire stack:** `docker compose up --build`
@@ -136,9 +136,3 @@ __pycache__/
 - **Access frontend:** `http://localhost:3000`
 - **Access backend:** `http://localhost:8000`
 - **Access Adminer:** `http://localhost:8080`
-
----
-
-## ⚠️ Proxy Notes
-
-If using Nginx as a reverse proxy (e.g., to route `/api/`), configure `proxy_pass` to `http://backend:8000` in the Nginx config.

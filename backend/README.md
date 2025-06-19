@@ -1,4 +1,3 @@
-cat > /workspaces/SubHub/README.md << 'EOL'
 SubHub API Documentation
 
 LIBRARIES AND DEPENDENCIES
@@ -247,6 +246,3 @@ SECURITY FEATURES
    - All user inputs validated with Pydantic models
    - Email format verification
    - Numeric field range checking
-EOL
-
-echo "README.md created successfully at /workspaces/SubHub/README.md"
