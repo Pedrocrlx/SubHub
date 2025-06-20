@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const pieData = [
-        { name: 'Netflix (Premium)', value: 17.99, color: '#E50914' },
-        { name: 'Spotify (Individual)', value: 10.99, color: '#1DB954' },
+        { name: 'Netflix', value: 17.99, color: '#E50914' },
+        { name: 'Spotify', value: 10.99, color: '#1DB954' },
         { name: 'YouTube Premium', value: 12.99, color: '#FF0000' },
         { name: 'Amazon Prime', value: 5.99, color: '#00A8E1' },
         { name: 'Microsoft 365', value: 7.00, color: '#F25022' },
@@ -9,6 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Cloud Storage', value: 2.99, color: '#4CAF50' }
     ];
 
+    const cores = {
+  netflix: '#E50914',
+  spotify: '#1DB954',
+  youtube: '#FF0000',
+  amazon: '#00A8E1',
+  microsoft: '#F25022',
+  gym: '#8A2BE2',
+  cloud: '#4CAF50'
+};
+    
     const totalSpendingValue = pieData.reduce((sum, item) => sum + item.value, 0);
 
     const pieCenterText = document.querySelector('.pie-center-text');

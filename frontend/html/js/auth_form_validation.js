@@ -1,10 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
-
-});
 
 document.getElementById('signUp').addEventListener('submit', async function (event) {
     event.preventDefault();
-     console.log('submit intercepted');
+    console.log('submit intercepted');
     const username = document.getElementById('signup-username').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value.trim();
@@ -42,29 +39,35 @@ document.getElementById('signUp').addEventListener('submit', async function (eve
         return;
     }
     try {
-        // Simulate a sign-up process
-        // In a real application, you would send the email and password to your server here
-        // For example:
-        await signUp(username, email, password);
-        // Simulating a successful sign-up    
+        await registerUser (username, email, password);
+        Swal.fire({
+            title: 'Registered!',
+            text: 'Click on the button bellow to Login!',
+            icon: 'success',
+            confirmButtonText: 'Login!',
+            customClass: {
+                confirmButton: 'button-primary'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            console.log('Sign up válido:');
+            console.log('Login válido:', { email, password });
+            window.location.href = '/auth/';
+    
+        });
     } catch (error) {
         console.error('Sign up failed:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Sign up failed',
+            text: 'Please try again later.',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'button-primary'
+            },
+            buttonsStyling: false
+        });
     };
-    Swal.fire({
-        title: 'Registered!',
-        text: 'Click on the button bellow to Login!',
-        icon: 'success',
-        confirmButtonText: 'Login!',
-        customClass: {
-            confirmButton: 'button-primary'
-        },
-        buttonsStyling: false
-    }).then((result) => {
-        console.log('Sign up válido:');
-        console.log('Login válido:', { email, password });
-        window.location.href = 'auth.html';
-
-    });
 
 });
 
@@ -100,9 +103,8 @@ document.getElementById('login-form').addEventListener('submit', async function 
             },
             buttonsStyling: false
         }).then(() => {
-            // Redirect or proceed to dashboard
             console.log('User logged in:', { email });
-           window.location.href = 'index.html';
+            window.location.href = '/dashboard/';
         });
 
     } catch (error) {
@@ -121,23 +123,58 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
 });
 
-signUp = async (username, email, password) => {
-    // Simulate a sign-up process
-    // In a real application, you would send the email and password to your server here
-    console.log('Sign up successful:', { username, email, password });
-}
-login = async (email, password) => {
-    // Simulate a login process
-    // In a real application, you would send the email and password to your server here
-    console.log('Login successful:', { email, password });
-}
+const registerUser  = async (username, email, password) => {
+    console.log(username,email,password);
+    const response = await fetch("http://localhost:8000/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: username,
+            email: email,
+            password: password
+        })
+    });
+    console.log(response);
+    if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error);
+    }
+
+    console.log('Sign up successful:', { username, email });
+};
+
+const login = async (email, password) => {
+    const response = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+    });
+
+    if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error);
+    }
+
+    const data = await response.json();
+
+    // Guardar no localStorage
+    localStorage.setItem("access_token", data.access_token);
+    localStorage.setItem("user_name", data.user_name);
+    localStorage.setItem("user_email", data.user_email);
+
+    console.log('Login successful:', data);
+};
 
 
 document.querySelectorAll('.floating-input').forEach(input => {
-  const update = () => {
-    input.classList.toggle('filled', input.value.trim() !== '');
-  };
-  update();
-  // Listen to user typing
-  input.addEventListener('input', update);
+    const update = () => {
+        input.classList.toggle('filled', input.value.trim() !== '');
+    };
+    update();
+    // Listen to user typing
+    input.addEventListener('input', update);
 });

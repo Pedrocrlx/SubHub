@@ -1,5 +1,5 @@
-document.querySelectorAll('.input-box').forEach(box => {
-    
+
+    document.querySelectorAll('.input-box').forEach(box => {
     const input = box.querySelector('.password-input');
     const openEye = box.querySelector('.open-eye');
     const closedEye = box.querySelector('.closed-eye');
@@ -50,8 +50,8 @@ document.querySelectorAll('.input-box').forEach(box => {
     input.addEventListener('blur', update);
     
     
-    closedEye.addEventListener('click', togglePassword);
     openEye.addEventListener('click', togglePassword);
+    closedEye.addEventListener('click', togglePassword);
     
 
 });
