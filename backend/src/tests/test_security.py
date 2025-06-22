@@ -1,15 +1,28 @@
 """
 Tests for security and authentication features.
+
+This module verifies that:
+- Password hashing and verification work correctly
+- Endpoint authentication requirements are enforced
+- The application handles potentially malicious input safely
+- Data persistence mechanisms function properly
 """
 import pytest
 import time
 from datetime import date
-from .conftest import (
-    client, auth_header, TEST_USER,
-    password_storage, active_sessions, verify_password
-)
 
-def test_password_hashing():
+from app.db.storage import user_database, active_sessions, save_data_to_file, load_data_from_file
+from app.core.security import verify_password
+
+# Test subscription data
+TEST_SUBSCRIPTION = {
+    "service_name": "Netflix",
+    "monthly_price": 15.99,
+    "category": "Entertainment",
+    "starting_date": str(date.today())
+}
+
+def test_password_hashing(client, test_user):
     """
     Test password security features
     
@@ -19,22 +32,25 @@ def test_password_hashing():
     - Password hashes reject incorrect passwords
     """
     # Register user
-    client.post("/register", json=TEST_USER)
+    client.post("/register", json=test_user)
     
-    # Get stored password hash
-    hashed_password = password_storage[TEST_USER["email"]]
+    # Get stored password hash directly from user object
+    user = user_database.get(test_user["email"])
+    assert user is not None, "User not found in database"
+    hashed_password = user.passhash
     
-    # Verify hash format
-    assert hashed_password.startswith("$argon2")
-    assert hashed_password != TEST_USER["password"]
+    # Verify hash format (now using SHA-256 instead of Argon2)
+    assert hashed_password is not None, "Password hash is missing"
+    assert len(hashed_password) == 64, "SHA-256 hash should be 64 characters"
+    assert hashed_password != test_user["password"], "Password should not be stored in plaintext"
     
     # Verify correct password matches hash
-    assert verify_password(TEST_USER["password"], hashed_password)
+    assert verify_password(test_user["password"], hashed_password)
     
     # Verify incorrect password fails
     assert not verify_password("wrong_password", hashed_password)
 
-def test_authentication_required():
+def test_authentication_required(client):
     """
     Test that protected endpoints reject unauthenticated requests
     
@@ -57,22 +73,16 @@ def test_authentication_required():
     response = client.get("/subscriptions", headers=headers)
     assert response.status_code == 401
 
-def test_xss_injection_attempt():
+def test_xss_injection_attempt(authenticated_client):
     """
     Test handling of potentially malicious input
     
     Verifies that:
     - Script tags in fields don't break the application
-    - SQL injection attempts are handled safely
+    - Malicious input is handled safely
     """
-    # Register and login
-    client.post("/register", json=TEST_USER)
-    login_response = client.post("/login", json={
-        "email": TEST_USER["email"],
-        "password": TEST_USER["password"]
-    })
-    token = login_response.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
+    # Use the authenticated_client fixture which already has a valid token
+    # Register and login handled by the fixture
     
     # Test HTML/script injection
     xss_sub = {
@@ -81,28 +91,32 @@ def test_xss_injection_attempt():
         "category": "<b>Malicious</b>",
         "starting_date": str(date.today())
     }
-    response = client.post("/subscriptions", json=xss_sub, headers=headers)
+    response = authenticated_client.post("/subscriptions", json=xss_sub)
     # Should accept but sanitize or escape the input
     assert response.status_code == 201
     
     # Verify it was stored and retrievable
-    response = client.get("/subscriptions", headers=headers)
+    response = authenticated_client.get("/subscriptions")
     assert response.status_code == 200
     assert len(response.json()) == 1
 
-def test_data_persistence():
-    """Test that data is properly persisted to file and can be loaded back"""
-    # Register a user and add subscriptions
-    client.post("/register", json=TEST_USER)
+def test_data_persistence(client, test_user):
+    """
+    Test data persistence mechanism
+    
+    Verifies that:
+    - Data is properly saved to disk
+    - Data can be reloaded from disk
+    - User and subscription information is preserved accurately
+    """
+    # Register a user and add subscriptions using the client fixture
+    client.post("/register", json=test_user)
     login_response = client.post("/login", json={
-        "email": TEST_USER["email"], 
-        "password": TEST_USER["password"]
+        "email": test_user["email"], 
+        "password": test_user["password"]
     })
     token = login_response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
-    
-    from .conftest import TEST_SUBSCRIPTION, user_database
-    from main import save_data_to_file, load_data_from_file
     
     # Add a subscription
     client.post("/subscriptions", json=TEST_SUBSCRIPTION, headers=headers)
@@ -112,17 +126,16 @@ def test_data_persistence():
     
     # Clear in-memory data
     user_database.clear()
-    password_storage.clear()
     active_sessions.clear()
     
     # Load data back
     load_data_from_file()
     
     # Verify data was restored
-    assert TEST_USER["email"] in user_database
-    assert len(user_database[TEST_USER["email"]].subscriptions) == 1
+    assert test_user["email"] in user_database
+    assert len(user_database[test_user["email"]].subscriptions) == 1
 
-def test_malformed_data_handling():
+def test_malformed_data_handling(client, test_user):
     """
     Test handling of malformed input data
     
@@ -132,10 +145,10 @@ def test_malformed_data_handling():
     - Empty request bodies don't crash the server
     """
     # Register a user for authentication
-    client.post("/register", json=TEST_USER)
+    client.post("/register", json=test_user)
     login_response = client.post("/login", json={
-        "email": TEST_USER["email"],
-        "password": TEST_USER["password"]
+        "email": test_user["email"],
+        "password": test_user["password"]
     })
     token = login_response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}

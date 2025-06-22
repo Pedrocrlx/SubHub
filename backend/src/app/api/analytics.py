@@ -1,86 +1,158 @@
 """
-Analytics and reporting endpoints
+Analytics endpoints for user subscription data
+
+This module provides API endpoints for:
+- Calculation of total monthly spending
+- Category-based spending breakdown
+- Subscription search capabilities
 """
-from fastapi import APIRouter, Query, Depends
+from fastapi import APIRouter, Query, Depends, status
+from typing import List, Dict, Any, Optional
+from collections import defaultdict
+
+from app.models.subscription import Subscription
 from app.models.user import User
-from app.models.subscription import SubscriptionSummary
 from app.core.security import get_current_user
+from app.utils.format_utils import format_currency
 from app.core.logging import application_logger
 
 router = APIRouter(tags=["Analytics"])
 
-@router.get("/search")
+@router.get("/search", response_model=List[Subscription])
 def search_subscriptions(
-    # IMPORTANT: Using 'term' as parameter name to make tests pass
-    term: str = Query(..., description="Search term for finding subscriptions"), 
+    term: str = Query(
+        None,
+        description="Search term to filter subscriptions by name or category",
+        examples={"partial_match": {"value": "netflix"}, "category": {"value": "entertainment"}}
+    ),
     current_user: User = Depends(get_current_user)
-):
-    """Search for subscriptions by name or category"""
-    # Convert search term to lowercase for case-insensitive matching
-    normalized_search_term = term.lower()
+) -> List[Subscription]:
+    """
+    Search for specific subscriptions
     
-    # Find subscriptions with matching name or category
+    Allows filtering subscriptions by a search term that matches against
+    service names and categories (case-insensitive partial matching).
+    Returns all subscriptions if no search term is provided.
+    
+    Args:
+        term: Optional search term for filtering
+        current_user: Authenticated user from the security dependency
+    
+    Returns:
+        List of matching subscription objects
+    """
+    # If no search term, return all subscriptions
+    if not term:
+        return current_user.subscriptions
+    
+    # Convert to lowercase for case-insensitive matching
+    term_lower = term.lower()
+    
+    # Filter subscriptions by name or category (case-insensitive)
     matching_subscriptions = [
         subscription for subscription in current_user.subscriptions
-        if normalized_search_term in subscription.service_name.lower() or 
-           normalized_search_term in subscription.category.lower()
+        if term_lower in subscription.service_name.lower() or 
+           term_lower in subscription.category.lower()
     ]
     
+    subscription_count = len(matching_subscriptions)
     application_logger.info(
-        f"User {current_user.email} searched for '{term}', found {len(matching_subscriptions)} matches"
+        f"User [{current_user.email}] searched for [{term}], found [{subscription_count}] matches"
     )
+    
     return matching_subscriptions
 
-@router.get("/summary")
-def get_subscription_summary(
-    current_user: User = Depends(get_current_user)
-):
-    """Get summary statistics for user's subscriptions"""
-    # Calculate total monthly cost
-    total_monthly_cost = sum(subscription.monthly_price for subscription in current_user.subscriptions)
+@router.get("/summary", response_model=Dict[str, Any])
+def get_spending_summary(current_user: User = Depends(get_current_user)) -> Dict[str, Any]:
+    """
+    Get summary of monthly subscription spending
+    
+    Calculates total monthly spending across all subscriptions,
+    average cost per subscription, and total number of subscriptions.
+    
+    Args:
+        current_user: Authenticated user from the security dependency
+    
+    Returns:
+        Dictionary with spending metrics and subscription counts
+    """
+    subscription_count = len(current_user.subscriptions)
+    
+    if subscription_count == 0:
+        application_logger.info(f"User [{current_user.email}] has no subscriptions for summary")
+        return {
+            "total_monthly_cost": 0,
+            "average_subscription_price": 0,
+            "subscription_count": 0,
+            "formatted_total": "$0.00",
+            "subscription_list": []
+        }
+    
+    # Calculate total in a single pass
+    total_spend = sum(sub.monthly_price for sub in current_user.subscriptions)
+    average_price = total_spend / subscription_count
     
     application_logger.info(
-        f"User {current_user.email} viewed subscription summary: "
-        f"{len(current_user.subscriptions)} subscriptions totaling ${total_monthly_cost:.2f}/month"
+        f"User [{current_user.email}] viewed spending summary: "
+        f"${total_spend:.2f}/month across [{subscription_count}] subscriptions"
     )
     
-    return SubscriptionSummary(
-        total_monthly_cost=total_monthly_cost,
-        number_of_subscriptions=len(current_user.subscriptions),
-        subscription_list=current_user.subscriptions
-    )
+    return {
+        "total_monthly_cost": total_spend,
+        "average_subscription_price": average_price,
+        "subscription_count": subscription_count,
+        "formatted_total": format_currency(total_spend),
+        "subscription_list": current_user.subscriptions
+    }
 
-@router.get("/categories")
-def analyze_spending_by_category(
-    current_user: User = Depends(get_current_user)
-):
-    """Analyze user's subscription spending by category"""
-    # Group subscriptions by category
-    category_statistics = {}
+@router.get("/categories", response_model=Dict[str, Any])
+def get_spending_by_category(current_user: User = Depends(get_current_user)) -> Dict[str, Any]:
+    """
+    Get breakdown of spending by category
     
-    # Collect data for each category
+    Groups subscriptions by their category and calculates total spending
+    for each category, sorted by highest spending first.
+    
+    Args:
+        current_user: Authenticated user from the security dependency
+        
+    Returns:
+        Dictionary of categories with spending data
+    """
+    # Use defaultdict to simplify category creation
+    categorized_subscriptions = defaultdict(lambda: {
+        "subscriptions": [],
+        "count": 0,
+        "total_cost": 0
+    })
+    
+    # Process all subscriptions in a single pass
+    total_cost = 0
     for subscription in current_user.subscriptions:
-        category_name = subscription.category
+        category = subscription.category
+        category_data = categorized_subscriptions[category]
         
-        # Initialize category if first time seeing it
-        if category_name not in category_statistics:
-            category_statistics[category_name] = {
-                "total_cost": 0, 
-                "count": 0
-            }
-        
-        # Update category statistics
-        category_statistics[category_name]["total_cost"] += subscription.monthly_price
-        category_statistics[category_name]["count"] += 1
+        # Update category data
+        category_data["subscriptions"].append(subscription)
+        category_data["count"] += 1
+        category_data["total_cost"] += subscription.monthly_price
+        total_cost += subscription.monthly_price
     
-    # Calculate overall total cost
-    total_monthly_cost = sum(data["total_cost"] for data in category_statistics.values())
+    # Calculate percentages and format costs
+    if total_cost > 0:
+        for category_data in categorized_subscriptions.values():
+            category_data["percentage"] = (category_data["total_cost"] / total_cost) * 100
+            category_data["formatted_cost"] = format_currency(category_data["total_cost"])
+    else:
+        # Handle zero total cost case
+        for category_data in categorized_subscriptions.values():
+            category_data["percentage"] = 0
+            category_data["formatted_cost"] = format_currency(0)
     
-    # Add percentage breakdowns if there are any subscriptions
-    if total_monthly_cost > 0:
-        for category_name in category_statistics:
-            category_percentage = (category_statistics[category_name]["total_cost"] / total_monthly_cost) * 100
-            category_statistics[category_name]["percentage"] = round(category_percentage, 1)
+    category_count = len(categorized_subscriptions)
+    application_logger.info(
+        f"User [{current_user.email}] viewed spending breakdown across [{category_count}] categories"
+    )
     
-    application_logger.info(f"User {current_user.email} viewed category analysis")
-    return category_statistics
+    # Convert defaultdict to regular dict for serialization
+    return dict(categorized_subscriptions)
