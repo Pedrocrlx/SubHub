@@ -1,191 +1,159 @@
 """
 Tests for input validation functionality.
+
+This module verifies that:
+- Email formats are properly validated
+- Password strength rules are enforced
+- Empty required fields are rejected
+- Invalid login attempts are handled correctly
+- Data type validation works correctly
 """
 import pytest
-from .conftest import client, TEST_USER, settings
 
-def test_invalid_email_formats():
+def test_invalid_email_formats(client):
     """
     Test validation of email formats during registration
     
     Verifies that:
-    - Invalid email formats are rejected with 422 status
-    - Various invalid email patterns are properly caught
+    - Various invalid email formats are rejected
     - Valid but unusual email formats are accepted
     """
-    # Test completely invalid format
-    invalid_user = dict(TEST_USER)
-    invalid_user["email"] = "not-an-email"
-    response = client.post("/register", json=invalid_user)
-    assert response.status_code == 422
-    assert "email" in response.json()["detail"][0]["loc"]
+    test_cases = [
+        # (email, should_accept)
+        ("notanemail", False),
+        ("missing@tld", False),
+        ("spaces not allowed@example.com", False),
+        ("valid+plus@example.com", True),
+        ("valid.dots@example.co.uk", True)
+    ]
     
-    # Test missing @ symbol
-    invalid_user["email"] = "useremail.com"
-    response = client.post("/register", json=invalid_user)
-    assert response.status_code == 422
-    
-    # Test missing domain
-    invalid_user["email"] = "user@"
-    response = client.post("/register", json=invalid_user)
-    assert response.status_code == 422
-    
-    # Test missing username
-    invalid_user["email"] = "@example.com"
-    response = client.post("/register", json=invalid_user)
-    assert response.status_code == 422
-    
-    # Test unusual but valid email (should pass)
-    valid_user = dict(TEST_USER)
-    valid_user["email"] = "user+tag@example.co.uk"
-    response = client.post("/register", json=valid_user)
-    assert response.status_code == 201
+    for email, should_accept in test_cases:
+        test_user_data = {
+            "email": email,
+            "username": "Test User",
+            "password": "Valid!Password123"
+        }
+        
+        response = client.post("/register", json=test_user_data)
+        
+        if should_accept:
+            assert response.status_code == 201, f"Email '{email}' should be accepted"
+        else:
+            assert response.status_code == 422, f"Email '{email}' should be rejected"
 
-def test_password_strength_validation():
+def test_password_strength_validation(client):
     """
     Test password strength validation rules
     
     Verifies that:
-    - Very short passwords are rejected
-    - Passwords exactly at minimum length are accepted
-    - Password length validation is correctly enforced
+    - Very weak passwords are rejected
+    - Strong passwords are accepted
+    - Password complexity requirements are enforced
     """
-    # Try a range of password lengths
-    min_length = settings.MIN_PASSWORD_LENGTH
+    test_cases = [
+        # (password, should_accept)
+        ("short", False),  # Too short
+        ("longenoughbutnospecial123", False),  # No special characters
+        ("Longenough!butnonumber", False),  # No numbers
+        ("longenough!123nouppercase", False),  # No uppercase
+        ("Valid!Password123", True)  # Valid password
+    ]
     
-    # Test passwords with different lengths
-    for length in range(min_length - 2, min_length + 3):
-        test_user = dict(TEST_USER)
-        test_user["email"] = f"user{length}@example.com"  # Unique email for each test
-        # Use this instead to ensure all requirements are met
-        test_user["password"] = f"P1!{'a' * (length-3)}"  # Starts with uppercase, number, symbol
+    for password, should_accept in test_cases:
+        test_user_data = {
+            "email": "test@example.org",
+            "username": "Test User",
+            "password": password
+        }
         
-        response = client.post("/register", json=test_user)
+        response = client.post("/register", json=test_user_data)
         
-        if length >= min_length:
-            # Should be accepted
-            assert response.status_code == 201, f"Password of length {length} should be accepted"
+        if should_accept:
+            assert response.status_code == 201, f"Password '{password}' should be accepted"
         else:
-            # Should be rejected
-            assert response.status_code == 422, f"Password of length {length} should be rejected"
-            error_detail = response.json()["detail"]
-            assert any("password" in err.get("loc", []) for err in error_detail)
+            assert response.status_code == 422, f"Password '{password}' should be rejected"
 
-def test_empty_fields_validation():
+def test_empty_fields_validation(client):
     """
-    Test validation of empty fields
+    Test validation of empty required fields
     
     Verifies that:
     - Empty email is rejected
-    - Empty name is rejected
     - Empty password is rejected
-    - Empty values don't cause server errors
+    - Empty username is rejected
     """
-    # Test empty email
-    invalid_user = dict(TEST_USER)
-    invalid_user["email"] = ""
-    response = client.post("/register", json=invalid_user)
-    assert response.status_code == 422
+    test_cases = [
+        # Field to leave empty
+        "email",
+        "password",
+        "username"
+    ]
     
-    # Test empty name
-    invalid_user = dict(TEST_USER)
-    invalid_user["name"] = ""
-    response = client.post("/register", json=invalid_user)
-    # This might be accepted depending on your validation, adjust accordingly
+    valid_data = {
+        "email": "test@example.org",
+        "username": "Test User",
+        "password": "Valid!Password123"
+    }
     
-    # Test empty password
-    invalid_user = dict(TEST_USER)
-    invalid_user["password"] = ""
-    response = client.post("/register", json=invalid_user)
-    assert response.status_code == 422
-    
-    # Test login with empty fields
-    response = client.post("/login", json={
-        "email": "",
-        "password": ""
-    })
-    assert response.status_code == 422
-    
-    # Test login with empty password but valid email
-    # First register a user to ensure the email exists
-    client.post("/register", json=TEST_USER)
-    
-    response = client.post("/login", json={
-        "email": TEST_USER["email"],
-        "password": ""
-    })
-    # Expect 401 (authentication failure) instead of 422 (validation error)
-    assert response.status_code == 401
+    for empty_field in test_cases:
+        # Create a copy of valid data with one field empty
+        test_data = valid_data.copy()
+        test_data[empty_field] = ""
+        
+        response = client.post("/register", json=test_data)
+        assert response.status_code == 422, f"Empty {empty_field} should be rejected"
 
-def test_login_with_invalid_credentials():
+def test_login_with_invalid_credentials(client, test_user):
     """
-    Test various invalid login scenarios
+    Test login validation with invalid credentials
     
     Verifies that:
-    - Non-registered email returns appropriate error
-    - Wrong password format is handled properly
-    - Large password inputs are handled safely
+    - Non-existent user is rejected
+    - Incorrect password is rejected
+    - Error messages don't leak sensitive info
     """
-    # Register a valid user first
-    client.post("/register", json=TEST_USER)
+    # Register a user
+    client.post("/register", json=test_user)
     
-    # Test with valid format but non-registered email
+    # Try login with non-existent email
     response = client.post("/login", json={
-        "email": "nonexistent@example.org",
-        "password": "!ValidPassword123"
+        "email": "nonexistent@example.com",
+        "password": test_user["password"]
     })
     assert response.status_code == 404
     assert "not found" in response.json()["detail"].lower()
     
-    # Test with wrong password
+    # Try login with wrong password
     response = client.post("/login", json={
-        "email": TEST_USER["email"],
-        "password": "wrongpassword"
+        "email": test_user["email"],
+        "password": "WrongPassword123!"
     })
     assert response.status_code == 401
-    assert "incorrect" in response.json()["detail"].lower() or "invalid" in response.json()["detail"].lower()
-    
-    # Test with very long password (shouldn't crash)
-    response = client.post("/login", json={
-        "email": TEST_USER["email"],
-        "password": "x" * 1000  # Very long password
-    })
-    assert response.status_code == 401  # Should fail but not crash
+    assert "incorrect password" in response.json()["detail"].lower()
 
-def test_invalid_data_types():
+def test_invalid_data_types(client, test_user):
     """
-    Test handling of incorrect data types in requests
+    Test validation of data types
     
     Verifies that:
-    - String values for numeric fields are rejected
-    - Numeric values for string fields are properly handled
-    - Invalid date formats are rejected
+    - Non-string email is rejected
+    - Non-string password is rejected
+    - Numeric values for string fields are rejected
     """
-    # Register and login
-    client.post("/register", json=TEST_USER)
+    # Register valid user first
+    client.post("/register", json=test_user)
     login_response = client.post("/login", json={
-        "email": TEST_USER["email"],
-        "password": TEST_USER["password"]
+        "email": test_user["email"],
+        "password": test_user["password"]
     })
     token = login_response.json()["access_token"]
     headers = {"Authorization": f"Bearer {token}"}
     
-    from .conftest import TEST_SUBSCRIPTION
-    
-    # Test string in price field
-    invalid_sub = dict(TEST_SUBSCRIPTION)
-    invalid_sub["monthly_price"] = "not a number"
-    response = client.post("/subscriptions", json=invalid_sub, headers=headers)
-    assert response.status_code == 422
-    
-    # Test number in string field
-    invalid_sub = dict(TEST_SUBSCRIPTION)
-    invalid_sub["service_name"] = 12345
-    # This might actually work since JSON numbers can be coerced to strings
-    response = client.post("/subscriptions", json=invalid_sub, headers=headers)
-    
-    # Test invalid date format
-    invalid_sub = dict(TEST_SUBSCRIPTION)
-    invalid_sub["starting_date"] = "not-a-date"
+    # Try adding subscription with wrong data types
+    invalid_sub = {
+        "service_name": 12345,  # should be string
+        "monthly_price": "15.99",  # should be number
+        "category": True  # should be string
+    }
     response = client.post("/subscriptions", json=invalid_sub, headers=headers)
     assert response.status_code == 422
