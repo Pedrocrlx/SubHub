@@ -2,22 +2,42 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from app.db import Base
 """
-User-related data models
+User models for authentication and data storage
+
+This module provides Pydantic models for:
+- User data validation and serialization
+- Request and response schemas for authentication endpoints
+- Field constraints and validations
 """
-from pydantic import BaseModel, EmailStr, field_validator
-from typing import List
-from app.config import app_settings
+from typing import List, Optional
+from pydantic import BaseModel, Field, EmailStr, field_validator, ConfigDict
+
 from app.models.subscription import Subscription
+from app.utils.validation_utils import validate_password_strength
+from app.config import app_settings  # Add this import
 
 class User(BaseModel):
-    """Represents a registered user in the system"""
+    """
+    Core user model
     
-    email: EmailStr
-    name: str
-    subscriptions: List[Subscription] = []
+    Contains essential user account information including:
+    - Username for display purposes
+    - Password hash stored directly with user data
+    - Email address (used as primary identifier)
+    - List of subscriptions
+    """
+    username: str = Field(..., description="User's display name")
+    passhash: str = Field(..., description="SHA-256 hash of the user's password")
+    email: EmailStr = Field(..., description="User's email address (used for login)")
+    subscriptions: List[Subscription] = Field(default_factory=list, description="User's subscription services")
     
-class LoginRequest(BaseModel):
-    """Login form data"""
+    @field_validator('username')
+    @classmethod
+    def validate_username(cls, v):
+        """Validate username is not empty"""
+        if not v or not v.strip():
+            raise ValueError('Username cannot be empty')
+        return v.strip()
     
     email: EmailStr 
     password: str
@@ -29,56 +49,74 @@ class LoginRequest(BaseModel):
     subscriptions = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
     model_config = {
         "json_schema_extra": {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
-                "email": "user@example.com",
-                "password": "!Password123"
+                "username": "john_doe",
+                "passhash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+                "email": "john@example.com",
+                "subscriptions": [
+                    {
+                        "service_name": "Netflix",
+                        "monthly_price": 17.99,
+                        "category": "Entertainment",
+                        "starting_date": "2025-01-15"
+                    }
+                ]
             }
         }
-    }
+    )
 
 class RegisterRequest(BaseModel):
-    """Registration form data"""
+    """
+    User registration request model
     
-    email: EmailStr
-    name: str
-    password: str
-
+    Validates registration data including:
+    - Email format
+    - Password strength requirements
+    """
+    email: EmailStr = Field(..., description="User's email address")
+    username: str = Field(..., description="User's display name")
+    password: str = Field(..., min_length=app_settings.MIN_PASSWORD_LENGTH, description="User's password")
+    
+    @field_validator('username')
+    @classmethod
+    def validate_username(cls, v):
+        """Validate username is not empty"""
+        if not v or not v.strip():
+            raise ValueError('Username cannot be empty')
+        return v.strip()
+    
     @field_validator('password')
-    def validate_password(cls, password):
-        """Validate password strength against all security requirements"""
-        
-        missing_requirements = []
-        
-        # Check minimum length
-        if len(password) < app_settings.MIN_PASSWORD_LENGTH:
-            missing_requirements.append(f"at least {app_settings.MIN_PASSWORD_LENGTH} characters")
-            
-        # Check for uppercase letters
-        if app_settings.PASSWORD_REQUIRES_UPPERCASE and not any(char.isupper() for char in password):
-            missing_requirements.append("at least one uppercase letter")
-            
-        # Check for numbers
-        if app_settings.PASSWORD_REQUIRES_NUMBER and not any(char.isdigit() for char in password):
-            missing_requirements.append("at least one number")
-            
-        # Check for symbols
-        if app_settings.PASSWORD_REQUIRES_SYMBOL and not any(not char.isalnum() for char in password):
-            missing_requirements.append("at least one symbol")
-        
-        # Generate comprehensive error message if requirements aren't met
-        if missing_requirements:
-            requirements_text = missing_requirements[0] if len(missing_requirements) == 1 else \
-                f"{', '.join(missing_requirements[:-1])}, and {missing_requirements[-1]}"
-            raise ValueError(f"Your password must include {requirements_text}!")
-            
-        return password
+    @classmethod
+    def validate_password(cls, v):
+        """Validate password meets strength requirements"""
+        return validate_password_strength(v)
     
-    model_config = {
-        "json_schema_extra": {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
-                "email": "new_user@example.com", 
-                "name": "New User",
-                "password": "!Password123"
+                "email": "john@example.com",
+                "username": "john_doe",
+                "password": "SecurePassword123!"
             }
         }
-    }
+    )
+
+class LoginRequest(BaseModel):
+    """
+    User login request model
+    
+    Validates login credentials format
+    """
+    email: EmailStr = Field(..., description="User's email address")
+    password: str = Field(..., description="User's password")
+    
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "email": "john@example.com",
+                "password": "SecurePassword123!"
+            }
+        }
+    )
