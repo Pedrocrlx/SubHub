@@ -1,8 +1,3 @@
-"""
-Utility functions package
-
-This package provides various utility functions used across the application.
-"""
 from .validation_utils import (
     validate_password_strength,
     is_valid_service_name,  # This function is missing
