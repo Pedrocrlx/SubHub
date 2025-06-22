@@ -1,115 +1,96 @@
 """
 Shared fixtures and configuration for all tests.
+
+This module provides pytest fixtures for:
+- API test client setup
+- Test user creation and authentication
+- Database isolation between tests
 """
 import os
-import sys
 import pytest
 from fastapi.testclient import TestClient
-from datetime import date
+import tempfile
 
-# Add the current directory to path to ensure imports work
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Updated imports to use the new module structure
+from app.main import app
+from app.db.storage import user_database, active_sessions, save_data_to_file
+from app.config import app_settings as settings
+from app.core.security import verify_password, hash_password, create_access_token
+from app.models.user import User
 
-# Import the app and related components
-from main import app
-from main import user_database, password_storage, active_sessions
-from main import app_settings as settings
-from main import verify_password, hash_password  # Add these imports
-
-# Create test client
-client = TestClient(app)
-
-# Use a separate test data file to avoid interfering with production data
-TEST_DATA_FILE = "test_subhub_data.json"
-
-# ===== TEST DATA =====
-# Sample data used across multiple tests
-
-# Test user for authentication tests
+# Test data using "username" instead of "name"
 TEST_USER = {
     "email": "test@example.com",
-    "name": "Test User",
+    "username": "Test User",
     "password": "!Testpass123"
 }
 
-# Sample subscription for testing subscription management
-TEST_SUBSCRIPTION = {
-    "service_name": "Netflix",
-    "monthly_price": 15.99,
-    "category": "Entertainment",
-    "starting_date": str(date.today())
-}
-
-# Second subscription for testing multiple items
-SECOND_SUBSCRIPTION = {
-    "service_name": "Spotify",
-    "monthly_price": 9.99,
-    "category": "Music",
-    "starting_date": str(date.today())
-}
-
-@pytest.fixture(autouse=True)
-def setup_and_teardown():
+@pytest.fixture(scope="session", autouse=True)
+def setup_test_environment():
     """
-    Setup and teardown for each test
-    
-    This fixture runs automatically before and after each test to:
-    1. Redirect data storage to a test file
-    2. Clear in-memory data stores for clean state
-    3. Clean up test files after the test
+    Set up test environment with a temporary data file
+    This runs once before all tests and cleans up afterward
     """
-    # Store original data file path
-    original_data_file = settings.DATA_FILEPATH
+    # Use a temporary file for test data
+    test_data_fd, test_data_path = tempfile.mkstemp()
+    os.close(test_data_fd)
     
-    # Redirect to test file
-    import main
-    main.app_settings.DATA_FILEPATH = TEST_DATA_FILE
+    # Store original settings
+    original_data_path = settings.DATA_FILEPATH
     
-    # Clear any existing data
-    user_database.clear()
-    password_storage.clear()
-    active_sessions.clear()
+    # Update settings to use test file
+    settings.DATA_FILEPATH = test_data_path
     
-    yield  # Test runs here
+    yield  # Run all tests
     
-    # Reset to original data file
-    main.app_settings.DATA_FILEPATH = original_data_file
-    
-    # Clean up test files
-    if os.path.exists(TEST_DATA_FILE):
-        os.remove(TEST_DATA_FILE)
-
-def get_auth_token():
-    """Helper function to register a user and get authentication token"""
-    # Register test user
-    client.post("/register", json=TEST_USER)
-    
-    # Login to get token
-    response = client.post("/login", json={
-        "email": TEST_USER["email"],
-        "password": TEST_USER["password"]
-    })
-    return response.json()["access_token"]
+    # Clean up after tests complete
+    if os.path.exists(test_data_path):
+        os.unlink(test_data_path)
+        
+    # Restore original settings
+    settings.DATA_FILEPATH = original_data_path
 
 @pytest.fixture
-def auth_header():
-    """Fixture that provides a valid authentication header"""
-    token = get_auth_token()
-    return {"Authorization": f"Bearer {token}"}
+def client():
+    """
+    Create a FastAPI TestClient with a clean database for each test
+    """
+    # Clear all databases before each test
+    user_database.clear()
+    active_sessions.clear()
+    
+    return TestClient(app)
 
-@pytest.fixture(scope="session", autouse=True)
-def disable_pytest_log_capture():
-    """Disable pytest's log capturing to allow logs to be written to file"""
-    import logging
-    logging.getLogger().handlers = []  # Clear any handlers pytest might have added
+@pytest.fixture
+def authenticated_client():
+    """
+    Create a FastAPI TestClient with a pre-authenticated test user
+    """
+    # Clear all databases before each test
+    user_database.clear()
+    active_sessions.clear()
     
-    # Re-initialize our logging setup
-    from main import setup_logging
-    logger, log_file_path = setup_logging()
+    # Create test user with password hash directly in the user object
+    password_hash = hash_password(TEST_USER["password"])
+    user_database[TEST_USER["email"]] = User(
+        email=TEST_USER["email"],
+        username=TEST_USER["username"],
+        passhash=password_hash,
+        subscriptions=[]
+    )
     
-    yield
+    # Create authentication token
+    token, _ = create_access_token(TEST_USER["email"])
     
-    # Make sure logs are written to disk after test session
-    for handler in logging.getLogger().handlers:
-        if isinstance(handler, logging.FileHandler):
-            handler.flush()
+    # Create test client with auth headers
+    client = TestClient(app)
+    client.headers = {"Authorization": f"Bearer {token}"}
+    
+    return client
+
+@pytest.fixture
+def test_user():
+    """
+    Return test user data for use in tests
+    """
+    return TEST_USER

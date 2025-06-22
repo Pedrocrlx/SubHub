@@ -1,57 +1,67 @@
 """
-Validation utility functions
+Validation utility functions for data validation across the application
 """
 import re
-from typing import Optional, List, Tuple
+from typing import Optional
 
-def is_valid_service_name(name: str) -> bool:
+from app.config import app_settings
+
+def validate_password_strength(password: str) -> str:
     """
-    Validate a subscription service name
+    Validate password meets strength requirements
     
     Requirements:
-    - Must not be empty
-    - Must not be just whitespace
-    """
-    if not name or name.isspace():
-        return False
-    return True
-
-def validate_password_strength(
-    password: str, 
-    min_length: int = 8,
-    require_uppercase: bool = True,
-    require_number: bool = True, 
-    require_symbol: bool = True
-) -> Tuple[bool, List[str]]:
-    """
-    Validate password strength and return validation status with error messages
+    - Minimum length (from app settings)
+    - Contains at least one uppercase letter
+    - Contains at least one lowercase letter
+    - Contains at least one digit
     
+    Args:
+        password: Password to validate
+        
     Returns:
-        Tuple of (is_valid, list_of_missing_requirements)
+        The original password if valid
+        
+    Raises:
+        ValueError: If password doesn't meet requirements
     """
-    missing_requirements = []
-    
-    if len(password) < min_length:
-        missing_requirements.append(f"at least {min_length} characters")
+    if len(password) < app_settings.MIN_PASSWORD_LENGTH:
+        raise ValueError(f"Password must be at least {app_settings.MIN_PASSWORD_LENGTH} characters")
         
-    if require_uppercase and not any(char.isupper() for char in password):
-        missing_requirements.append("at least one uppercase letter")
+    if not re.search(r'[A-Z]', password):
+        raise ValueError("Password must contain at least one uppercase letter")
         
-    if require_number and not any(char.isdigit() for char in password):
-        missing_requirements.append("at least one number")
+    if not re.search(r'[a-z]', password):
+        raise ValueError("Password must contain at least one lowercase letter")
         
-    if require_symbol and not any(not char.isalnum() for char in password):
-        missing_requirements.append("at least one symbol")
-    
-    return (len(missing_requirements) == 0, missing_requirements)
+    if not re.search(r'\d', password):
+        raise ValueError("Password must contain at least one digit")
+        
+    # Return the original password, not a boolean
+    return password
 
-def sanitize_input(text: str) -> str:
+def is_valid_service_name(service_name: str) -> bool:
     """
-    Basic sanitization of user input to prevent script injection
+    Validate if a service name is acceptable
     
-    This is a very basic implementation and should not be relied upon for security.
-    FastAPI's built-in validation and Pydantic should be the primary mechanisms.
+    Requirements:
+    - Non-empty string
+    - Maximum 100 characters
+    - Contains only alphanumeric chars, spaces, and common punctuation
+    
+    Args:
+        service_name: Service name to validate
+        
+    Returns:
+        True if valid, False otherwise
     """
-    # Replace angle brackets to neutralize HTML/script tags
-    text = text.replace("<", "&lt;").replace(">", "&gt;")
-    return text
+    if not service_name or not isinstance(service_name, str):
+        return False
+        
+    # Check length
+    if len(service_name) > 100:
+        return False
+        
+    # Check for valid characters (allowing alphanumeric, spaces, and basic punctuation)
+    valid_pattern = r'^[\w\s\-\+\&\.\,\!\?\(\)\'\"]+$'
+    return bool(re.match(valid_pattern, service_name))
