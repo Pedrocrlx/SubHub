@@ -1,10 +1,3 @@
-"""
-Database and data storage functionality
-
-This package provides data persistence and management for the SubHub API.
-"""
-
-# Import key elements for easy access
 from app.db.storage import (
     user_database,
     active_sessions,
