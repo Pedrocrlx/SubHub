@@ -24,9 +24,6 @@ def update_subscription(db: Session, user_id: int, sub_id: int, sub_update: Subs
         db.refresh(sub)
     return sub
 
-def get_user_subscriptions(db: Session, user_id: int):
-    return db.query(Subscription).filter(Subscription.user_id == user_id).all()
-
 def delete_subscription(db: Session, user_id: int, sub_id: int):
     sub = get_subscription_by_id(db, user_id, sub_id)
     if sub:

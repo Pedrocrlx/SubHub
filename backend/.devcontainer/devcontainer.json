@@ -1,0 +1,17 @@
+{
+  "name": "Subhub Backend DevContainer",
+  "dockerComposeFile": "compose.yaml",
+  "service": "backend",
+  "workspaceFolder": "/app",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance"
+  ],
+  "postCreateCommand": "pip install --no-cache-dir -r requirements.txt || poetry install",
+  "remoteEnv": {
+    "PYTHONPATH": "/app/src"
+  }
+}

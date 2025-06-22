@@ -7,14 +7,12 @@ from fastapi.responses import FileResponse, HTMLResponse
 from app.routers import auth, ping, subscription    # Imports router modules (Giulio)
 from app.db import Base, engine                     # For DB table creation (Giulio)
 from app.routers import auth, user                  # Imports router module (Giulio)
-from app.services.middleware import JWTMiddleware   # For Middleware protection (Giulio)
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 frontend_path = os.path.join(current_dir, "..", "..", "frontend")
 frontend_path = os.path.abspath(frontend_path)
 
 app = FastAPI()
-app.add_middleware(JWTMiddleware)
 
 # Creates tables
 Base.metadata.create_all(bind=engine)
