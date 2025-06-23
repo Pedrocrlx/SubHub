@@ -74,7 +74,7 @@ def setup_logging(log_level=logging.INFO):
     # Create uniquely named log file with timestamp and date for readability
     current_date = datetime.now().strftime("%Y%m%d")
     timestamp = int(time.time())
-    log_filename = f"subhub_{current_date}_{timestamp}.csv"
+    log_filename = f"subhub_{current_date}_{timestamp}.log"
     log_file_path = logs_directory / log_filename
     
     # Write CSV header as first line of log file
