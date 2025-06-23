@@ -33,35 +33,32 @@ class LoginRequest(BaseModel):
     email: EmailStr 
     password: str
 
-<<<<<<< HEAD
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     subscriptions = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
     model_config = {
-        "json_schema_extra": {
-    model_config = ConfigDict(
-        json_schema_extra={
-=======
-    model_config = {
-        "json_schema_extra": {
->>>>>>> 585ae5d (fix:(User Model and CRUD): Add user password update, delete; add subscription creation)
-            "example": {
-                "username": "john_doe",
-                "passhash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-                "email": "john@example.com",
-                "subscriptions": [
-                    {
-                        "service_name": "Netflix",
-                        "monthly_price": 17.99,
-                        "category": "Entertainment",
-                        "starting_date": "2025-01-15"
-                    }
-                ]
+        "json_schema_extra": (
+        model_config = ConfigDict(
+            json_schema_extra={
+               "example": {
+                    "username": "john_doe",
+                    "passhash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+                    "email": "john@example.com",
+                    "subscriptions": [
+                        {
+                            "service_name": "Netflix",
+                            "monthly_price": 17.99,
+                            "category": "Entertainment",
+                            "starting_date": "2025-01-15"
+                        }
+                    ]
+                }
             }
-        }
+        )
     )
+}
 
 class RegisterRequest(BaseModel):
     """
