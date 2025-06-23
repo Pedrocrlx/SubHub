@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Request, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db import SessionLocal, get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, Token
 from app.services import auth as auth_service
+from app.routers.user import get_current_user
 from app.services.auth import EmailPasswordForm
+from app.schemas.user import UserCreate, Token, UserRead
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -41,6 +42,5 @@ def login(form_data: EmailPasswordForm = Depends(), db: Session = Depends(get_db
 
 # Optional protected route (for testing)
 @router.get("/protected")
-def protected(request: Request):
-    current_user = request.state.user
-    return {"message": f"Hello, {current_user}"}
+def protected(current_user: UserRead = Depends(get_current_user)):
+    return {"message": f"Hello, {current_user.email}"}

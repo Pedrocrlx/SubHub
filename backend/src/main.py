@@ -20,7 +20,6 @@ from app.db.storage import (
     save_data_to_file,
     load_data_from_file
 )
-
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse
