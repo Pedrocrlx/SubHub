@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         registerBtn.addEventListener('click', () => {
             console.log('Register button clicked');
             container.classList.add('active');
+            
         });
 
     }

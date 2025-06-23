@@ -1,11 +1,5 @@
 """
 Subscription management endpoints
-
-This module provides API endpoints for:
-- Adding new subscription services
-- Listing user's current subscriptions
-- Updating existing subscription details
-- Deleting specific subscriptions by name
 """
 from fastapi import APIRouter, Body, HTTPException, Depends, status
 from typing import List, Dict, Any, Optional, Tuple
@@ -18,68 +12,24 @@ from src.app.core.logging import application_logger
 
 router = APIRouter(tags=["Subscriptions"])
 
-def find_subscription_by_name(user: User, service_name: str) -> Tuple[int, Optional[Subscription]]:
-    """
-    Find a subscription by name with case-insensitive matching
-    
-    Args:
-        user: User object containing subscriptions
-        service_name: Name of service to find
-        
-    Returns:
-        Tuple containing (index, subscription) if found, or (-1, None) if not found
-    """
-    service_name_lower = service_name.lower()
-    for i, sub in enumerate(user.subscriptions):
-        if sub.service_name.lower() == service_name_lower:
-            return i, sub
-    return -1, None
-
-def check_duplicate_subscription(user: User, service_name: str, exclude_index: int = -1) -> bool:
-    """
-    Check if a subscription name would create a duplicate
-    
-    Args:
-        user: User object containing subscriptions
-        service_name: Name to check for duplicates
-        exclude_index: Optional index to exclude from comparison (for updates)
-        
-    Returns:
-        True if duplicate exists, False otherwise
-    """
-    service_name_lower = service_name.lower()
-    for i, sub in enumerate(user.subscriptions):
-        if i != exclude_index and sub.service_name.lower() == service_name_lower:
-            return True
-    return False
-
-@router.post("", status_code=status.HTTP_201_CREATED, response_model=Dict[str, str])
+@router.post("", status_code=201)
 def add_subscription(
     new_subscription: Subscription = Body(..., description="Subscription details to add"),
     current_user: User = Depends(get_current_user)
-) -> Dict[str, str]:
-    """
-    Add a new subscription for the current user
-    
-    Validates that the subscription doesn't already exist (case-insensitive matching)
-    and adds it to the user's subscription list.
-    
-    Returns a success message and the name of the added service.
-    """
+):
+    """Add a new subscription for the current user"""
     application_logger.info(
-        f"User [{current_user.email}] adding subscription: [{new_subscription.service_name}] "
-        f"(${new_subscription.monthly_price:.2f}/month, category: [{new_subscription.category}])"
+        f"User {current_user.email} adding subscription: {new_subscription.service_name} "
+        f"(${new_subscription.monthly_price:.2f}/month, category: {new_subscription.category})"
     )
     
-    # Check for duplicate subscription using helper function
-    if check_duplicate_subscription(current_user, new_subscription.service_name):
+    # Check for duplicate subscriptions (case-insensitive)
+    if any(existing_sub.service_name.lower() == new_subscription.service_name.lower() 
+           for existing_sub in current_user.subscriptions):
         application_logger.warning(
-            f"User [{current_user.email}] attempted to add duplicate subscription: [{new_subscription.service_name}]"
+            f"User {current_user.email} attempted to add duplicate subscription: {new_subscription.service_name}"
         )
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, 
-            detail="Subscription already exists"
-        )
+        raise HTTPException(status_code=409, detail="Subscription already exists")
     
     # Add subscription to user's list
     current_user.subscriptions.append(new_subscription)
@@ -219,3 +169,31 @@ def delete_subscription(
         "message": f"Subscription {exact_name} deleted successfully",
         "service": exact_name
     }
+    application_logger.info(f"User {current_user.email} successfully added subscription: {new_subscription.service_name}")
+    return {"message": "Subscription added", "service": new_subscription.service_name}
+
+@router.get("")
+def list_subscriptions(
+    current_user: User = Depends(get_current_user)
+):
+    """Get all subscriptions for the current user"""
+    application_logger.info(f"User {current_user.email} viewed their {len(current_user.subscriptions)} subscriptions")
+    return current_user.subscriptions
+
+@router.delete("/{service_name}")
+def delete_subscription(
+    service_name: str, 
+    current_user: User = Depends(get_current_user)
+):
+    """Delete a subscription by service name"""
+    # Find and remove the subscription with matching name
+    for index, subscription in enumerate(current_user.subscriptions):
+        if subscription.service_name == service_name:
+            current_user.subscriptions.pop(index)
+            application_logger.info(f"User {current_user.email} deleted subscription: {service_name}")
+            save_data_to_file()
+            return {"message": f"Subscription {service_name} deleted successfully"}
+    
+    # If we get here, no matching subscription was found
+    application_logger.warning(f"User [{current_user.email}] attempted to delete non-existent subscription: [{service_name}]")
+    raise HTTPException(status_code=404, detail=f"Subscription [{service_name}] not found for current user")
