@@ -56,16 +56,4 @@ def read_login():
 app.include_router(auth.router)
 app.include_router(ping.router)
 app.include_router(user.router)
-app.include_router(subscription.router)
-# Ensure setup_logging is available for tests
-try:
-    from app.core.logging import setup_logging
-except ImportError:
-    # Fallback if not available
-    def setup_logging():
-        return None, None
-
-# Entry point when running directly
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+>>>>>>> 43432ec (fix:(User Model and CRUD): Implement user registration, login with JWT, and protected route access -- All functional)

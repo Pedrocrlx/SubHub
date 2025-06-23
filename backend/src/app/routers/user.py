@@ -1,17 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from app.db import get_db, SessionLocal
-from app.schemas.user import UserCreate, UserRead, UserUpdate
+from app.schemas.user import UserCreate, UserRead, UserUpdate, PasswordChange
 from app.services import user_service
 
 router = APIRouter(prefix="/users", tags=["users"])
 
 # Helper to extract the current user from JWT token
 def get_current_user(request: Request, db: Session) -> UserRead:
-    email = request.state.user
+    email = getattr(request.state, "user", None)
+    if not email:
+        raise HTTPException(status_code=401, detail="Unauthenticated")
+
     user = user_service.get_user_by_email(db, email)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+
     return user
 
 @router.post("/", response_model=UserRead, status_code=status.HTTP_201_CREATED)
@@ -43,3 +47,13 @@ def delete_own_user(request: Request, db: Session = Depends(get_db)):
     user = get_current_user(request, db)
     user_service.delete_user(db, user)
     return {"message": "User deleted successfully"}
+
+@router.patch("/me/password")   #Secure password handling for editing passwords (Giulio)
+def update_password(
+    payload: PasswordChange,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    user = get_current_user(request, db)
+    user_service.update_password(db, user, payload.current_password, payload.new_password)
+    return {"message": "Password updated successfully"}

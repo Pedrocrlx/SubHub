@@ -16,32 +16,24 @@ from app.models.subscription import Subscription
 from app.utils.validation_utils import validate_password_strength
 from app.config import app_settings  # Add this import
 
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from app.db import Base
+
 class User(BaseModel):
-    """
-    Core user model
+    """Represents a registered user in the system"""
     
-    Contains essential user account information including:
-    - Username for display purposes
-    - Password hash stored directly with user data
-    - Email address (used as primary identifier)
-    - List of subscriptions
-    """
-    username: str = Field(..., description="User's display name")
-    passhash: str = Field(..., description="SHA-256 hash of the user's password")
-    email: EmailStr = Field(..., description="User's email address (used for login)")
-    subscriptions: List[Subscription] = Field(default_factory=list, description="User's subscription services")
+    email: EmailStr
+    name: str
+    subscriptions: List[Subscription] = []
     
-    @field_validator('username')
-    @classmethod
-    def validate_username(cls, v):
-        """Validate username is not empty"""
-        if not v or not v.strip():
-            raise ValueError('Username cannot be empty')
-        return v.strip()
+class LoginRequest(BaseModel):
+    """Login form data"""
     
     email: EmailStr 
     password: str
 
+<<<<<<< HEAD
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
@@ -51,6 +43,10 @@ class User(BaseModel):
         "json_schema_extra": {
     model_config = ConfigDict(
         json_schema_extra={
+=======
+    model_config = {
+        "json_schema_extra": {
+>>>>>>> 585ae5d (fix:(User Model and CRUD): Add user password update, delete; add subscription creation)
             "example": {
                 "username": "john_doe",
                 "passhash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
