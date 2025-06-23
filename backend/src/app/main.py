@@ -1,69 +1,128 @@
+"""
+SubHub API - Main Application Module
+
+This module initializes and configures the SubHub FastAPI application with:
+- API router registration for different feature areas
+- CORS middleware configuration for cross-origin access
+- Global exception handling for graceful error responses
+- Application startup/shutdown lifecycle management
+- Swagger UI and OpenAPI documentation setup
+"""
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Request
+import traceback
+from typing import List, Dict, Any
+
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exception_handlers import http_exception_handler
-from fastapi import HTTPException
+
+# Application imports
 from app.config import app_settings
 from app.core.logging import application_logger
 from app.db.storage import load_data_from_file
 from app.api import auth, subscriptions, analytics, system
 
-# Define lifespan context manager
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup: Load data when the app starts
-    load_data_from_file()
-    application_logger.info("Application startup: data loaded successfully")
-    
-    yield  # This is where the app runs
-    
-    # Shutdown: Any cleanup code would go here
-    application_logger.info("Application shutdown")
+# ===== LIFECYCLE MANAGEMENT =====
 
-# API documentation
-api_tag_descriptions = [
-    {"name": "System", "description": "General information about the API"},
-    {"name": "Auth", "description": "User registration and authentication"},
-    {"name": "Subscriptions", "description": "Manage user subscription services"},
-    {"name": "Analytics", "description": "Subscription analysis, reporting, and search"}
+@asynccontextmanager
+async def application_lifespan(app_instance: FastAPI):
+    """
+    Manage application startup and shutdown lifecycle
+    
+    Handles initialization tasks like loading data on startup
+    and cleanup operations on shutdown.
+    """
+    # Startup: Load persisted data when the application starts
+    data_load_success = load_data_from_file()
+    if data_load_success:
+        application_logger.info("Application startup: Data loaded successfully")
+    else:
+        application_logger.warning("Application startup: No existing data found or load failed")
+    
+    yield  # Application runs during this yield
+    
+    # Shutdown: Any cleanup code goes here
+    application_logger.info("Application shutdown: Performing cleanup operations")
+
+# ===== API DOCUMENTATION CONFIG =====
+
+api_documentation_tags = [
+    {
+        "name": "System", 
+        "description": "General information about the API and health monitoring"
+    },
+    {
+        "name": "Auth", 
+        "description": "User registration, authentication, and session management"
+    },
+    {
+        "name": "Subscriptions", 
+        "description": "CRUD operations for user subscription services"
+    },
+    {
+        "name": "Analytics", 
+        "description": "Subscription analysis, spending insights, and search capabilities"
+    }
 ]
+
+# ===== APPLICATION INITIALIZATION =====
 
 app = FastAPI(
     title=app_settings.APP_NAME, 
     version=app_settings.VERSION,
-    openapi_tags=api_tag_descriptions,
+    description="API for managing and analyzing subscription services",
+    openapi_tags=api_documentation_tags,
     swagger_ui_parameters={"persistAuthorization": True},
-    lifespan=lifespan  # Include the lifespan manager here
+    lifespan=application_lifespan
 )
 
-# Add CORS middleware
+# ===== MIDDLEWARE CONFIGURATION =====
+
+# Configure CORS to allow cross-origin requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000"],  # Frontend origin - more secure than "*"
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "Accept"],
+    expose_headers=["Content-Type"]
 )
 
-# Add global exception handler
+# ===== EXCEPTION HANDLING =====
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exception: Exception):
-    """Global exception handler to catch all unhandled errors"""
+    """
+    Global exception handler for capturing all unhandled errors
     
-    error_message = f"Unhandled error: {str(exception)}"
-    application_logger.error(error_message)
+    Provides unified error handling and prevents exposing sensitive
+    error details to clients while ensuring proper logging.
+    """
+    # Get exception details for logging
+    error_type = type(exception).__name__
+    error_message = str(exception)
     
+    # Log detailed error information including stack trace
+    application_logger.error(
+        f"Unhandled {error_type}: {error_message}"
+    )
+    application_logger.debug(traceback.format_exc())
+    
+    # Handle FastAPI HTTP exceptions specially to preserve status codes
     if isinstance(exception, HTTPException):
         return await http_exception_handler(request, exception)
     
+    # For all other exceptions, return a generic 500 error
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal server error"}
     )
 
-# Include routers
+# ===== ROUTER REGISTRATION =====
+
+# Register API routes from different modules
 app.include_router(system)
 app.include_router(auth)
 app.include_router(subscriptions, prefix="/subscriptions")
-app.include_router(analytics)
+app.include_router(analytics, prefix="/analytics")

@@ -9,7 +9,7 @@ class Settings:
     PASSWORD_REQUIRES_UPPERCASE = True
     PASSWORD_REQUIRES_NUMBER = True
     PASSWORD_REQUIRES_SYMBOL = True
-    SECRET_KEY = secrets.token_bytes(32)
+    SECRET_KEY = os.environ.get("SECRET_KEY", secrets.token_hex(32))
     
     BASE_DIR = Path(__file__).resolve().parent.parent
     DATA_FILEPATH = os.path.join(BASE_DIR, "subhub_data.json")
