@@ -9,9 +9,9 @@ This module provides Pydantic models for:
 from typing import List, Optional
 from pydantic import BaseModel, Field, EmailStr, field_validator, ConfigDict
 
-from app.models.subscription import Subscription
-from app.utils.validation_utils import validate_password_strength
-from app.config import app_settings  # Add this import
+from src.app.models.subscription import Subscription
+from src.app.utils.validation_utils import validate_password_strength
+from src.app.config import app_settings  # Add this import
 
 class User(BaseModel):
     """

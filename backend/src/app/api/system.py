@@ -10,8 +10,8 @@ from fastapi import APIRouter, status, Response
 from typing import Dict, Any
 from functools import lru_cache
 
-from app.config import app_settings
-from app.core.logging import application_logger
+from src.app.config import app_settings
+from src.app.core.logging import application_logger
 
 # Create router with appropriate tag
 router = APIRouter(tags=["System"])

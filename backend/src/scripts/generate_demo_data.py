@@ -17,12 +17,12 @@ from datetime import date, timedelta
 # Ensure app modules are importable
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.models.user import User
-from app.models.subscription import Subscription
-from app.core.security import hash_password
-from app.db.storage import user_database, save_data_to_file
-from app.config import app_settings
-from app.core.logging import application_logger
+from src.app.models.user import User
+from src.app.models.subscription import Subscription
+from src.app.core.security import hash_password
+from src.app.db.storage import user_database, save_data_to_file
+from src.app.config import app_settings
+from src.app.core.logging import application_logger
 
 # Sample data
 DEMO_USERS = [

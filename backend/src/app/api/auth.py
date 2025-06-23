@@ -11,13 +11,13 @@ from fastapi import APIRouter, Body, HTTPException, Request, Depends, status
 from typing import Dict, Any, Optional
 
 # Application imports
-from app.models.user import User, RegisterRequest, LoginRequest
-from app.core.security import (
+from src.app.models.user import User, RegisterRequest, LoginRequest
+from src.app.core.security import (
     hash_password, verify_password, get_current_user, oauth2_scheme, 
     get_user_email_from_session, create_access_token
 )
-from app.db.storage import user_database, active_sessions, save_data_to_file
-from app.core.logging import application_logger
+from src.app.db.storage import user_database, active_sessions, save_data_to_file
+from src.app.core.logging import application_logger
 
 # Map of email to active tokens for faster session invalidation
 email_to_token_map: Dict[str, str] = {}

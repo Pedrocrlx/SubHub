@@ -15,9 +15,9 @@ from typing import Tuple, Dict, Any, Union, Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-from app.db.storage import user_database, active_sessions
-from app.models.user import User
-from app.core.logging import application_logger
+from src.app.db.storage import user_database, active_sessions
+from src.app.models.user import User
+from src.app.core.logging import application_logger
 
 # Constants
 TOKEN_LENGTH = 16  # Length for secure random tokens
