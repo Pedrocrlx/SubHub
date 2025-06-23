@@ -133,7 +133,7 @@ const registerUser = async (username, email, password) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                name: username,  // Certifique-se de que o campo é 'name' (ou ajuste para o esperado pelo backend)
+                username: username,  // Certifique-se de que o campo é 'name' (ou ajuste para o esperado pelo backend)
                 email: email,
                 password: password,
             }),
