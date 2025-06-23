@@ -11,12 +11,12 @@ import pytest
 from fastapi.testclient import TestClient
 import tempfile
 
-# Updated imports to use the new module structure
-from app.main import app
-from app.db.storage import user_database, active_sessions, save_data_to_file
-from app.config import app_settings as settings
-from app.core.security import verify_password, hash_password, create_access_token
-from app.models.user import User
+# FIX: Use src.app instead of app to match your application imports
+from src.app.main import app
+from src.app.db.storage import user_database, active_sessions, save_data_to_file
+from src.app.config import app_settings as settings
+from src.app.core.security import verify_password, hash_password, create_access_token
+from src.app.models.user import User
 
 # Test data using "username" instead of "name"
 TEST_USER = {
