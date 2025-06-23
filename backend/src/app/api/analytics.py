@@ -10,11 +10,11 @@ from fastapi import APIRouter, Query, Depends, status
 from typing import List, Dict, Any, Optional
 from collections import defaultdict
 
-from app.models.subscription import Subscription
-from app.models.user import User
-from app.core.security import get_current_user
-from app.utils.format_utils import format_currency
-from app.core.logging import application_logger
+from src.app.models.subscription import Subscription
+from src.app.models.user import User
+from src.app.core.security import get_current_user
+from src.app.utils.format_utils import format_currency
+from src.app.core.logging import application_logger
 
 router = APIRouter(tags=["Analytics"])
 

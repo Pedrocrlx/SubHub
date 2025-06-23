@@ -12,6 +12,6 @@ class Settings:
     SECRET_KEY = os.environ.get("SECRET_KEY", secrets.token_hex(32))
     
     BASE_DIR = Path(__file__).resolve().parent.parent
-    DATA_FILEPATH = os.path.join(BASE_DIR, "subhub_data.json")
+    DATA_FILEPATH = os.path.join(BASE_DIR, "data", "subhub_data.json")
 
 app_settings = Settings()

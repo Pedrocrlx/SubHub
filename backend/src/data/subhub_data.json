@@ -6,22 +6,40 @@
       "email": "john@example.com",
       "subscriptions": [
         {
-          "service_name": "Spotify Premium",
-          "monthly_price": 10.94,
-          "category": "Music",
-          "starting_date": "2025-05-10"
+          "service_name": "JetBrains All Products",
+          "monthly_price": 24.9,
+          "category": "Development",
+          "starting_date": "2024-07-07"
+        },
+        {
+          "service_name": "PlayStation Plus",
+          "monthly_price": 16.1,
+          "category": "Gaming",
+          "starting_date": "2025-05-27"
+        },
+        {
+          "service_name": "Xbox Game Pass",
+          "monthly_price": 10.26,
+          "category": "Gaming",
+          "starting_date": "2024-08-01"
         },
         {
           "service_name": "Google Workspace",
-          "monthly_price": 7.42,
+          "monthly_price": 6.74,
           "category": "Productivity",
-          "starting_date": "2024-11-03"
+          "starting_date": "2024-12-20"
         },
         {
           "service_name": "Adobe Creative Cloud",
-          "monthly_price": 24.29,
+          "monthly_price": 39.15,
           "category": "Productivity",
-          "starting_date": "2024-09-20"
+          "starting_date": "2024-08-10"
+        },
+        {
+          "service_name": "Disney+",
+          "monthly_price": 10.42,
+          "category": "Entertainment",
+          "starting_date": "2025-05-07"
         }
       ]
     },
@@ -32,21 +50,39 @@
       "subscriptions": [
         {
           "service_name": "GitHub Pro",
-          "monthly_price": 4.81,
+          "monthly_price": 5.44,
           "category": "Development",
-          "starting_date": "2024-11-06"
+          "starting_date": "2025-02-02"
         },
         {
-          "service_name": "Nintendo Switch Online",
-          "monthly_price": 6.19,
-          "category": "Gaming",
-          "starting_date": "2025-01-12"
+          "service_name": "Amazon Prime Video",
+          "monthly_price": 10.31,
+          "category": "Entertainment",
+          "starting_date": "2025-01-24"
         },
         {
-          "service_name": "Apple Music",
-          "monthly_price": 11.32,
-          "category": "Music",
-          "starting_date": "2025-05-08"
+          "service_name": "Disney+",
+          "monthly_price": 10.12,
+          "category": "Entertainment",
+          "starting_date": "2025-04-20"
+        },
+        {
+          "service_name": "Google Workspace",
+          "monthly_price": 11.29,
+          "category": "Productivity",
+          "starting_date": "2024-09-14"
+        },
+        {
+          "service_name": "JetBrains All Products",
+          "monthly_price": 24.9,
+          "category": "Development",
+          "starting_date": "2024-10-02"
+        },
+        {
+          "service_name": "Adobe Creative Cloud",
+          "monthly_price": 30.93,
+          "category": "Productivity",
+          "starting_date": "2025-01-20"
         }
       ]
     },
@@ -56,34 +92,40 @@
       "email": "guru@techworld.com",
       "subscriptions": [
         {
-          "service_name": "JetBrains All Products",
-          "monthly_price": 24.9,
-          "category": "Development",
-          "starting_date": "2024-12-23"
-        },
-        {
           "service_name": "GitHub Pro",
-          "monthly_price": 4.74,
+          "monthly_price": 4.02,
           "category": "Development",
-          "starting_date": "2024-12-07"
+          "starting_date": "2025-02-15"
         },
         {
           "service_name": "Adobe Creative Cloud",
-          "monthly_price": 41.26,
+          "monthly_price": 33.44,
           "category": "Productivity",
-          "starting_date": "2025-04-30"
+          "starting_date": "2024-12-27"
         },
         {
           "service_name": "Google Workspace",
-          "monthly_price": 11.18,
+          "monthly_price": 11.37,
           "category": "Productivity",
-          "starting_date": "2024-09-11"
+          "starting_date": "2024-10-08"
         },
         {
-          "service_name": "Nintendo Switch Online",
-          "monthly_price": 4.73,
-          "category": "Gaming",
-          "starting_date": "2024-07-17"
+          "service_name": "Disney+",
+          "monthly_price": 8.27,
+          "category": "Entertainment",
+          "starting_date": "2025-01-10"
+        },
+        {
+          "service_name": "GitLab",
+          "monthly_price": 51.2,
+          "category": "Development",
+          "starting_date": "2025-03-18"
+        },
+        {
+          "service_name": "YouTube Music",
+          "monthly_price": 10.14,
+          "category": "Music",
+          "starting_date": "2024-09-14"
         }
       ]
     },
@@ -93,28 +135,22 @@
       "email": "cinephile@films.com",
       "subscriptions": [
         {
-          "service_name": "Microsoft 365",
-          "monthly_price": 7.6,
+          "service_name": "Adobe Creative Cloud",
+          "monthly_price": 24.9,
           "category": "Productivity",
-          "starting_date": "2024-12-26"
-        },
-        {
-          "service_name": "Google Workspace",
-          "monthly_price": 6.76,
-          "category": "Productivity",
-          "starting_date": "2025-03-24"
-        },
-        {
-          "service_name": "PlayStation Plus",
-          "monthly_price": 10.88,
-          "category": "Gaming",
-          "starting_date": "2025-04-11"
+          "starting_date": "2025-06-19"
         },
         {
           "service_name": "GitLab",
-          "monthly_price": 85.53,
+          "monthly_price": 89.85,
           "category": "Development",
-          "starting_date": "2024-10-20"
+          "starting_date": "2025-03-09"
+        },
+        {
+          "service_name": "PlayStation Plus",
+          "monthly_price": 10.34,
+          "category": "Gaming",
+          "starting_date": "2025-06-01"
         }
       ]
     },
@@ -124,28 +160,28 @@
       "email": "saver@finance.com",
       "subscriptions": [
         {
-          "service_name": "Apple Music",
-          "monthly_price": 14.53,
-          "category": "Music",
-          "starting_date": "2024-08-09"
-        },
-        {
-          "service_name": "GitHub Pro",
-          "monthly_price": 4.31,
+          "service_name": "GitLab",
+          "monthly_price": 69.66,
           "category": "Development",
-          "starting_date": "2024-12-16"
+          "starting_date": "2024-09-25"
         },
         {
-          "service_name": "Spotify Premium",
-          "monthly_price": 14.17,
+          "service_name": "Apple Music",
+          "monthly_price": 10.68,
           "category": "Music",
-          "starting_date": "2024-11-10"
+          "starting_date": "2024-08-17"
         },
         {
-          "service_name": "Xbox Game Pass",
-          "monthly_price": 10.48,
-          "category": "Gaming",
-          "starting_date": "2025-02-25"
+          "service_name": "Microsoft 365",
+          "monthly_price": 8.23,
+          "category": "Productivity",
+          "starting_date": "2024-11-11"
+        },
+        {
+          "service_name": "Adobe Creative Cloud",
+          "monthly_price": 29.75,
+          "category": "Productivity",
+          "starting_date": "2025-01-26"
         }
       ]
     },
@@ -155,22 +191,52 @@
       "email": "gamer@games.net",
       "subscriptions": [
         {
-          "service_name": "Adobe Creative Cloud",
-          "monthly_price": 29.96,
+          "service_name": "JetBrains All Products",
+          "monthly_price": 24.9,
+          "category": "Development",
+          "starting_date": "2025-03-17"
+        },
+        {
+          "service_name": "Microsoft 365",
+          "monthly_price": 7.89,
           "category": "Productivity",
-          "starting_date": "2025-05-01"
+          "starting_date": "2024-11-07"
+        },
+        {
+          "service_name": "Hulu",
+          "monthly_price": 11.01,
+          "category": "Entertainment",
+          "starting_date": "2025-01-28"
+        },
+        {
+          "service_name": "YouTube Music",
+          "monthly_price": 12.21,
+          "category": "Music",
+          "starting_date": "2025-01-02"
+        },
+        {
+          "service_name": "GitHub Pro",
+          "monthly_price": 5.79,
+          "category": "Development",
+          "starting_date": "2024-10-12"
+        },
+        {
+          "service_name": "Amazon Prime Video",
+          "monthly_price": 14.41,
+          "category": "Entertainment",
+          "starting_date": "2025-02-12"
         },
         {
           "service_name": "Nintendo Switch Online",
-          "monthly_price": 6.62,
+          "monthly_price": 5.39,
           "category": "Gaming",
-          "starting_date": "2025-06-14"
+          "starting_date": "2024-09-10"
         },
         {
-          "service_name": "HBO Max",
-          "monthly_price": 10.35,
-          "category": "Entertainment",
-          "starting_date": "2024-08-28"
+          "service_name": "Xbox Game Pass",
+          "monthly_price": 14.95,
+          "category": "Gaming",
+          "starting_date": "2025-02-06"
         }
       ]
     }

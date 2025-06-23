@@ -2,7 +2,7 @@ FROM python:3.12
 
 RUN pip install poetry
 
-WORKDIR /app
+WORKDIR /workspace
 
 COPY pyproject.toml poetry.lock ./
 
@@ -12,12 +12,11 @@ RUN poetry config virtualenvs.create true &&\
 
 COPY . .
 
-ENV PATH="/app/.venv/bin:$PATH" \
-    PYTHONPATH=/app/src
+ENV PATH="/app/.venv/bin:$PATH" 
 
 EXPOSE 8000
 
-CMD ["poetry", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 # Ordem dos comandos no Dockerfile importam
 # Apartir do momento em que defino WORKDIR, todo '.' passado à direita dos meus argumentos de meus comandos; são <WORKDIR>

@@ -17,11 +17,12 @@ from datetime import date, timedelta
 # Ensure app modules are importable
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.models.user import User
-from app.models.subscription import Subscription
-from app.core.security import hash_password
-from app.db.storage import user_database, save_data_to_file
-from app.config import app_settings
+from src.app.models.user import User
+from src.app.models.subscription import Subscription
+from src.app.core.security import hash_password
+from src.app.db.storage import user_database, save_data_to_file
+from src.app.config import app_settings
+from src.app.core.logging import application_logger
 
 # Sample data
 DEMO_USERS = [
@@ -98,20 +99,30 @@ def create_demo_users(clear_existing=False):
     """Create demo users with random subscriptions using app models and storage."""
     if clear_existing:
         user_database.clear()
+        application_logger.info("Cleared existing user database before generating demo data.")
     for user_info in DEMO_USERS:
         email = user_info["email"]
         if not clear_existing and email in user_database:
-            print(f"User {email} already exists, skipping...")
+            application_logger.info(f"User [{email}] already exists, skipping...")
             continue
+        subscriptions = get_random_subscriptions()
         user_database[email] = User(
             username=user_info["username"],
             passhash=hash_password(user_info["password"]),
             email=email,
-            subscriptions=get_random_subscriptions()
+            subscriptions=subscriptions
         )
-        print(f"Created user {email} ({user_info['username']}) with {len(user_database[email].subscriptions)} subscriptions")
+        application_logger.info(
+            f"Registered user: [{email}] (username: [{user_info['username']}])"
+        )
+        for sub in subscriptions:
+            application_logger.info(
+                f"Added subscription for [{email}]: "
+                f"[{sub.service_name}] | ${sub.monthly_price:.2f}/month | "
+                f"Category: [{sub.category}] | Start: [{sub.starting_date}]"
+            )
     save_data_to_file()
-    print(f"Demo data generation complete. Created/updated {len(DEMO_USERS)} users.")
+    application_logger.info(f"Demo data generation complete. Created/updated [{len(DEMO_USERS)}] users.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate demo data for SubHub')
@@ -124,5 +135,6 @@ if __name__ == "__main__":
         for user in DEMO_USERS:
             print(f"  Email: {user['email']}, Password: {user['password']}")
     except Exception as e:
+        application_logger.error(f"Error generating demo data: {e}")
         print(f"Error generating demo data: {e}")
         sys.exit(1)
