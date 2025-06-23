@@ -11,8 +11,8 @@ import pytest
 import time
 from datetime import date
 
-from app.db.storage import user_database, active_sessions, save_data_to_file, load_data_from_file
-from app.core.security import verify_password
+from src.app.db.storage import user_database, active_sessions, save_data_to_file, load_data_from_file
+from src.app.core.security import verify_password
 
 # Test subscription data
 TEST_SUBSCRIPTION = {
