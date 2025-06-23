@@ -13,12 +13,9 @@ from typing import List, Optional
 from pydantic import BaseModel, Field, EmailStr, field_validator, ConfigDict
 
 from app.models.subscription import Subscription
+from app.routers import auth, ping, subscription, user
 from app.utils.validation_utils import validate_password_strength
 from app.config import app_settings  # Add this import
-
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
-from app.db import Base
 
 class User(BaseModel):
     """Represents a registered user in the system"""
@@ -40,25 +37,25 @@ class LoginRequest(BaseModel):
     subscriptions = relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
     model_config = {
         "json_schema_extra": (
-        model_config = ConfigDict(
-            json_schema_extra={
-               "example": {
-                    "username": "john_doe",
-                    "passhash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
-                    "email": "john@example.com",
-                    "subscriptions": [
-                        {
-                            "service_name": "Netflix",
-                            "monthly_price": 17.99,
-                            "category": "Entertainment",
-                            "starting_date": "2025-01-15"
-                        }
-                    ]
+            model_config = ConfigDict(
+                json_schema_extra={
+                    "example": {
+                        "username": "john_doe",
+                        "passhash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+                        "email": "john@example.com",
+                        "subscriptions": [
+                            {
+                                "service_name": "Netflix",
+                                "monthly_price": 17.99,
+                                "category": "Entertainment",
+                                "starting_date": "2025-01-15"
+                            }
+                        ]
+                    }
                 }
-            }
+            )
         )
-    )
-}
+    }
 
 class RegisterRequest(BaseModel):
     """
