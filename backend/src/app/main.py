@@ -18,10 +18,10 @@ from fastapi.responses import JSONResponse
 from fastapi.exception_handlers import http_exception_handler
 
 # Application imports
-from app.config import app_settings
-from app.core.logging import application_logger
-from app.db.storage import load_data_from_file
-from app.api import auth, subscriptions, analytics, system
+from src.app.config import app_settings
+from src.app.core.logging import application_logger
+from src.app.db.storage import load_data_from_file
+from src.app.api import auth, subscriptions, analytics, system
 
 # ===== LIFECYCLE MANAGEMENT =====
 

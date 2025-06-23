@@ -4,7 +4,7 @@ Validation utility functions for data validation across the application
 import re
 from typing import Optional
 
-from app.config import app_settings
+from src.app.config import app_settings
 
 def validate_password_strength(password: str) -> str:
     """
