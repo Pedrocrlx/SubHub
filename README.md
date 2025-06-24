@@ -70,7 +70,7 @@ Before opening the project, make sure you have the following installed:
    Download and install from: https://www.docker.com/products/docker-desktop/
 
 4. **.env file**  
-   Create a `.env` file in the project root.
+   Create a `.env` file in the project root and use the variables used in .env.example.
 
 ## How to Open the Project
 
