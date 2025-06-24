@@ -1,0 +1,145 @@
+
+.overview-graph {
+    background-color: var(--marble-300); /* Cor de fundo semelhante à da imagem */
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.spending-value{
+    font-weight: bold;
+    color: var(--black-300);
+    padding: 10px;
+}
+
+.bar-chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end; /* Alinha as barras pela parte inferior */
+    height: 150px; /* Altura total do gráfico */
+    background-color: #d8e0e8; /* Fundo levemente diferente para o gráfico */
+    border-radius: 20px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra interna para profundidade */
+}
+
+.bar {
+    width: 22px; /* Largura das barras */
+    background-color: #6a8c6a; /* Cor padrão das barras */
+    border-radius: 5px 5px 0 0; /* Bordas arredondadas apenas no topo */
+    transition: height 0.5s ease-out, background-color 0.3s ease; /* Animação suave */
+    margin: 0 4px; /* Espaçamento entre as barras */
+}
+
+/* Cores e alturas para cada barra (pode ser ajustado dinamicamente com JS) */
+.bar-1 {
+    background-color: #c0d1c0;
+    height: 40px;
+}
+
+.bar-2 {
+    background-color: #a0c0a0;
+    height: 60px;
+}
+
+.bar-3 {
+    background-color: #80ac80;
+    height: 80px;
+}
+
+.bar-4 {
+    background-color: #609860;
+    height: 100px;
+}
+
+.bar-5 {
+    background-color: #408440;
+    height: 120px;
+}
+
+.bar-6 {
+    background-color: #207020;
+    height: 140px;
+}
+
+/* Efeito de hover simples nas barras */
+.bar:hover {
+    background-color: #4CAF50; /* Uma cor de destaque no hover */
+    transform: translateY(-5px); /* Levanta um pouco a barra */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adiciona sombra no hover */
+}
+
+
+
+/* chart pie*/
+
+
+.pie-chart-container {
+    position: relative;
+    width: 250px; /* Tamanho maior para o SVG */
+    height: 250px;
+    margin: 30px auto;
+    border-radius: 50%;
+    /* background-color: #ccc; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pie-chart-svg {
+    position: absolute; /* Para que o texto central possa flutuar acima */
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg); /* Começa o 0 grau no topo */
+}
+
+/* Estilo para cada fatia SVG */
+.pie-slice-path {
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out; /* Animação suave */
+    transform-origin: 50px 50px; /* Ponto central do SVG viewBox */
+    cursor: pointer;
+}
+
+.pie-slice-path:hover {
+    transform: scale(1.03); /* Ligeiro zoom na fatia */
+    opacity: 0.9; /* Pequena transparência para destacar */
+}
+
+.pie-center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e0e5ea;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 5; /* Acima do SVG */
+}
+
+.pie-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    white-space: nowrap;
+    pointer-events: none; /* Garante que o tooltip não bloqueie eventos do mouse */
+    z-index: 20;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.pie-tooltip.active {
+    opacity: 1;
+}
