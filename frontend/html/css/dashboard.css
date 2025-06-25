@@ -164,6 +164,15 @@ main {
     justify-content: center;
     gap: 0.5rem;
 }
+#addSubscriptionBtn{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#addSubscriptionBtn i {
+    font-size: 20px;
+}
 
 .dashboard-content {
     display: grid;
@@ -208,6 +217,16 @@ main {
     margin-bottom: 10px;
 }
 
+.subscription_div{
+    display:flex; 
+    align-items:center;
+}
+
+.subscription_logo{
+    width:40px; 
+    height:40px; 
+    margin-right:10px;
+}
 .coming-up-card {
     color: var(--marble-300);
     margin: 1rem 0;

@@ -17,7 +17,7 @@ function loadMenu() {
                     </p>
                 </div>
                 <a href="/home/" id="home-button" class="label button-terciary">home</a>
-                <a id="language-button" class="label button-terciary">LANGUAGE</a>
+                <a id="language-button" class="label button-terciary disabled">LANGUAGE</a>
                 <a href="/learn_more/" id="learnmore-button" class="label button-terciary">learn more</a>
 
             </div>
