@@ -11,14 +11,14 @@ export function updateBarChart(subscriptions) {
 
     if (!subscriptions || subscriptions.length === 0) {
         console.warn("updateBarChart: No subscriptions to display. Bar chart will be empty.");
+        const monthLabels = barChartContainer.querySelectorAll('.month-label'); 
         const bars = barChartContainer.querySelectorAll('.bar');
-        const monthLabels = barChartContainer.querySelectorAll('.month-label'); // Select month labels
+        monthLabels.forEach(label => { // Clear month labels too
+            label.textContent = '';
+        });
         bars.forEach(bar => {
             bar.style.height = '0px';
             bar.textContent = '';
-        });
-        monthLabels.forEach(label => { // Clear month labels too
-            label.textContent = '';
         });
         const totalSpendingElement = document.querySelector('.spending-value');
         if (totalSpendingElement) totalSpendingElement.textContent = '0.00€';
@@ -30,19 +30,19 @@ export function updateBarChart(subscriptions) {
 
     const bars = barChartContainer.querySelectorAll('.bar');
     const monthLabels = barChartContainer.querySelectorAll('.month-label'); // Select month labels again
+    const barLabels = barChartContainer.querySelectorAll('.bar-label');
     const chartMaxHeight = 140;
 
     bars.forEach((bar, index) => {
         const barValue = monthlySpending[index] || 0;
         const heightPercentage = maxSpending > 0 ? (barValue / maxSpending) : 0;
         const barHeight = heightPercentage * chartMaxHeight;
-
         bar.style.height = `${barHeight}px`;
-        bar.textContent = barValue.toFixed(2);
         bar.style.opacity = barValue > 0 ? '1' : '0.5';
         bar.title = `Spending: ${barValue.toFixed(2)}€`;
-
-        // Update the month label for the current bar
+        if (barLabels[index]) {
+            barLabels[index].textContent = `${barValue.toFixed(2)}€`;
+        }        
         if (monthLabels[index]) {
             monthLabels[index].textContent = getMonthName(index);
         }

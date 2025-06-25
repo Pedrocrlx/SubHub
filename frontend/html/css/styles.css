@@ -216,7 +216,9 @@ nav {
     position: relative;
     transition: color 0.2s;
 }
-
+.button-terciary .disabled{
+    opacity: 0.5;
+}
 
 .button-terciary::after {
     content: "";

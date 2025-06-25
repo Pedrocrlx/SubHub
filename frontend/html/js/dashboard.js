@@ -65,8 +65,8 @@ export async function loadSubscriptions() {
                     <td>${(parseFloat(sub.monthly_price || 0)).toFixed(2)}€</td>
                     <td>${sub.category}</td>
                     <td>
-                        <button class="action-btn edit-btn"><i class='bx bxs-pencil'></i></button>
-                        <button class="action-btn delete-btn"><i class='bx bxs-trash'></i></button>
+                        <button class="action-btn edit-btn" aria-label="Edit Subscription"><i class='bx bxs-pencil'></i></button>
+                        <button class="action-btn delete-btn" aria-label="Delete Subscription"><i class='bx bxs-trash'></i></button>
                     </td>
                 `;
                 subscriptionsTableBody.appendChild(row);
