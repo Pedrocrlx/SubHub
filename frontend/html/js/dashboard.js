@@ -1,24 +1,25 @@
+// js/dashboard.js
 
 import { endpoints } from './endpoints.js';
 import { openModal, closeModal } from './utils.js';
 import { updateBarChart } from './bar_chart.js';
 import { updatePieChart } from './pie_chart.js';
-import { updateNextPayments } from './next_payments.js';
-import { resetNewSubscriptionForm } from './new_subscription_modal.js'; // NOVO: Importa a função de reset
+import { updateNextPayments, getLogoForService } from './next_payments.js'; // Import getLogoForService
+import { resetNewSubscriptionForm } from './new_subscription_modal.js';
 import { requireAuth } from './user_authentication.js';
 
-// Exporta loadSubscriptions para que outros módulos possam usá-la
+// Export loadSubscriptions so other modules can use it
 export async function loadSubscriptions() {
     const token = localStorage.getItem("access_token");
     if (!token) {
-        console.error("Token de acesso não encontrado. Redirecionando para login.");
+        console.error("Access token not found. Redirecting to login.");
         window.location.href = "/auth/";
         return;
     }
 
     const subscriptionsTableBody = document.getElementById('subscriptionsTableBody');
     if (!subscriptionsTableBody) {
-        console.error("Elemento 'subscriptionsTableBody' não encontrado.");
+        console.error("Element 'subscriptionsTableBody' not found.");
         return;
     }
 
@@ -39,7 +40,7 @@ export async function loadSubscriptions() {
         }
 
         const subscriptions = await response.json();
-        console.log("Subscrições carregadas:", subscriptions);
+        console.log("Subscriptions loaded:", subscriptions);
 
         subscriptionsTableBody.innerHTML = '';
         if (subscriptions && subscriptions.length > 0) {
@@ -49,10 +50,17 @@ export async function loadSubscriptions() {
                 row.dataset.monthlyPrice = sub.monthly_price;
                 row.dataset.startingDate = sub.starting_date;
                 row.dataset.category = sub.category;
-                row.dataset.renovationType = sub.renovation_type || 'Monthly'; // Incluído renovation_type
+                row.dataset.renovationType = sub.renovation_type || 'Monthly';
+
+                const logoUrl = getLogoForService(sub.service_name); // Get the logo URL
 
                 row.innerHTML = `
-                    <td>${sub.service_name}</td>
+                    <td>
+                        <div style="display:flex; align-items:center;">
+                            <img src="${logoUrl}" alt="${sub.service_name}" style="width:30px; height:30px; margin-right:10px; border-radius: 5px;">
+                            ${sub.service_name}
+                        </div>
+                    </td>
                     <td>${sub.starting_date}</td>
                     <td>${(parseFloat(sub.monthly_price || 0)).toFixed(2)}€</td>
                     <td>${sub.category}</td>
@@ -64,18 +72,23 @@ export async function loadSubscriptions() {
                 subscriptionsTableBody.appendChild(row);
             });
         } else {
-            subscriptionsTableBody.innerHTML = '<tr><td colspan="5">Nenhuma subscrição encontrada.</td></tr>';
+            subscriptionsTableBody.innerHTML = '<tr><td colspan="5">No subscriptions found.</td></tr>';
         }
 
         updateDashboardCharts(subscriptions);
 
     } catch (error) {
-        console.error('Erro ao carregar subscrições:', error);
-        alert('Erro ao carregar subscrições. Por favor, tente novamente.');
+        console.error('Error loading subscriptions:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: `Error loading subscriptions: ${error.message}. Please try again.`,
+            confirmButtonText: 'OK'
+        });
     }
 }
 
-// Função para atualizar todos os componentes do dashboard
+// Function to update all dashboard components
 function updateDashboardCharts(subscriptions) {
     updateBarChart(subscriptions);
     updatePieChart(subscriptions);
@@ -96,16 +109,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         userDisplay.textContent = `Welcome, ${userName}!`;
     }
 
-    // --- Lógica para o botão "Add Subscription" ---
+    // --- Logic for the "Add Subscription" button ---
     const addSubscriptionBtn = document.getElementById('addSubscriptionBtn');
     if (addSubscriptionBtn) {
         addSubscriptionBtn.addEventListener('click', () => {
-            resetNewSubscriptionForm(); // NOVO: Chama a função de reset antes de abrir
+            resetNewSubscriptionForm();
             openModal('newSubscriptionModal');
         });
     }
 
-    // --- Lógica para fechar as modais ---
+    // --- Logic to close modals ---
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
@@ -121,10 +134,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
-    // Chama loadSubscriptions para carregar os dados iniciais
+    // Call loadSubscriptions to load initial data
     await loadSubscriptions();
 
-    // --- Delegação de eventos para botões de Edit/Delete na tabela ---
+    // --- Event delegation for Edit/Delete buttons in the table ---
     const subscriptionsTableBody = document.getElementById('subscriptionsTableBody');
     subscriptionsTableBody.addEventListener('click', async (e) => {
         const row = e.target.closest('tr');
@@ -138,38 +151,38 @@ document.addEventListener("DOMContentLoaded", async () => {
                 monthly_price: parseFloat(row.dataset.monthlyPrice),
                 starting_date: row.dataset.startingDate,
                 category: row.dataset.category,
-                renovation_type: row.dataset.renovationType // Passa o tipo de renovação
+                renovation_type: row.dataset.renovationType
             };
             if (typeof window.openEditSubscriptionModal === 'function') {
                 window.openEditSubscriptionModal(subscriptionData);
             } else {
-                console.error("openEditSubscriptionModal não está definida ou não é uma função.");
+                console.error("openEditSubscriptionModal is not defined or not a function.");
             }
         } else if (e.target.closest('.delete-btn')) {
 
             const result = await Swal.fire({
-                title: 'Tem certeza?',
-                text: `Deseja realmente deletar a subscrição "${serviceName}"?`,
+                title: 'Are you sure?',
+                text: `Do you really want to delete the subscription "${serviceName}"?`,
                 icon: 'warning',
-                showCancelButton: true, 
-                confirmButtonText: 'Sim, deletar!',
-                cancelButtonText: 'Cancelar',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
                 reverseButtons: true,
                 customClass: {
-                    confirmButton: 'button-primary danger-button', 
+                    confirmButton: 'button-primary danger-button',
                     cancelButton: 'button-secondary'
                 },
-                buttonsStyling: false 
+                buttonsStyling: false
             });
 
-            if (result.isConfirmed) { 
+            if (result.isConfirmed) {
                 try {
-                    const token = localStorage.getItem("access_token"); 
+                    const token = localStorage.getItem("access_token");
                     if (!token) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Erro de Autenticação',
-                            text: 'Token de acesso não encontrado. Por favor, faça login novamente.',
+                            title: 'Authentication Error',
+                            text: 'Access token not found. Please log in again.',
                             confirmButtonText: 'OK',
                             customClass: { confirmButton: 'button-primary' },
                             buttonsStyling: false
@@ -193,19 +206,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                     }
 
                     Swal.fire({
-                        title: 'Deletado!',
-                        text: `Subscrição "${serviceName}" deletada com sucesso.`,
+                        title: 'Deleted!',
+                        text: `Subscription "${serviceName}" deleted successfully.`,
                         icon: 'success',
                         confirmButtonText: 'OK',
                         customClass: { confirmButton: 'button-primary' },
                         buttonsStyling: false
                     });
-                    await loadSubscriptions(); 
+                    await loadSubscriptions();
                 } catch (error) {
                     console.error('Error deleting subscription:', error);
                     Swal.fire({
-                        title: 'Erro!',
-                        text: `Erro ao deletar subscrição: ${error.message}. Por favor, tente novamente.`,
+                        title: 'Error!',
+                        text: `Error deleting subscription: ${error.message}. Please try again.`,
                         icon: 'error',
                         confirmButtonText: 'OK',
                         customClass: { confirmButton: 'button-primary' },
@@ -213,7 +226,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     });
                 }
             } else {
-                console.log('Deleção cancelada pelo utilizador.');
+                console.log('Deletion cancelled by the user.');
             }
         }
     });
