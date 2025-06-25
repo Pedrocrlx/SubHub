@@ -1,6 +1,6 @@
 // endpoints.js
 
-const BASE_URL = "http://localhost:8000"; // ou altera para tua URL de produção
+const BASE_URL = "http://localhost:8000"; // or change to your production URL
 
 export const endpoints = {
   auth: {
@@ -11,14 +11,16 @@ export const endpoints = {
   subscriptions: {
     add: `${BASE_URL}/subscriptions`,
     list: `${BASE_URL}/subscriptions`,
-    delete: (serviceName) => `${BASE_URL}/subscriptions/${serviceName}`, // usa: delete('Netflix')
+    update: (serviceName) => `${BASE_URL}/subscriptions/${serviceName}`, // Added update endpoint
+    delete: (serviceName) => `${BASE_URL}/subscriptions/${serviceName}`,
   },
   analytics: {
-    search: (term) => `${BASE_URL}/search?term=${encodeURIComponent(term)}`,
-    summary: `${BASE_URL}/summary`,
-    categories: `${BASE_URL}/categories`,
+    search: `${BASE_URL}/analytics/search`, // Updated path
+    summary: `${BASE_URL}/analytics/summary`, // Updated path
+    categories: `${BASE_URL}/analytics/categories`, // Updated path
   },
   system: {
-    info: `${BASE_URL}/system/`,
+    rootInfo: `${BASE_URL}/`, // Corresponds to GET /
+    health: `${BASE_URL}/health`, // Corresponds to GET /health
   },
 };

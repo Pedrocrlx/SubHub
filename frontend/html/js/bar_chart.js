@@ -1,77 +1,130 @@
 // js/bar_chart.js
 
 export function updateBarChart(subscriptions) {
-    console.log("updateBarChart: Subscriptions received:", subscriptions); // Debugging
+    console.log("updateBarChart: Subscriptions received:", subscriptions);
+
+    const barChartContainer = document.querySelector('.bar-chart');
+    if (!barChartContainer) {
+        console.error("updateBarChart: Bar chart container '.bar-chart' not found.");
+        return;
+    }
+
     if (!subscriptions || subscriptions.length === 0) {
         console.warn("updateBarChart: No subscriptions to display. Bar chart will be empty.");
-        const bars = document.querySelectorAll('.bar-chart .bar');
-        bars.forEach(bar => bar.style.height = '0px'); // Clear bars
+        const bars = barChartContainer.querySelectorAll('.bar');
+        const monthLabels = barChartContainer.querySelectorAll('.month-label'); // Select month labels
+        bars.forEach(bar => {
+            bar.style.height = '0px';
+            bar.textContent = '';
+        });
+        monthLabels.forEach(label => { // Clear month labels too
+            label.textContent = '';
+        });
         const totalSpendingElement = document.querySelector('.spending-value');
         if (totalSpendingElement) totalSpendingElement.textContent = '0.00€';
         return;
     }
 
-    const barData = calculateMonthlySpending(subscriptions);
-    console.log("updateBarChart: Calculated barData:", barData); // Debugging
+    const { monthlySpending, totalSpending, maxSpending } = calculateMonthlySpending(subscriptions);
+    console.log("updateBarChart: Calculated barData - monthlySpending:", monthlySpending, "totalSpending:", totalSpending, "maxSpending:", maxSpending);
 
-    const bars = document.querySelectorAll('.bar-chart .bar');
-    const chartMaxHeight = 140; // A mesma altura definida no CSS para .bar-chart
+    const bars = barChartContainer.querySelectorAll('.bar');
+    const monthLabels = barChartContainer.querySelectorAll('.month-label'); // Select month labels again
+    const chartMaxHeight = 140;
 
     bars.forEach((bar, index) => {
-        // Certifique-se de que o valor existe e não é NaN
-        const barValue = barData.monthlySpending[index] || 0;
-        const heightPercentage = barData.maxSpending > 0 ? (barValue / barData.maxSpending) : 0;
-        bar.style.height = `${heightPercentage * chartMaxHeight}px`;
-        // console.log(`Bar ${index}: value=${barValue}, height=${bar.style.height}`); // More debugging
+        const barValue = monthlySpending[index] || 0;
+        const heightPercentage = maxSpending > 0 ? (barValue / maxSpending) : 0;
+        const barHeight = heightPercentage * chartMaxHeight;
+
+        bar.style.height = `${barHeight}px`;
+        bar.textContent = barValue.toFixed(2);
+        bar.style.opacity = barValue > 0 ? '1' : '0.5';
+        bar.title = `Spending: ${barValue.toFixed(2)}€`;
+
+        // Update the month label for the current bar
+        if (monthLabels[index]) {
+            monthLabels[index].textContent = getMonthName(index);
+        }
+
+        console.log(`Bar ${index} (${getMonthName(index)}): value=${barValue.toFixed(2)}€, height=${barHeight.toFixed(2)}px`);
     });
 
-    // Atualiza o valor total de gastos
     const totalSpendingElement = document.querySelector('.spending-value');
     if (totalSpendingElement) {
-        totalSpendingElement.textContent = `${barData.totalSpending.toFixed(2)}€`;
+        totalSpendingElement.textContent = `${totalSpending.toFixed(2)}€`;
     }
 }
 
-// Função auxiliar para calcular os gastos mensais
+// Helper function to calculate monthly spending
 function calculateMonthlySpending(subscriptions) {
-    const monthlySpending = new Array(6).fill(0); // [Current Month, Last Month, ..., 5 Months Ago]
-    let totalCurrentMonthlySpending = 0; // Para o valor total no canto superior direito
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize para o início do dia
+    // monthlySpending[0] = current month, monthlySpending[1] = last month, ..., monthlySpending[5] = 5 months ago
+    const monthlySpending = new Array(6).fill(0);
+    let totalCurrentMonthlySpending = 0; // For the total value in the top right corner
+
+    // Get the current month and year to base calculations from
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
 
     subscriptions.forEach(sub => {
         const monthlyPrice = parseFloat(sub.monthly_price || 0);
-        if (isNaN(monthlyPrice)) {
-            console.warn(`Invalid monthly_price for ${sub.service_name}: ${sub.monthly_price}`);
-            return; // Pula subscrições com preço inválido
+        if (isNaN(monthlyPrice) || monthlyPrice <= 0) {
+            console.warn(`Invalid or zero monthly_price for bar chart calculation for ${sub.service_name}: ${sub.monthly_price}`);
+            return;
         }
 
         const startDate = new Date(sub.starting_date);
-        startDate.setHours(0, 0, 0, 0);
+        startDate.setHours(0, 0, 0, 0); // Normalize startDate to the start of its day
 
-        // Calcula o total de gastos recorrentes do mês atual para o elemento 'spending-value'
-        // Assume que se a subscrição começou, ela contribui para o mês atual
-        if (startDate <= today) {
-            totalCurrentMonthlySpending += monthlyPrice;
+        if (isNaN(startDate.getTime())) {
+            console.error(`Invalid starting_date for subscription ${sub.service_name}: ${sub.starting_date}. Skipping.`);
+            return;
         }
 
-        // Calcula a contribuição para cada um dos últimos 6 meses para o gráfico de barras
-        for (let i = 0; i < 6; i++) { // i = 0 para o mês atual, i = 1 para o mês passado, etc.
-            // Cria uma data para o início do mês que estamos a calcular (ex: 1 de Junho para i=0, 1 de Maio para i=1)
-            const monthBeingCalculated = new Date(today.getFullYear(), today.getMonth() - i, 1);
-            monthBeingCalculated.setHours(0, 0, 0, 0);
+        // Iterate through the last 6 months (including current)
+        for (let i = 0; i < 6; i++) {
+            // Calculate the specific month and year for this bar
+            let barMonth = currentMonth - i;
+            let barYear = currentYear;
 
-            // Se a subscrição começou no mês que estamos a calcular ou antes
-            if (startDate <= monthBeingCalculated) {
+            if (barMonth < 0) { // If month goes into previous year
+                barMonth += 12;
+                barYear--;
+            }
+
+            // Get the last day of the month this bar represents
+            const lastDayOfBarMonth = new Date(barYear, barMonth + 1, 0);
+            lastDayOfBarMonth.setHours(23, 59, 59, 999); // Set to end of day for proper comparison
+
+            // A subscription contributes to this month if its start_date is
+            // on or before the last day of the bar's month.
+            if (startDate <= lastDayOfBarMonth) {
                 monthlySpending[i] += monthlyPrice;
             }
         }
+
+        // Calculate the total for the *current* month (index 0 for the overview value)
+        // This explicitly checks if the subscription was active on or before the end of the current month.
+        const endOfCurrentMonth = new Date(currentYear, currentMonth + 1, 0);
+        endOfCurrentMonth.setHours(23, 59, 59, 999);
+        if (startDate <= endOfCurrentMonth) {
+            totalCurrentMonthlySpending += monthlyPrice;
+        }
     });
 
+    // Find the maximum spending among the 6 months to scale the bars
     const maxSpending = Math.max(...monthlySpending);
+
     return {
-        monthlySpending,
-        totalSpending: totalCurrentMonthlySpending, // Este é o total para o mês atual
-        maxSpending: maxSpending > 0 ? maxSpending : 1 // Evita divisão por zero se todos os gastos forem 0
+        monthlySpending, // Array of spending for each of the last 6 months
+        totalSpending: totalCurrentMonthlySpending, // Total for the *current* month
+        maxSpending: maxSpending > 0 ? maxSpending : 1 // Prevents division by zero if all spending is 0
     };
+}
+
+// Helper to get month names for display
+function getMonthName(offset) {
+    const date = new Date();
+    date.setMonth(date.getMonth() - offset);
+    return date.toLocaleString('en-US', { month: 'short' }); // e.g., 'Jun', 'May', 'Apr'
 }

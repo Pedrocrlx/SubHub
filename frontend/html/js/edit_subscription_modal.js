@@ -1,6 +1,8 @@
+// edit-subscription.js
+
 import { endpoints } from './endpoints.js';
 import { openModal, closeModal } from './utils.js';
-import { loadSubscriptions } from './dashboard.js'; // <-- MUDANÇA AQUI: Importa como export nomeado
+import { loadSubscriptions } from './dashboard.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const editSubscriptionModal = document.getElementById('editSubscriptionModal');
@@ -9,12 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const editServiceSelect = document.getElementById('editService');
     const editCategorySelect = document.getElementById('editCategory');
-    const editRenovationTypeSelect = document.getElementById('editRenovationType');
+    const editRenovationTypeSelect = document.getElementById('editRenovationType'); // This will be restricted
     const editStartingDateInput = document.getElementById('editStartingDate');
     const editMonthlyPriceInput = document.getElementById('editMonthlyPrice');
     const unsubscribeNote = editSubscriptionModal.querySelector('.unsubscribe-note');
 
-    // --- Dados fixos para os dropdowns (decididos no frontend) ---
+    // --- Fixed data for dropdowns (decided on the frontend) ---
     const services = [
         { value: 'Netflix', text: 'Netflix' },
         { value: 'Spotify', text: 'Spotify' },
@@ -44,12 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         { value: 'Other', text: 'Other' }
     ];
 
+    // --- ONLY MONTHLY RENOVATION TYPE ALLOWED ---
     const renovationTypes = [
-        { value: 'Monthly', text: 'Monthly' },
-        { value: 'Annually', text: 'Annually' },
-        { value: 'Weekly', text: 'Weekly' },
-        { value: 'Quarterly', text: 'Quarterly' },
-        { value: 'One-time', text: 'One-time' }
+        { value: 'Monthly', text: 'Monthly' }
     ];
 
     function populateDropdown(selectElement, dataArray, placeholderText, selectedValue = null) {
@@ -87,7 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         populateDropdown(editServiceSelect, services, 'Select Service Name', subscriptionData.service_name);
         populateDropdown(editCategorySelect, categories, 'Select Category', subscriptionData.category);
-        populateDropdown(editRenovationTypeSelect, renovationTypes, 'Select Type', subscriptionData.renovation_type || 'Monthly');
+        
+        // Always populate Renovation Type with 'Monthly' and ensure it's selected
+        populateDropdown(editRenovationTypeSelect, renovationTypes, 'Select Type', 'Monthly');
+        editRenovationTypeSelect.value = 'Monthly'; // Explicitly set if populateDropdown doesn't select it
+        editRenovationTypeSelect.disabled = true; // Disable the dropdown to prevent changes
 
         if (editFlatpickrInstance) {
             editFlatpickrInstance.setDate(subscriptionData.starting_date, true);
@@ -103,8 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const token = localStorage.getItem("access_token");
             if (!token) {
-                alert("Você não está autenticado.");
-                window.location.href = "/auth/";
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Not Authenticated',
+                    text: 'You are not authenticated. Please log in again.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = "/auth/";
+                });
                 return;
             }
 
@@ -117,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 monthly_price: parseFloat(data.monthly_price),
                 category: data.category,
                 starting_date: data.starting_date,
+                renovation_type: 'Monthly' // IMPLICITLY SET TO MONTHLY
             };
 
             console.log('Updating subscription data:', updatedSubscriptionData);
@@ -138,13 +148,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const result = await response.json();
                 console.log('Subscription Updated:', result);
-                alert('Subscrição atualizada com sucesso!');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Subscription updated successfully!',
+                    confirmButtonText: 'OK'
+                });
                 closeModal('editSubscriptionModal');
-                // Chama loadSubscriptions importada
                 await loadSubscriptions();
             } catch (error) {
                 console.error('Error updating subscription:', error);
-                alert(`Erro ao atualizar subscrição: ${error.message}. Por favor, tente novamente.`);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: `Error updating subscription: ${error.message}. Please try again.`,
+                    confirmButtonText: 'OK'
+                });
             }
         });
     }
@@ -153,37 +172,62 @@ document.addEventListener('DOMContentLoaded', () => {
         unsubscribeNote.addEventListener('click', async () => {
             const token = localStorage.getItem("access_token");
             if (!token) {
-                alert("Você não está autenticado.");
-                window.location.href = "/auth/";
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Not Authenticated',
+                    text: 'You are not authenticated. Please log in again.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = "/auth/";
+                });
                 return;
             }
 
             const serviceName = editSubscriptionIdInput.value;
 
-            if (confirm(`Tem certeza que deseja cancelar a subscrição ${serviceName}?`)) {
-                try {
-                    const response = await fetch(endpoints.subscriptions.delete(serviceName), {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `Do you really want to cancel the subscription ${serviceName}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, cancel it!',
+                cancelButtonText: 'No'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const response = await fetch(endpoints.subscriptions.delete(serviceName), {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json();
+                            throw new Error(`HTTP error! status: ${response.status} - ${errorData.message || response.statusText}`);
                         }
-                    });
 
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(`HTTP error! status: ${response.status} - ${errorData.message || response.statusText}`);
+                        console.log('Subscription Deleted:', serviceName);
+                        Swal.fire(
+                            'Cancelled!',
+                            'Your subscription has been cancelled successfully.',
+                            'success'
+                        );
+                        closeModal('editSubscriptionModal');
+                        await loadSubscriptions();
+                    } catch (error) {
+                        console.error('Error deleting subscription:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: `Error cancelling subscription: ${error.message}. Please try again.`,
+                            confirmButtonText: 'OK'
+                        });
                     }
-
-                    console.log('Subscription Deleted:', serviceName);
-                    alert('Subscrição cancelada com sucesso!');
-                    closeModal('editSubscriptionModal');
-                    // Chama loadSubscriptions importada
-                    await loadSubscriptions();
-                } catch (error) {
-                    console.error('Error deleting subscription:', error);
-                    alert(`Erro ao cancelar subscrição: ${error.message}. Por favor, tente novamente.`);
                 }
-            }
+            });
         });
     }
 });

@@ -273,7 +273,9 @@ main {
     font-size: 0.8em;
     color: gray;
 }
-
+.subscriptions-container{
+    padding: 0 2rem;
+}
 .subscriptions-table table {
     width: 100%;
     border-collapse: collapse;

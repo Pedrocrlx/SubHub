@@ -63,12 +63,30 @@
                             <h3>Monthly Spending</h3>
                             <p class="spending-value text1"></p>
                             <div class="bar-chart">
-                                <div class="bar bar-1"></div>
-                                <div class="bar bar-2"></div>
-                                <div class="bar bar-3"></div>
-                                <div class="bar bar-4"></div>
-                                <div class="bar bar-5"></div>
-                                <div class="bar bar-6"></div>
+                                <div class="chart-column">
+                                    <div class="bar bar-0"></div>
+                                    <div class="month-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-1"></div>
+                                    <div class="month-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-2"></div>
+                                    <div class="month-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-3"></div>
+                                    <div class="month-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-4"></div>
+                                    <div class="month-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-5"></div>
+                                    <div class="month-label"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,11 +154,18 @@
                         <i class="bx bx-chevron-down dropdown-icon"></i>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="newMonthlyPrice">Monthly Price</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="newMonthlyPrice" name="monthly_price" step="0.01" placeholder="0.00">
+                        <span>€</span>
+                    </div>
+                </div>
                 <div class="form-row">
-                    <div class="form-group" id="starting-date-modal-label">
+                    <div class="form-group">
                         <label for="newStartingDate">Starting Date</label>
                         <div class="input-wrapper">
-                            <input type="text" id="newStartingDate" name="starting_date" placeholder="YYYY-MM-DD">
+                            <input type="text" id="newStartingDate" name="starting_date" placeholder="DD-MM--YYYY">
                             <i class='bx bx-calendar calendar-icon'></i>
                         </div>
                     </div>
@@ -154,15 +179,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="newMonthlyPrice">Monthly Price</label>
-                    <div class="input-wrapper">
-                        <input type="number" id="newMonthlyPrice" name="monthly_price" step="0.01" placeholder="0.00">
-                        <span>€</span>
-                    </div>
+                <div class="form-buttons">
+                    <p class="form-note" id="cancel-btn-modal">CHANGED YOUR MIND?</p>
+                    <button type="submit" class="button-primary save-btn">SAVE</button>
                 </div>
-                <p class="form-note" id="cancel-btn-modal">CHANGED YOUR MIND?</p>
-                <button type="submit" class="button-primary save-btn">SAVE</button>
             </form>
         </div>
     </div>
@@ -191,6 +211,14 @@
                         <i class="bx bx-chevron-down dropdown-icon"></i>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="editMonthlyPrice">Monthly Price</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="editMonthlyPrice" name="monthly_price" step="0.01" placeholder="0.00">
+                        <span>€</span>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="editStartingDate">Starting Date</label>
@@ -208,15 +236,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="editMonthlyPrice">Monthly Price</label>
-                    <div class="input-wrapper">
-                        <input type="number" id="editMonthlyPrice" name="monthly_price" step="0.01" placeholder="0.00">
-                        <span>€</span>
-                    </div>
+                <div class="form-buttons">
+                    <p class="form-note unsubscribe-note">WANT TO UNSUB?</p>
+                    <button type="submit" class="button-primary save-btn">SAVE</button>
                 </div>
-                <p class="form-note unsubscribe-note">WANT TO UNSUB?</p>
-                <button type="submit" class="button-primary save-btn">SAVE</button>
             </form>
         </div>
     </div>
@@ -227,7 +250,7 @@
     <script type="module" src="/js/pie_chart.js" defer></script>
     <script type="module" src="/js/bar_chart.js" defer></script>
     <script src="/js/toggle_menu.js" defer></script>
-    <script src="/js/next_payments.js" defer></script>
+    <script type="module" src="/js/next_payments.js" defer></script>
     <script type="module" src="/js/user_authentication.js" defer></script>
     <script type="module" src="/js/endpoints.js"></script>
     <script type="module" src="/js/dashboard.js" defer></script>
