@@ -1,22 +1,20 @@
-.PHONY: help
+.PHONY:help 
 
-help: ## Show this help message and exit
-    @echo "Available commands:"
-    @grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | \
-        awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+help:       
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 up: ## Start all services defined in compose.yml without rebuilding
 	@echo "Starting all services defined in compose.yml..."
 	docker compose up
 
-compose: build ## Start all services defined in compose.yml
+compose: ## Start all services defined in compose.yml
 	@echo "Starting all services defined in compose.yml..."
 	@echo "Use 'make up' to start services without rebuilding."
 	docker compose up
 
 build:
 	@echo "Building all services..."
-	docker compose up --build
+	docker compose up --build --force-recreate
 
 down: ## Stop and remove all containers
 	@echo "Stopping and removing all containers..."
@@ -34,3 +32,5 @@ frontend-build: ## Build the frontend service
 	@echo "Building frontend service..."
 	docker compose up --build frontend
 
+prune: ## Delete all containers
+	docker system prune -a
