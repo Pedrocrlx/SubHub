@@ -1,14 +1,13 @@
-# SubHub - Subscription Management API
+# SubHub - Subscription Management Backend
 
 SubHub is a subscription management application with a FastAPI backend allowing users to register, login, and track their subscription services.
 
 ## Project Overview
 
 SubHub helps users:
-- Track all their subscription services in one place
-- Analyze monthly spending by subscription and category
-- Get insights into their subscription habits
-- Search and filter their subscription data
+- Track all their subscription services in one place.
+- Analyze monthly spending by subscription and category.
+- Search and filter their subscription data.
 
 ## Libraries and Dependencies
 
@@ -29,16 +28,10 @@ SubHub helps users:
 
 ## Installation
 
-Install dependencies with pip:
+Install dependencies with poetry:
 
 ```
-pip install fastapi uvicorn pydantic pytest
-```
-
-For development:
-
-```
-pip install pytest pytest-cov
+poetry install
 ```
 
 ## Running the Application
@@ -48,13 +41,13 @@ pip install pytest pytest-cov
 From the src directory:
 
 ```
-uvicorn app.main:app --reload
+uvicorn src.app.main:app --reload
 ```
 
 For production:
 
 ```
-uvicorn app.main:app
+uvicorn src.app.main:app
 ```
 
 ### Run Tests
@@ -62,8 +55,10 @@ uvicorn app.main:app
 Run all tests:
 
 ```
-cd /workspaces/SubHub/backend/src
-python -m pytest
+cd /workspaces/SubHub/backend/
+```
+```bash
+poetry run pytest
 ```
 
 Run specific test files:
@@ -109,13 +104,13 @@ To run the script:
 
 ```
 cd /workspaces/SubHub/backend/src
-python scripts/generate_demo_data.py
+poetry run python scripts/generate_demo_data.py
 ```
 
 To clear existing data before generating new demo users:
 
 ```
-python scripts/generate_demo_data.py --clear
+poetry run python scripts/generate_demo_data.py --clear
 ```
 
 After running the script, login credentials for all demo users will be displayed, making it easy to test the application with pre-populated data.
@@ -123,36 +118,35 @@ After running the script, login credentials for all demo users will be displayed
 ## API Endpoints
 
 ### Authentication
-- **POST /register**: Register a new user
-- **POST /login**: Login and get access token  
-- **POST /logout**: Invalidate current session
+- **POST /register**: Register a new user.
+- **POST /login**: Login and get access token.
+- **POST /logout**: Invalidate current session.
 
 ### Subscriptions
-- **GET /subscriptions**: List all user subscriptions
-- **POST /subscriptions**: Add a new subscription
-- **PUT /subscriptions/{service_name}**: Update a subscription
-- **DELETE /subscriptions/{service_name}**: Delete a subscription
+- **GET /subscriptions**: List all user subscriptions.
+- **POST /subscriptions**: Add a new subscription.
+- **PUT /subscriptions/{service_name}**: Update a subscription.
+- **DELETE /subscriptions/{service_name}**: Delete a subscription.
 
 ### Analytics
-- **GET /analytics/summary**: Get subscription spending summary
-- **GET /analytics/categories**: Get spending breakdown by category
-- **GET /analytics/search**: Search for subscriptions by term
+- **GET /analytics/summary**: Get subscription spending summary.
+- **GET /analytics/categories**: Get spending breakdown by category.
 
 ### System
-- **GET /**: Root endpoint with API information
-- **GET /health**: Health check endpoint for monitoring
+- **GET /**: Root endpoint with API information.
+- **GET /health**: Health check endpoint for monitoring.
 
 ## Configuration
 
 The application uses settings defined in `app/config.py`:
 
-- **APP_NAME**: Application name
-- **VERSION**: API version
-- **MIN_PASSWORD_LENGTH**: Minimum password length requirement
-- **PASSWORD_REQUIRES_UPPERCASE**: Whether passwords need uppercase letters
-- **PASSWORD_REQUIRES_NUMBER**: Whether passwords need numbers
-- **PASSWORD_REQUIRES_SYMBOL**: Whether passwords need special characters
-- **DATA_FILEPATH**: Path to data storage file
+- **APP_NAME**: SubHub
+- **VERSION**: 1.0
+- **MIN_PASSWORD_LENGTH**: Minimum password length requirement (8 characters).
+- **PASSWORD_REQUIRES_UPPERCASE**: At least one capitalised letter.
+- **PASSWORD_REQUIRES_NUMBER**: At least one number.
+- **PASSWORD_REQUIRES_SYMBOL**: At least one symbol.
+- **DATA_FILEPATH**: TBD.
 
 ## Project Structure
 

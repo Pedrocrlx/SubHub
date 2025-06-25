@@ -226,7 +226,7 @@ def test_password_strength_validation(client):
     - Passwords exactly at minimum length are accepted
     - Password length validation is correctly enforced
     """
-    from app.config import app_settings
+    from src.app.config import app_settings
     
     min_length = app_settings.MIN_PASSWORD_LENGTH
     

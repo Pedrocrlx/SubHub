@@ -9,7 +9,6 @@
 This application enables users to:
 - Monitor and organize their active subscriptions.
 - Automatically calculate the total monthly spending on subscriptions.
-- Receive notifications prior to renewal dates.
 
 This MVP focuses on delivering essential functionality with a static, user-friendly interface.
 
@@ -34,9 +33,13 @@ This MVP focuses on delivering essential functionality with a static, user-frien
 - Static frontend hosted through an NGINX container.
 - Fully containerized architecture for cross-platform compatibility.
 
-## API Endpoints
-
-## Environment variables (.env) example
+## Environment variables (.env) example:
+```
+SECRET_KEY=your_secret_key_here
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your_password_here
+POSTGRES_DB=subHub  
+```
 
 ## Project Structure
 ```
@@ -69,15 +72,16 @@ Before opening the project, make sure you have the following installed:
 3. **Docker Desktop**  
    Download and install from: https://www.docker.com/products/docker-desktop/
 
-4. **.env file**  
+4. **.env file** 
+   [header title](#how-to-open-the-project)
    Create a `.env` file in the project root and use the variables used in .env.example.
 
 ## How to Open the Project
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone <https://github.com/Pedrocrlx/SubHub.git>
+   cd <SubHub>
    ```
 
 2. **Open the project folder in Visual Studio Code:**
@@ -92,14 +96,24 @@ Before opening the project, make sure you have the following installed:
    In VS Code, press `Ctrl+Shift+P`, then select:  
    `Dev Containers: Reopen in Container`
 
-5. **Start the application using Make:**
+5. **Install dependencies**
+   Go to /workspaces/SubHub/backend and run.
+   ```bash
+   poetry install
+   ```
+6. **Start the application using Make:**
    ```bash
    make compose
    ```
 
    Alternatively, using Docker:
    ```bash
-   docker compose up --build
+   docker compose up
+   ```
+
+   You can check all the make commands running:
+   ```bash
+   make help
    ```
 
 Now the project should be up and running.
