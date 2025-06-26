@@ -217,7 +217,7 @@ nav {
     transition: color 0.2s;
 }
 
-.button-terciary + .disabled{
+.disabled{
     opacity: 0.5;
 }
 
