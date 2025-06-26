@@ -4,11 +4,10 @@ import { endpoints } from './endpoints.js';
 import { openModal, closeModal } from './utils.js';
 import { updateBarChart } from './bar_chart.js';
 import { updatePieChart } from './pie_chart.js';
-import { updateNextPayments, getLogoForService } from './next_payments.js'; // Import getLogoForService
+import { updateNextPayments, getLogoForService } from './next_payments.js'; 
 import { resetNewSubscriptionForm } from './new_subscription_modal.js';
 import { requireAuth } from './user_authentication.js';
 
-// Export loadSubscriptions so other modules can use it
 export async function loadSubscriptions() {
     const token = localStorage.getItem("access_token");
     if (!token) {

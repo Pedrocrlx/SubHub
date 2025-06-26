@@ -13,7 +13,7 @@ export function updateBarChart(subscriptions) {
         console.warn("updateBarChart: No subscriptions to display. Bar chart will be empty.");
         const monthLabels = barChartContainer.querySelectorAll('.month-label'); 
         const bars = barChartContainer.querySelectorAll('.bar');
-        monthLabels.forEach(label => { // Clear month labels too
+        monthLabels.forEach(label => { 
             label.textContent = '';
         });
         bars.forEach(bar => {
@@ -29,7 +29,7 @@ export function updateBarChart(subscriptions) {
     console.log("updateBarChart: Calculated barData - monthlySpending:", monthlySpending, "totalSpending:", totalSpending, "maxSpending:", maxSpending);
 
     const bars = barChartContainer.querySelectorAll('.bar');
-    const monthLabels = barChartContainer.querySelectorAll('.month-label'); // Select month labels again
+    const monthLabels = barChartContainer.querySelectorAll('.month-label'); 
     const barLabels = barChartContainer.querySelectorAll('.bar-label');
     const chartMaxHeight = 140;
 
@@ -56,13 +56,10 @@ export function updateBarChart(subscriptions) {
     }
 }
 
-// Helper function to calculate monthly spending
 function calculateMonthlySpending(subscriptions) {
-    // monthlySpending[0] = current month, monthlySpending[1] = last month, ..., monthlySpending[5] = 5 months ago
     const monthlySpending = new Array(6).fill(0);
-    let totalCurrentMonthlySpending = 0; // For the total value in the top right corner
+    let totalCurrentMonthlySpending = 0; 
 
-    // Get the current month and year to base calculations from
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
 
@@ -81,30 +78,22 @@ function calculateMonthlySpending(subscriptions) {
             return;
         }
 
-        // Iterate through the last 6 months (including current)
         for (let i = 0; i < 6; i++) {
-            // Calculate the specific month and year for this bar
             let barMonth = currentMonth - i;
             let barYear = currentYear;
 
-            if (barMonth < 0) { // If month goes into previous year
+            if (barMonth < 0) {
                 barMonth += 12;
                 barYear--;
             }
-
-            // Get the last day of the month this bar represents
             const lastDayOfBarMonth = new Date(barYear, barMonth + 1, 0);
-            lastDayOfBarMonth.setHours(23, 59, 59, 999); // Set to end of day for proper comparison
+            lastDayOfBarMonth.setHours(23, 59, 59, 999);
 
-            // A subscription contributes to this month if its start_date is
-            // on or before the last day of the bar's month.
             if (startDate <= lastDayOfBarMonth) {
                 monthlySpending[i] += monthlyPrice;
             }
         }
 
-        // Calculate the total for the *current* month (index 0 for the overview value)
-        // This explicitly checks if the subscription was active on or before the end of the current month.
         const endOfCurrentMonth = new Date(currentYear, currentMonth + 1, 0);
         endOfCurrentMonth.setHours(23, 59, 59, 999);
         if (startDate <= endOfCurrentMonth) {
@@ -112,13 +101,12 @@ function calculateMonthlySpending(subscriptions) {
         }
     });
 
-    // Find the maximum spending among the 6 months to scale the bars
     const maxSpending = Math.max(...monthlySpending);
 
     return {
-        monthlySpending, // Array of spending for each of the last 6 months
-        totalSpending: totalCurrentMonthlySpending, // Total for the *current* month
-        maxSpending: maxSpending > 0 ? maxSpending : 1 // Prevents division by zero if all spending is 0
+        monthlySpending,
+        totalSpending: totalCurrentMonthlySpending,
+        maxSpending: maxSpending > 0 ? maxSpending : 1 
     };
 }
 
@@ -126,5 +114,5 @@ function calculateMonthlySpending(subscriptions) {
 function getMonthName(offset) {
     const date = new Date();
     date.setMonth(date.getMonth() - offset);
-    return date.toLocaleString('en-US', { month: 'short' }); // e.g., 'Jun', 'May', 'Apr'
+    return date.toLocaleString('en-US', { month: 'short' });
 }

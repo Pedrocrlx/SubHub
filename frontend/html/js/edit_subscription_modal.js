@@ -11,12 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const editServiceSelect = document.getElementById('editService');
     const editCategorySelect = document.getElementById('editCategory');
-    const editRenovationTypeSelect = document.getElementById('editRenovationType'); // This will be restricted
+    const editRenovationTypeSelect = document.getElementById('editRenovationType'); 
     const editStartingDateInput = document.getElementById('editStartingDate');
     const editMonthlyPriceInput = document.getElementById('editMonthlyPrice');
     const unsubscribeNote = editSubscriptionModal.querySelector('.unsubscribe-note');
 
-    // --- Fixed data for dropdowns (decided on the frontend) ---
     const services = [
         { value: 'Netflix', text: 'Netflix' },
         { value: 'Spotify', text: 'Spotify' },
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
         { value: 'Other', text: 'Other' }
     ];
 
-    // --- ONLY MONTHLY RENOVATION TYPE ALLOWED ---
     const renovationTypes = [
         { value: 'Monthly', text: 'Monthly' }
     ];
@@ -75,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 editStartingDateInput.style.pointerEvents = 'auto';
             },
             onClose: (selectedDates, dateStr, instance) => {
-                // editStartingDateInput.style.pointerEvents = 'none';
             }
         });
     }
@@ -87,10 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
         populateDropdown(editServiceSelect, services, 'Select Service Name', subscriptionData.service_name);
         populateDropdown(editCategorySelect, categories, 'Select Category', subscriptionData.category);
         
-        // Always populate Renovation Type with 'Monthly' and ensure it's selected
         populateDropdown(editRenovationTypeSelect, renovationTypes, 'Select Type', 'Monthly');
-        editRenovationTypeSelect.value = 'Monthly'; // Explicitly set if populateDropdown doesn't select it
-        editRenovationTypeSelect.disabled = true; // Disable the dropdown to prevent changes
+        editRenovationTypeSelect.value = 'Monthly'; 
+        editRenovationTypeSelect.disabled = true;
 
         if (editFlatpickrInstance) {
             editFlatpickrInstance.setDate(subscriptionData.starting_date, true);
@@ -126,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 monthly_price: parseFloat(data.monthly_price),
                 category: data.category,
                 starting_date: data.starting_date,
-                renovation_type: 'Monthly' // IMPLICITLY SET TO MONTHLY
+                renovation_type: 'Monthly'
             };
 
             console.log('Updating subscription data:', updatedSubscriptionData);
