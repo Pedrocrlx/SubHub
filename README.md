@@ -72,8 +72,7 @@ Before opening the project, make sure you have the following installed:
 3. **Docker Desktop**  
    Download and install from: https://www.docker.com/products/docker-desktop/
 
-4. **.env file** 
-   [header title](#how-to-open-the-project)
+4. **.env file** (#how-to-open-the-project)
    Create a `.env` file in the project root and use the variables used in .env.example.
 
 ## How to Open the Project
@@ -88,20 +87,18 @@ Before opening the project, make sure you have the following installed:
    ```bash
    code .
    ```
-   
-3. **Create the `.env` file:**  
-   Copy the example above and save it as `.env` in the root directory.
 
-4. **Reopen in Dev Container:**  
+3. **Reopen in Dev Container:**  
    In VS Code, press `Ctrl+Shift+P`, then select:  
    `Dev Containers: Reopen in Container`
 
-5. **Install dependencies**
+4. **Install dependencies**
    Go to /workspaces/SubHub/backend and run.
    ```bash
    poetry install
    ```
-6. **Start the application using Make:**
+   
+5. **Start the application using Make:**
    ```bash
    make compose
    ```
