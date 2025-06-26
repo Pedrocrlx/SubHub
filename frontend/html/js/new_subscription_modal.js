@@ -1,18 +1,15 @@
-// js/new_subscription_modal.js
 
 import { endpoints } from './endpoints.js';
 import { openModal, closeModal } from './utils.js';
 import { loadSubscriptions } from './dashboard.js';
 
-// Global variables within this module for access by the reset function
 let newServiceSelect;
 let newCategorySelect;
-let newRenovationTypeSelect; // This will be restricted
+let newRenovationTypeSelect; 
 let newStartingDateInput;
 let newFlatpickrInstance;
 let newSubscriptionForm;
 
-// Fixed data for dropdowns (decided on the frontend)
 const services = [
     { value: 'Netflix', text: 'Netflix' },
     { value: 'Spotify', text: 'Spotify' },
@@ -60,21 +57,17 @@ function populateDropdown(selectElement, dataArray, placeholderText, selectedVal
     });
 }
 
-// Exported function to reset and initialize form fields
 export function resetNewSubscriptionForm() {
     if (newSubscriptionForm) {
-        newSubscriptionForm.reset(); // Resets all HTML form fields
+        newSubscriptionForm.reset(); 
     }
-    // Repopulate dropdowns with default options
     populateDropdown(newServiceSelect, services, 'Select Service Name');
     populateDropdown(newCategorySelect, categories, 'Select Category');
     
-    // Always populate Renovation Type with 'Monthly' and ensure it's selected and disabled
     populateDropdown(newRenovationTypeSelect, renovationTypes, 'Select Type', 'Monthly');
-    newRenovationTypeSelect.value = 'Monthly'; // Explicitly set
-    newRenovationTypeSelect.disabled = true; // Disable the dropdown
+    newRenovationTypeSelect.value = 'Monthly'; 
+    newRenovationTypeSelect.disabled = true;
 
-    // Clear the selected date in Flatpickr
     if (newFlatpickrInstance) {
         newFlatpickrInstance.clear();
     }
@@ -88,11 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     newServiceSelect = document.getElementById('newService');
     newCategorySelect = document.getElementById('newCategory');
-    newRenovationTypeSelect = document.getElementById('newRenovationType'); // Assign to global variable
+    newRenovationTypeSelect = document.getElementById('newRenovationType'); 
     newStartingDateInput = document.getElementById('newStartingDate');
 
-    // Initial population for newRenovationTypeSelect when the page loads
-    // This is important because resetNewSubscriptionForm might not be called on initial load
     populateDropdown(newRenovationTypeSelect, renovationTypes, 'Select Type', 'Monthly');
     newRenovationTypeSelect.value = 'Monthly';
     newRenovationTypeSelect.disabled = true;
@@ -105,10 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
             altFormat: "F j, Y",
             appendTo: newSubscriptionModal,
             onOpen: (selectedDates, dateStr, instance) => {
-                // newStartingDateInput.style.pointerEvents = 'auto'; // Removed: Can cause issues
             },
             onClose: (selectedDates, dateStr, instance) => {
-                // newStartingDateInput.style.pointerEvents = 'none'; // Removed: Can cause issues
             }
         });
     }
@@ -140,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 monthly_price: parseFloat(data.monthly_price),
                 category: data.category,
                 starting_date: data.starting_date,
-                renovation_type: 'Monthly' // IMPLICITLY SET TO MONTHLY
+                renovation_type: 'Monthly'
             };
 
             console.log('Sending new subscription data:', newSubscriptionData);
@@ -172,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     buttonsStyling: false
                 }).then(() => {
                     closeModal('newSubscriptionModal');
-                    loadSubscriptions(); // Reload table and dashboards
+                    loadSubscriptions();
                 });
 
             } catch (error) {

@@ -4,16 +4,17 @@ document.addEventListener("DOMContentLoaded", function () {
     LoadFooter();
 });
 
+
 function loadMenu() {
     class CustomMenu extends HTMLElement {
         connectedCallback() {
             this.innerHTML = `
-                <nav>
-        <div id="nav-container" class="nav-container">
+            <nav>
+            <div id="nav-container" class="nav-container">
             <div id="links">
-                <div id="logoContainer">
-                    <p>
-                        <span class="logo-sub">Sub</span><span class="logo-hub">Hub</span>
+            <div id="logoContainer">
+                <p>        
+                    <span class="logo-sub">Sub</span><span class="logo-hub">Hub</span>
                     </p>
                 </div>
                 <a href="/home/" id="home-button" class="label button-terciary">home</a>

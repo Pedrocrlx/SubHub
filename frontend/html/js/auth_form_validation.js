@@ -123,17 +123,16 @@ const registerUser = async (username, email, password) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                username: username,  // Certifique-se de que o campo é 'name' (ou ajuste para o esperado pelo backend)
+                username: username,
                 email: email,
                 password: password,
             }),
-            credentials: "include",  // Opcional: só use se o backend exigir cookies/sessão
+            credentials: "include", 
         });
 
         console.log("Resposta do servidor:", response);
 
         if (!response.ok) {
-            // Tenta extrair a mensagem de erro do JSON (se o backend retornar JSON)
             const errorData = await response.json().catch(() => null);
             const errorMessage = errorData?.detail || "Erro desconhecido";
             Swal.fire({
@@ -151,11 +150,11 @@ const registerUser = async (username, email, password) => {
 
         const data = await response.json();
         console.log("Registro bem-sucedido:", data);
-        return data;  // Retorna os dados do usuário (opcional)
+        return data; 
 
     } catch (error) {
         console.error("Erro durante o registro:", error.message);
-        throw error;  // Propaga o erro para ser tratado pelo chamador
+        throw error; 
     }
 };
 

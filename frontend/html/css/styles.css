@@ -276,25 +276,17 @@ nav button {
     height: 100%;
 }
 
+#logoContainer p  {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
 .logo-sub {
-    background: var(--hunter-green-600);
-    /* black background */
     color: var(--marble-300);
-    /* white text */
-    padding: 0 0.4em;
-    border-radius: 0.3em 0 0 0.3em;
 }
 
 .logo-hub {
-    background: var(--marble-300);
-    /* white background */
-    color: var(--hunter-green-600);
-    /* black text */
-    padding: 0 0.4em;
-    border-radius: 0 0.3em 0.3em 0;
-    border: 1px solid #161616;
-    /* optional: border for contrast */
-    border-left: none;
+    color: #000000;
 }
 
 /* Footer */
@@ -325,6 +317,8 @@ footer a {
 }
 
 .footer-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -11,52 +11,45 @@ function generateNextMonthlyPaymentDates(startDateStr, count = 12) {
     }
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize today to the start of the day
+    today.setHours(0, 0, 0, 0); 
 
     const results = [];
-    // Store original day of the month to handle month-end rollovers (e.g., Jan 31st -> Feb 28th/29th -> Mar 31st)
     const originalDay = startDate.getDate();
 
     let currentYear = startDate.getFullYear();
-    let currentMonth = startDate.getMonth(); // 0-indexed month
-
-    // Calculate the initial candidate payment date based on the start date
+    let currentMonth = startDate.getMonth();
     let nextDate = new Date(currentYear, currentMonth, originalDay);
-    nextDate.setHours(0, 0, 0, 0); // Normalize
+    nextDate.setHours(0, 0, 0, 0); 
 
-    // Advance `nextDate` month by month until it is today or in the future
-    // This loop finds the first upcoming payment date for a monthly subscription
+
     while (nextDate < today) {
-        currentMonth++; // Move to the next month
-        if (currentMonth > 11) { // If month overflows (e.g., December to January)
+        currentMonth++; 
+        if (currentMonth > 11) {
             currentMonth = 0;
             currentYear++;
         }
-        // When setting a date, always consider the last day of the target month
-        // This correctly handles cases like originalDay=31 in a 30-day month or Feb.
+
         const lastDayOfTargetMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        const actualDay = Math.min(originalDay, lastDayOfTargetMonth); // Use original day or last day of month if original is too high
+        const actualDay = Math.min(originalDay, lastDayOfTargetMonth);
 
         nextDate = new Date(currentYear, currentMonth, actualDay);
-        nextDate.setHours(0, 0, 0, 0); // Normalize
+        nextDate.setHours(0, 0, 0, 0); 
     }
 
-    // Now, `nextDate` holds the *first* upcoming monthly payment date.
-    // Generate `count` additional future payment dates from this point.
-    for (let i = 0; i < count; i++) {
-        results.push(new Date(nextDate)); // Push a copy of the date to results
 
-        // Advance to the next month for the next iteration
+    for (let i = 0; i < count; i++) {
+        results.push(new Date(nextDate)); 
+
+
         currentMonth++;
         if (currentMonth > 11) {
             currentMonth = 0;
             currentYear++;
         }
-        // Recalculate `nextDate` considering month-end issues for the next iteration
         const lastDayOfTargetMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const actualDay = Math.min(originalDay, lastDayOfTargetMonth);
         nextDate = new Date(currentYear, currentMonth, actualDay);
-        nextDate.setHours(0, 0, 0, 0); // Normalize
+        nextDate.setHours(0, 0, 0, 0);
     }
 
     return results;
