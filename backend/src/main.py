@@ -1,34 +1,35 @@
-import os
+"""
+Entry point for the SubHub API with exports for test compatibility
+"""
 
-from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, HTMLResponse
 
-from app.routers import auth                        # Imports router module (Giulio)
-from app.db import Base, engine                     # For DB table creation (Giulio)
-from app.services.middleware import JWTMiddleware   # For Middleware protection (Giulio)
+# Re-export variables needed by tests
+from src.app.db.storage import (
+    user_database, 
+    active_sessions,
+    save_data_to_file,
+    load_data_from_file
+)
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-frontend_path = os.path.join(current_dir, "..", "..", "frontend")
-frontend_path = os.path.abspath(frontend_path)
+# Re-export security functions needed by tests
+from src.app.core.security import (
+    hash_password,
+    verify_password,
+    create_access_token
+)
 
-app = FastAPI()
-app.add_middleware(JWTMiddleware)
+# Re-export settings
+from src.app.config import app_settings  # Changed: don't rename this variable
 
-# Creates tables
-Base.metadata.create_all(bind=engine)
+# Ensure setup_logging is available for tests
+try:
+    from src.app.core.logging import setup_logging
+except ImportError:
+    # Fallback if not available
+    def setup_logging():
+        return None, None
 
-# Montar a pasta de ficheiros estáticos (por exemplo, a pasta 'frontend')
-app.mount("/static", StaticFiles(directory=frontend_path), name="static")
-
-# Rota principal: servir index.html
-@app.get("/")
-def read_index():
-    return FileResponse(os.path.join(frontend_path, "index.html"))
-
-# Login/Register route: serves login.html (Giulio)
-@app.get("/login", response_class=HTMLResponse)
-def read_login():
-    return FileResponse(os.path.join(frontend_path, "login.html"))
-
-app.include_router(auth.router)
+# Entry point when running directly
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("src.app.main:app", host="0.0.0.0", port=8000, reload=True)

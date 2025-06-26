@@ -1,0 +1,229 @@
+body {
+    background-color: var(--marble-300);
+}
+
+main {
+    min-height: auto;
+}
+
+
+.hero-section {
+    color: var(--marble-300);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: url('/images/hero-background.png') no-repeat center center;
+    background-size: cover;
+    background-position: center center;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.hero-content h1 {
+    color: var(--marble-300);
+    max-width: 600px;
+}
+
+.hero-content .text1 {
+    color: var(--kingly-cloud-500);
+}
+
+
+.hero-section button {
+    padding: 16px 20px;
+}
+
+.features-section {
+    display: flex;
+    justify-content: center;
+    height: 40vh;
+    gap: 30px;
+    padding: 80px 40px;
+    flex-wrap: wrap;
+    background: linear-gradient(to bottom, var(--hunter-green-600), var(--hunter-green-0));
+}
+
+.feature-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    text-align: center;
+    max-width: 280px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.feature-card img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.feature-card .text2 {
+    color: var(--black-300);
+    padding: 0 10px;
+}
+
+.faq-section {
+    padding: 80px 40px;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    background: linear-gradient(to bottom, var(--hunter-green-0));
+    align-items: center;
+}
+
+.faq-container {
+    display: flex;
+    gap: 40px;
+    max-width: 1100px;
+    width: 100%;
+    align-items: center;
+}
+
+.faq-list {
+    background-color: var(--hunter-green-50);
+    padding: 30px 40px;
+    border-radius: 16px;
+    flex: 1;
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--hunter-green-100);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.faq-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-question p {
+    color: var(--marble-300);
+    font-weight: 600;
+    margin: 0;
+}
+
+.faq-icon {
+    font-size: 24px;
+    color: var(--marble-300);
+}
+
+/* FAQ Answer and Icon Toggle styles */
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+    color: var(--kingly-cloud-400);
+    padding-right: 30px;
+    /* To avoid text hitting the edge */
+}
+
+.faq-answer p {
+    margin-top: 15px;
+    line-height: 1.6;
+}
+
+.faq-icon .bx-minus {
+    display: none;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+    /* Adjust if your answers are longer */
+}
+
+.faq-item.active .faq-icon .bx-plus {
+    display: none;
+}
+
+.faq-item.active .faq-icon .bx-minus {
+    display: block;
+}
+
+
+.faq-illustration {
+    flex: 0.8;
+    text-align: center;
+}
+
+.faq-illustration h2 {
+    font-weight: 600;
+    color: var(--hunter-green-100);
+
+}
+
+.faq-illustration img {
+    max-width: 300px;
+    height: auto;
+}
+
+.convinced-section {
+    background: linear-gradient(to bottom, var(--hunter-green-50), var(--hunter-green-500));
+    color: var(--marble-300);
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.convinced-section h2 {
+    color: var(--marble-300);
+    margin-bottom: 16px;
+}
+
+.convinced-section .text1 {
+    color: var(--kingly-cloud-500);
+    margin-bottom: 20px;
+}
+
+@media (max-width: 992px) {
+    .faq-container {
+        flex-direction: column;
+    }
+
+    .faq-illustration {
+        margin-top: 40px;
+        max-width: 300px;
+        padding-top: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .features-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature-card {
+        max-width: 320px;
+    }
+
+    .hero-content h1 {
+        font-size: 40px;
+        line-height: 1.2;
+    }
+}

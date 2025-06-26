@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubHub – Stream Managers</title>
+    <link rel="icon" type="image/png" href="/images/favicon.ico">
+    <meta name="description" content="Subscription Management Landing Page" />
+
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/learn_more.css" />
+
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <custom-menu></custom-menu>
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>The best of <br> Stream Managers</h1>
+                <p class="text1">Easily manage, track, and cancel all your online subscriptions in one place. Stay in
+                    control, avoid unwanted charges, and never miss a renewal again.</p>
+                <button class="button-primary" id="register-buton" onclick="signUp()"> Register now</button>
+            </div>
+            <div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="feature-item">
+                <img src="/images/dollar_icon.png" alt="Dollar icon">
+                <h5 class="feature-title">Cost Tracking</h5>
+                <p class="caption">View all your digital subscriptions and bills in one place. Subhub categorises
+                    recurring expenses, calculates annual totals, and helps you spot what’s worth keeping—or cutting.
+                </p>
+            </div>
+            <div class="feature-item">
+                <img src="/images/finance_icon.png" alt="Chart icon">
+                <h5 class="feature-title">Usage Analytics</h5>
+                <p class="caption">Track your earnings, expenses, and net income month-by-month with Subhub’s clean
+                    visual breakdown. Instantly see where your money goes and compare spending trends across time to
+                    stay on top of your finances.</p>
+            </div>
+            <div class="feature-item">
+                <img src="/images/budget_icon.png" alt="Bell icon">
+                <h5 class="feature-title">Renewal Reminders</h5>
+                <p class="caption">Create personalised monthly budgets with Subhub. Set limits, track category-specific
+                    spending, and adjust in real time—so you always know what you’ve spent, what’s left, and where you
+                    can save.</p>
+            </div>
+        </section>
+
+        <section class="testimonials-section">
+            <div class="testimonial-div">
+                <div class="testimonial-card">
+                    <p class="label tittle"> "Subhub completely changed how I manage my digital life."</p>
+                    <p class="text1">"I had no idea how much I was spending across streaming and subscription services
+                        until I tried Subhub. It gave me a clear, easy-to-read summary in minutes. The monthly tracking
+                        and budgeting tools helped me cut costs on things I wasn’t even using. I finally feel in control
+                        of my spending."</p>
+                    <p class="caption testimonial-author" id="testimonial-caption-right">— Gonçalo C. - Subhub user,
+                        2025</p>
+                </div>
+                <div class="testimonial-image-right">
+                    <img src="/images/goncalo_pic.png" alt=" Gloria image">
+                </div>
+            </div>
+            <div class="testimonial-div">
+                <div class="testimonial-image-left">
+                    <img src="/images/gloria_pic.png" alt=" Gloria image">
+                </div>
+
+                <div class="testimonial-card">
+                    <p class="label tittle"> "Subhub helped me cut the clutter—and the cost."</p>
+                    <p class="text1">"Between work, school, and side gigs, I didn’t have time to track all my
+                        subscriptions.
+                        Subhub laid everything out clearly and showed me exactly what I was paying for. I cancelled four
+                        services the first day. Now I stick to a budget that actually makes sense for me."</p>
+                    <p class="caption testimonial-author"> Gloria V. - Subhub user, 2025</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h3>You’re all caught up!</h3>
+            <p>Click Register Now to get Started!</p>
+            <button class="button-primary" onclick="signUp()"> Register Now </button>
+        </section>
+    </main>
+    <custom-footer></custom-footer>
+    <script src="/js/WebComponents.js" defer></script>
+</body>
+
+</html>

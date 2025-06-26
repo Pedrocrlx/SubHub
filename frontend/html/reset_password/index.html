@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubHub Reset password</title>
+    <meta name="description" content="Auth page" />
+    <link rel="icon" type="image/png" href="/images/favicon.ico">
+
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/auth.css" />
+
+    <!-- icons -->
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <custom-menu></custom-menu>
+    <main>
+        <div class="container" id="container">
+            <div class="form-box left-card">
+                <form id="reset-email-form">
+                    <h1>Forgot your password ?</h1>
+                    <div class="input-box">
+                        <input type="text" id="reset-email" class="floating-input" />
+                        <label class="floating-label" for="reset-email">Email</label>
+                        <i class='bxr bx-user'></i>
+                        <label id="reset-email-error-message" class="error-message"></label>
+                    </div>
+                    <button type="submit" class="button-primary"> Send reset link </button>
+                </form>
+            </div>
+
+            <div class="form-box right-card">
+                <form id="reset-password-form">
+                    <h1>Reset password</h1>
+                    <div class="input-box">
+                        <input type="password" id="reset-password" class="floating-input password-input" />
+                        <label class="floating-label" for="reset-password">Password</label>
+                        <i class="bx bx-lock lock-icon"></i>
+                        <i class="bx bx-eye open-eye"></i>
+                        <i class="bx bx-eye-slash closed-eye"></i>
+                        <label id="reset-password-error-message" class="error-message"></label>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="reset-password-repeat" class="floating-input password-input" />
+                        <label class="floating-label" for="reset-password-repeat">Repeat password</label>
+                        <i class="bx bx-lock lock-icon"></i>
+                        <i class="bx bx-eye open-eye"></i>
+                        <i class="bx bx-eye-slash closed-eye"></i>
+                        <label id="reset-password-repeat-error-message" class="error-message"></label>
+                    </div>
+                    <button type="submit" class="button-primary"> Reset password </button>
+                </form>
+            </div>
+
+            <div class="toggle-box">
+                <div class="toggle-panel toggle-left">
+                    <div class="tittle">
+                        <h1 class="neutral-tittle"> Reset your password </h1>
+                    </div>
+                    <p> We'll send you a secure link via email.</p>
+                    <button class="button-secondary secondary-neutral" onclick="signIn()" id="login-btn"> Login </button>
+                </div>
+
+                <div class="toggle-panel toggle-right">
+                    <h1 class="neutral-tittle">Oops, forgot ? </h1>
+                    <p>Don’t worry. Happens to the best of us.</p>
+
+                    <button class="button-secondary secondary-neutral" onclick="signIn()" id="login-btn"> Login </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<custom-footer></custom-footer>
+<script type="module" src="/reset_form_validation.js" defer></script>
+<script type="module" src="/js/resetPassword.js" defer></script>
+<script src="/js/input-animation.js" defer></script>
+<script src="/js/WebComponents.js" defer></script>
+<script src="/js/redirectIfAuthenticated.js"></script>
+
+
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubHub Dashboard</title>
+    <link rel="icon" type="image/png" href="/images/favicon.ico">
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <link rel="stylesheet" href="/css/graphs.css" />
+    <link rel="stylesheet" href="/css/modals.css" />
+
+    <!-- external library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-title">SUBHUB</span>
+                <button class="close-sidebar-btn bx bx-x" aria-label="Close Sidebar"></button>
+            </div>
+            <div class="nav-links">
+                <div class="nav-link active"><a href="#">Dashboard</a></div>
+                <div class="nav-link"><a href="#">Shared (Coming soon)</a></div>
+                <div class="nav-link"><a href="#">Bills (Coming soon)</a></div>
+            </div>
+        </aside>
+
+        <main>
+            <header class="main-header">
+                <button class="hamburger-menu bx bx-menu" aria-label="Open Menu"></button>
+                <h1><a id="user-info"> </a> </h1>
+                <div class="buttons">
+                    <button class="button-primary" id="addSubscriptionBtn"> <i class='bxr bx-plus-circle'></i>Add
+                        Subscription</button>
+                    <button class="logout-btn button-secondary" aria-label="Logout button" id="logout-btn">LOGOUT</button>
+                </div>
+            </header>
+
+            <h2 id="dashboard-title">Dashboard</h2>
+            <div class="dashboard-content">
+                <div class="overview-card">
+                    <h2 class="neutral-tittle">Overview</h2>
+                    <div class="overview-down">
+                        <div class="overview-subscriptions">
+                            <h3>Next Payments</h3>
+                            <div class="card" id="subscription-list"></div>
+                        </div>
+                        <div class="overview-graph">
+                            <h3>Monthly Spending</h3>
+                            <p class="spending-value text1"></p>
+                            <div class="bar-chart">
+                                <div class="chart-column">
+                                    <div class="bar bar-0"></div>
+                                    <div class="month-label"></div>
+                                    <div class="bar-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-1"></div>
+                                    <div class="month-label"></div>
+                                    <div class="bar-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-2"></div>
+                                    <div class="month-label"></div>
+                                    <div class="bar-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-3"></div>
+                                    <div class="month-label"></div>
+                                    <div class="bar-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-4"></div>
+                                    <div class="month-label"></div>
+                                    <div class="bar-label"></div>
+                                </div>
+                                <div class="chart-column">
+                                    <div class="bar bar-5"></div>
+                                    <div class="month-label"></div>
+                                    <div class="bar-label"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="coming-up-card">
+                    <h2>Subscriptions</h2>
+                    <div class="overview-chart">
+                        <div class="pie-chart-container">
+                            <svg class="pie-chart-svg" viewBox="0 0 100 100">
+                            </svg>
+                            <div class="pie-center-text">
+                                Total<br>0.00€
+                            </div>
+                            <div class="pie-tooltip">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="subscriptions-container">
+                <h2> All Subscriptions </h2>
+                <div class="subscriptions-list">
+                    <div class="subscriptions-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Subscription</th>
+                                    <th>Starting date</th>
+                                    <th>Price</th>
+                                    <th>Category</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subscriptionsTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="newSubscriptionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>NEW SUBSCRIPTION</h2>
+                <span class="close-modal-btn bx bx-x"></span>
+            </div>
+            <form class="modal-form" id="newSubscriptionForm">
+                <div class="form-group">
+                    <label for="newService">Service Name</label>
+                    <div class="input-wrapper">
+                        <select id="newService" name="service_name">
+                            <option value="">Select Service</option>
+                        </select>
+                        <i class="bx bx-chevron-down dropdown-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newCategory">Category</label>
+                    <div class="input-wrapper">
+                        <select id="newCategory" name="category">
+                            <option value="">Select Category</option>
+                        </select>
+                        <i class="bx bx-chevron-down dropdown-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newMonthlyPrice">Monthly Price</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="newMonthlyPrice" name="monthly_price" step="0.01" placeholder="0.00">
+                        <span>€</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="newStartingDate">Starting Date</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="newStartingDate" name="starting_date" placeholder="DD-MM--YYYY">
+                            <i class='bx bx-calendar calendar-icon'></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newRenovationType">Renovation Type</label>
+                        <div class="input-wrapper">
+                            <select id="newRenovationType" name="renovation_type">
+                                <option value="">Select Type</option>
+                            </select>
+                            <i class="bx bx-chevron-down dropdown-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <p class="form-note" id="cancel-btn-modal">CHANGED YOUR MIND?</p>
+                    <button type="submit" class="button-primary save-btn">SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editSubscriptionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>EDIT SUBSCRIPTION</h2>
+                <span class="close-modal-btn bx bx-x"></span>
+            </div>
+            <form class="modal-form" id="editSubscriptionForm">
+                <input type="hidden" id="editSubscriptionId" name="id">
+                <div class="form-group">
+                    <label for="editService">Service Name</label>
+                    <div class="input-wrapper">
+                        <select id="editService" name="service_name">
+                        </select>
+                        <i class="bx bx-chevron-down dropdown-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Category</label>
+                    <div class="input-wrapper">
+                        <select id="editCategory" name="category">
+                        </select>
+                        <i class="bx bx-chevron-down dropdown-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="editMonthlyPrice">Monthly Price</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="editMonthlyPrice" name="monthly_price" step="0.01" placeholder="0.00">
+                        <span>€</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editStartingDate">Starting Date</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="editStartingDate" name="starting_date" placeholder="YYYY-MM-DD">
+                            <i class='bx bx-calendar calendar-icon'></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRenovationType">Renovation Type</label>
+                        <div class="input-wrapper">
+                            <select id="editRenovationType" name="renovation_type">
+                            </select>
+                            <i class="bx bx-chevron-down dropdown-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <p class="form-note unsubscribe-note">WANT TO UNSUB?</p>
+                    <button type="submit" class="button-primary save-btn">SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="/js/WebComponents.js" defer></script>
+    <script type="module" src="/js/utils.js" defer></script>
+    <script type="module" src="/js/pie_chart.js" defer></script>
+    <script type="module" src="/js/bar_chart.js" defer></script>
+    <script src="/js/toggle_menu.js" defer></script>
+    <script type="module" src="/js/next_payments.js" defer></script>
+    <script type="module" src="/js/user_authentication.js" defer></script>
+    <script type="module" src="/js/endpoints.js"></script>
+    <script type="module" src="/js/dashboard.js" defer></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
+
+    <script type="module" src="/js/new_subscription_modal.js" defer></script>
+    <script type="module" src="/js/edit_subscription_modal.js" defer></script>
+</body>
+
+</html>

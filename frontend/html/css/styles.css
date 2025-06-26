@@ -1,0 +1,353 @@
+:root {
+    /* Primary Colors - Hunter Green */
+    --hunter-green-0: #E1ECE1;
+    --hunter-green-50: #698A6C;
+    --hunter-green-100: #557B59;
+    --hunter-green-200: #416B46;
+    --hunter-green-300: #2C5C33;
+    --hunter-green-400: #254F2B;
+    --hunter-green-500: #1E4223;
+    --hunter-green-600: #17361C;
+
+    /* Secondary Colors */
+    --hypnotic-red-300: #D13113;
+    --homeworld-300: #1B75D6;
+
+    /* Neutral Colors */
+    --marble-300: #F2F8FC;
+    --kingly-cloud-400: #EDEDED;
+    --kingly-cloud-500: #E9E9E9;
+    --kingly-cloud-600: #B0B0B0;
+    --kingly-cloud-700: #ADADAD;
+    --black-300: #2E2E2E;
+    --black-400: #161616;
+    --black-500: #303030;
+}
+
+body {
+    height: 100vh;
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--marble-300);
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    color: var(--black-300);
+    margin: 0;
+}
+
+h1 {
+    font-size: 48px;
+    line-height: 76px;
+    letter-spacing: -1px;
+}
+.neutral-tittle{
+    color: var(--marble-300);
+}
+
+h2 {
+    font-size: 40px;
+    line-height: 52px;
+    letter-spacing: -0.5px;
+}
+
+h3 {
+    font-size: 36px;
+    line-height: 38px;
+    letter-spacing: -0.5px;
+}
+
+h4 {
+    font-size: 32px;
+    line-height: 26px;
+    letter-spacing: 0.25px;
+}
+
+h5 {
+    font-size: 24px;
+    line-height: 22px;
+    letter-spacing: 0.25px;
+}
+
+/* Label */
+.label {
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+/* Text 1 */
+.text1 {
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: 0.2px;
+}
+
+/* Text 2 */
+.text2 {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+}
+
+/* Placeholders */
+.placeholder {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.2px;
+}
+
+/* Caption */
+.caption {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 0.2px;
+}
+
+/* Buttons */
+button {
+    margin: 20px 10px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    border: none;
+    border-radius: 45px;
+    font-family: "Inter", sans-serif;
+}
+
+/* Primary */
+.button-primary {
+    background: var(--hunter-green-300);
+    color: var(--marble-300);
+    padding: 1rem 2rem;
+}
+
+.button-primary:hover {
+    background: var(--hunter-green-200);
+    color: var(--marble-300);
+    border: none;
+}
+
+.button-primary:active {
+    background: var(--hunter-green-500);
+}
+
+.button-primary:disabled {
+    background: var(--hunter-green-0);
+    color: var(--kingly-cloud-700);
+    cursor: not-allowed;
+}
+
+/* Button Primary neutral  */
+.primary-neutral {
+    background: var(--marble-300);
+    color: var(--hunter-green-200);
+}
+
+/* Botões Secondary */
+.button-secondary {
+    background: var(--marble-300);
+    color: var(--hunter-green-300);
+    border: 2px solid var(--hunter-green-300);
+    padding: 1rem 2rem;
+}
+
+.button-secondary:hover {
+    background: var(--hunter-green-300);
+    color: var(--marble-300);
+    border-color: var(--hunter-green-400);
+}
+
+.button-secondary:active {
+    background: var(--hunter-green-500);
+    color: var(--marble-300);
+    border-color: var(--hunter-green-500);
+}
+
+.button-secondary:disabled {
+    background: var(--kingly-cloud-700);
+    color: var(--kingly-cloud-400);
+    border-color: var(--kingly-cloud-700);
+    cursor: not-allowed;
+}
+
+/* Button Secondary neutral  */
+.secondary-neutral {
+    background: var(--hunter-green-50);
+    color: var(--marble-300);
+    border: 2px solid var(--marble-300);
+}
+
+nav {
+    top: 0;
+    z-index: 1;
+    position: fixed;
+    width: 100vw;
+}
+
+.nav-container{
+        background-color: var(--hunter-green-50);
+        padding: 0px 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between
+}
+
+.button-terciary {
+    color: var(--marble-300);
+    text-decoration: none;
+    margin: 0px 1rem;
+    padding: 2rem 0px;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.disabled{
+    opacity: 0.5;
+}
+
+.button-terciary::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 1.8rem;
+    width: 100%;
+    height: 2px;
+    background: var(--hunter-green-600);
+    transform: scaleX(0);
+    transition: transform 0.3s cubic-bezier(.4, 0, .2, 1);
+    transform-origin: left;
+}
+
+.button-terciary:hover {
+    color: var(--hunter-green-600);
+}
+ 
+.button-terciary:hover::after {
+    transform: scaleX(1);
+}
+
+.terciary-green {
+    color: var(--hunter-green-300);
+}
+
+nav a.active {
+    color: var(--hunter-green-600);
+}
+
+nav a.active::after {
+    transform: scaleX(1);
+}
+
+nav button {
+    gap: 1rem;
+}
+
+#links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logoContainer {
+    padding-right: 2rem;
+    max-width: 6rem;
+    max-height: 6rem;
+}
+
+#logo {
+    width: 100%;
+    height: 100%;
+}
+
+#logoContainer p  {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.logo-sub {
+    color: var(--marble-300);
+}
+
+.logo-hub {
+    color: #000000;
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    bottom: 0;
+    position: relative;
+}
+
+footer a {
+    color: var(--marble-300);
+    text-decoration: none;
+    margin: 0px 1rem;
+    padding: 2.5rem 0px;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.footer-container {
+    background-color: var(--hunter-green-50);
+    color: var(--marble-300);
+    padding: 0px 3rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.footer-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.underline {
+    margin: 2rem 0px;
+}
+
+.footer-line {
+    height: 2px;
+    background-color: var(--marble-300);
+    width: 100%;
+    margin-top: 20px;
+    grid-column: span 4;
+}
+
+.footer-rights {
+    display: flex;
+    grid-column: span 4;
+    justify-content: center;
+    margin: 4rem;
+}
+main{
+    min-height: calc(100vh - 6rem);
+}

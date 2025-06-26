@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubHub landing page</title>
+    <link rel="icon" type="image/png" href="/images/favicon.ico">
+    <meta name="description" content="SubHub Landing Page" />
+
+    <!-- Font -->
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/landing_page.css" />
+
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+
+</head>
+
+<body>
+    <custom-menu></custom-menu>
+    <main>
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>Take control of your streaming services</h1>
+                    <button class="button-primary" onclick="signUp()">REGISTER NOW</button>
+                </div>
+            </section>
+
+            <section class="features-section">
+                <div class="feature-card">
+                    <img src="/images/monthly_spending.png" alt="Track monthly expenses">
+                    <p class="text1">Keep track of your monthly expenses</p>
+                </div>
+                <div class="feature-card">
+                    <img src="/images/next_payments.png" alt="Next payments">
+                    <p class="text1">Manage easily your next payments</p>
+                </div>
+            </section>
+
+            <section class="faq-section">
+                <div class="faq-container">
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <p>What exactly is this app?</p>
+                                <div class="faq-icon">
+                                    <i class='bx bx-plus'></i>
+                                    <i class='bx bx-minus'></i>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <p>SubHub is a powerful application designed to help you take control of your digital
+                                    subscriptions. From a single dashboard, you can track all your recurring payments,
+                                    monitor spending, receive alerts before renewal dates, and manage your services
+                                    effortlessly.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <p>Does it work on every device?</p>
+                                <div class="faq-icon">
+                                    <i class='bx bx-plus'></i>
+                                    <i class='bx bx-minus'></i>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes! SubHub is designed to be fully responsive and works seamlessly on any device
+                                    with a modern web browser, including desktops, tablets, and smartphones. We also
+                                    have dedicated applications for iOS and Android for the best mobile experience.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <p>Which streaming services can I manage?</p>
+                                <div class="faq-icon">
+                                    <i class='bx bx-plus'></i>
+                                    <i class='bx bx-minus'></i>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <p>You can manage a wide variety of services, including Netflix, Spotify, Disney+, Prime
+                                    Video, HBO Max, YouTube Premium, and many more. Our platform is constantly expanding
+                                    to support new and popular subscription services.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <p>Can this app also manage my budget?</p>
+                                <div class="faq-icon">
+                                    <i class='bx bx-plus'></i>
+                                    <i class='bx bx-minus'></i>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Absolutely. Budget management is a core feature of SubHub. You can view your total
+                                    monthly and yearly subscription costs, categorize your spending, and set custom
+                                    budgets to receive alerts when you're approaching your limits.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <p>How secure is my data?</p>
+                                <div class="faq-icon">
+                                    <i class='bx bx-plus'></i>
+                                    <i class='bx bx-minus'></i>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <p>We take your privacy and security very seriously. All your data is protected with
+                                    end-to-end, bank-level encryption. We do not store your credit card details and use
+                                    trusted, secure connections to manage your information.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <p>What is your privacy policy?</p>
+                                <div class="faq-icon">
+                                    <i class='bx bx-plus'></i>
+                                    <i class='bx bx-minus'></i>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Our privacy policy is built on transparency. We never sell your personal information
+                                    to third parties. You can read our full privacy policy for detailed information by
+                                    visiting the "Privacy" link in our website footer.</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <p>Is this app available in all regions?</p>
+                                <div class="faq-icon">
+                                    <i class='bx bx-plus'></i>
+                                    <i class='bx bx-minus'></i>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <p>SubHub is currently available to users in Europe and North America. We are actively
+                                    working on expanding our services to more regions around the globe. Stay tuned for
+                                    updates!</p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <p>What payment plans are available?</p>
+                                <div class="faq-icon">
+                                    <i class='bx bx-plus'></i>
+                                    <i class='bx bx-minus'></i>
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <p>We offer a flexible pricing structure. You can start with our free plan to track up
+                                    to 3 subscriptions. For unlimited tracking and advanced budgeting tools, you can
+                                    upgrade to our Premium plan, which starts at just €6.99 per month.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="faq-illustration">
+                        <h2> Frequently Asked Questions </h2>
+                        <img src="/images/faq-illustration.png"
+                            alt="Woman with a question mark and a lightbulb">
+                    </div>
+                </div>
+            </section>
+
+            <section class="convinced-section">
+                <h2>Convinced?</h2>
+                <p class="text1">Click Register Now to get started!</p>
+                <button class="button-primary primary-neutral" onclick="signUp()">REGISTER NOW</button>
+            </section>
+        </main>
+        <custom-footer></custom-footer>
+
+        <script src="/js/WebComponents.js" defer></script>
+        <script src="/js/landing_page.js" defer></script>
+        <script src="/js/redirectIfAuthenticated.js"></script>
+
+</body>
+
+</html>
