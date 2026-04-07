@@ -33,14 +33,6 @@ This MVP focuses on delivering essential functionality with a static, user-frien
 - Static frontend hosted through an NGINX container.
 - Fully containerized architecture for cross-platform compatibility.
 
-## Environment variables (.env) example:
-```
-SECRET_KEY=your_secret_key_here
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your_password_here
-POSTGRES_DB=subHub  
-```
-
 ## Project Structure
 ```
 SubHub/
